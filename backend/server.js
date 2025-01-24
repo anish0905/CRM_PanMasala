@@ -3,6 +3,7 @@ const dotenv = require("dotenv").config();
 const cors = require("cors");
 const connectDb = require("./src/config/dbConnection");
 const adminRoutes = require("./src/routes/adminRoutes");
+const subAdminRoutes = require("./src/routes/subAdmin/subAdminRoutes");
 
 // Field Management Variables
 const fieldManagerLogin = require("./src/routes/fieldManagement/fieldManagerRoute.router");
@@ -48,3 +49,11 @@ const port = process.env.PORT || 5001;
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`);
 });
+
+// Admin  routes
+
+app.use("/api/admin", adminRoutes);
+
+//subadmin routes
+
+app.use("/api/subAdmin", subAdminRoutes);
