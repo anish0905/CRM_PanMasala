@@ -4,6 +4,7 @@ import { Route, Routes, useLocation, useNavigate } from "react-router-dom";
 import Login from "./pages/Admin/Login";
 import AdminDashbord from "./pages/Admin/AdminDashbord";
 import SubAdminDashboard from "./pages/SubAdmin/dashboard/Dashboard";
+import SuperStockistDetails from "./pages/SubAdmin/superStockist/SuperStockistDetails";
 
 function App() {
   const navigate = useNavigate();
@@ -17,6 +18,8 @@ function App() {
       <Route path="/AdminDashBoard" element={<AdminDashbord />} />
 
       <Route path="/SubadminDashBoard" element={<SubAdminDashboard />} />
+
+      <Route path="/SuperStockistDetails" element={<SuperStockistDetails />} />
     </Routes>
   );
 }

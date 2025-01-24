@@ -5,6 +5,7 @@ const bodyParser = require("body-parser");
 const connectDb = require("./src/config/dbConnection");
 const adminRoutes = require("./src/routes/adminRoutes");
 const subAdminRoutes = require("./src/routes/subAdmin/subAdminRoutes");
+const superStockist = require("./src/routes/superStockist/superStockistRoutes");
 
 connectDb();
 const app = express();
@@ -25,3 +26,4 @@ app.use("/api/admin", adminRoutes);
 //subadmin routes
 
 app.use("/api/subAdmin", subAdminRoutes);
+app.use("/api/superstockist", superStockist);

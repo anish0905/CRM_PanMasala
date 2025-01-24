@@ -14,7 +14,7 @@ import {
 import { GiShop } from "react-icons/gi";
 import { TbReport } from "react-icons/tb";
 
-const ManagementSidebar = ({ onClose }) => {
+const Sidebar = ({ onClose }) => {
   const [showDropdown, setShowDropdown] = useState(false);
   const [manageDropdown, setManageDropdown] = useState(false);
   const [vendorDropdown, setVendorDropdown] = useState(false);
@@ -68,7 +68,7 @@ const ManagementSidebar = ({ onClose }) => {
         <NavItem
           icon={<RxDashboard style={{ color: "#eab308", fontSize: "2rem" }} />}
           text="Dashboard"
-          onClick={() => handleItemClick("/managementDashboard")}
+          onClick={() => handleItemClick("/SubadminDashBoard")}
         />
         <NavItem
           icon={
@@ -118,6 +118,10 @@ const ManagementSidebar = ({ onClose }) => {
           {showDropdown && (
             <div className="flex justify-start ml-10 flex-col font-semibold text-xl text-black">
               <DropdownItem
+                text="CNF"
+                onClick={() => handleItemClick("/superstockistDetails")}
+              />
+              <DropdownItem
                 text="Super Stockist"
                 onClick={() => handleItemClick("/superstockistDetails")}
               />
@@ -148,19 +152,17 @@ const ManagementSidebar = ({ onClose }) => {
             <MdOutlineManageAccounts
               style={{ color: "#047857", fontSize: "2rem" }}
             />
-            <span className="text-lg font-semibold">Manage Users</span>
+            <span className="text-lg font-semibold">Super Stockist</span>
           </span>
           {manageDropdown && (
             <div className="flex justify-start ml-10 flex-col font-semibold text-xl text-black">
               <DropdownItem
-                text="Super Stockist"
-                onClick={() => handleItemClick("/manage/superStockit/user")}
+                text="Super Stockist Details"
+                onClick={() => handleItemClick("/SuperStockistDetails")}
               />
               <DropdownItem
                 text="Stockist"
-                onClick={() =>
-                  handleItemClick("/manage/stockist/user/management")
-                }
+                onClick={() => handleItemClick("SuperStockistDetails")}
               />
               <DropdownItem
                 text="Field Executive"
@@ -388,4 +390,4 @@ const LogoutItem = ({ icon, text, onClick }) => (
   </div>
 );
 
-export default ManagementSidebar;
+export default Sidebar;
