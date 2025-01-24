@@ -1,0 +1,86 @@
+/* General Button Styles */
+button.swal2-confirm,
+button.swal2-cancel {
+  padding: 10px 20px;
+  font-size: 14px;
+  border-radius: 5px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+/* Confirm Button Styles */
+.custom-confirm-button {
+  background-color: #d33 !important; /* Red */
+  color: #fff !important;
+  border: none;
+}
+
+.custom-confirm-button:hover {
+  background-color: #a22 !important; /* Darker red */
+}
+
+/* Cancel Button Styles */
+.custom-cancel-button {
+  background-color: #28a745 !important; /* Green */
+  color: #fff !important;
+  border: none;
+  margin-left: 10px;
+}
+
+.custom-cancel-button:hover {
+  background-color: #218838 !important; /* Darker green */
+}
+
+/* Success Button Styles */
+.custom-success-button {
+  background-color: #4caf50 !important; /* Green */
+  color: white !important;
+  border: none;
+  border-radius: 5px !important;
+}
+
+.custom-success-button:hover {
+  background-color: #388e3c !important; /* Darker green */
+}
+
+/* Error Button Styles */
+.custom-error-button {
+  background-color: #f44336 !important; /* Red */
+  color: white !important;
+  border: none;
+  border-radius: 5px !important;
+}
+
+.custom-error-button:hover {
+  background-color: #d32f2f !important; /* Darker red */
+}
+
+
+/* modal */
+
+
+.modal-overlay {
+  background: rgba(0, 0, 0, 0.8);
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.modal-content {
+  background: white;
+  padding: 20px;
+  border-radius: 8px;
+  max-width: 90%;
+  max-height: 90%;
+  position: relative;
+  overflow: hidden;
+}
+
+

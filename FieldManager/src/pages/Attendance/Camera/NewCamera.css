@@ -1,0 +1,137 @@
+.camera-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  background-color: #f4f6f9;
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+.camera-video {
+  width: 90%;
+  max-width: 400px;
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  margin-bottom: 20px;
+}
+
+.capture-button {
+  background-color: #007bff;
+  color: #fff;
+  padding: 10px 20px;
+  font-size: 18px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.capture-button:disabled {
+  background-color: #999;
+  cursor: not-allowed;
+}
+
+.capture-button:hover:not(:disabled) {
+  background-color: #0056b3;
+}
+
+.error-message {
+  color: #d9534f;
+  font-weight: bold;
+  margin-bottom: 20px;
+  text-align: center;
+  font-size: 16px;
+}
+
+
+
+.camera-select {
+  margin-bottom: 20px;
+  padding: 10px;
+  font-size: 16px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  width: 90%;
+  max-width: 400px;
+  outline: none;
+  background-color: #fff;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  appearance: none;
+  cursor: pointer;
+}
+
+
+
+.camera-controls {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+.switch-camera-button {
+  background-color: #4caf50;
+  color: #fff;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+.switch-camera-button:hover {
+  background-color: #45a049;
+}
+
+.capture-button {
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  padding: 15px 30px;
+  border-radius: 10px;
+  cursor: pointer;
+  font-size: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+}
+
+.capture-button:hover {
+  background-color: #0056b3;
+}
+
+.camera-icon {
+  margin-right: 8px;
+  font-size: 20px;
+}
+
+
+.back-button {
+
+  position: fixed;
+  top: 10px;
+  left: 10px;
+  background-color: #ff4d4f;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  cursor: pointer;
+  font-size: 16px;
+  display: flex;
+  align-items: center;
+}
+
+.back-button .camera-icon {
+  margin-right: 8px;
+}
+
+.back-button:hover {
+  background-color: #e43d3f;
+}
