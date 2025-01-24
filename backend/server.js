@@ -3,6 +3,7 @@ const dotenv = require("dotenv").config();
 const cors = require("cors");
 const bodyParser = require("body-parser");
 const connectDb = require("./src/config/dbConnection");
+const adminRoutes = require("./src/routes/adminRoutes");
 
 connectDb();
 const app = express();
@@ -15,3 +16,9 @@ const port = process.env.PORT || 5001;
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`);
 });
+
+
+// Importing routes
+
+
+app.use("/api/admin", adminRoutes);
