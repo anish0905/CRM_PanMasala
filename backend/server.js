@@ -4,6 +4,7 @@ const cors = require("cors");
 const bodyParser = require("body-parser");
 const connectDb = require("./src/config/dbConnection");
 const adminRoutes = require("./src/routes/adminRoutes");
+const subAdminRoutes = require("./src/routes/subAdmin/subAdminRoutes");
 
 connectDb();
 const app = express();
@@ -17,8 +18,10 @@ app.listen(port, () => {
   console.log(`Server is running on port ${port}`);
 });
 
-
-// Importing routes
-
+// Admin  routes
 
 app.use("/api/admin", adminRoutes);
+
+//subadmin routes
+
+app.use("/api/subAdmin", subAdminRoutes);

@@ -6,9 +6,9 @@ const {
   currentUser,
   updateAdministratorDetails,
   getAllAdministrators,
-  deleteAdministrator
+  deleteAdministrator,
 } = require("../controllers/adminController");
-const validateToken = require("../middleware/middleware/validateTokenHandler");
+const validateToken = require("../middleware/validateTokenHandler");
 
 // Register
 router.post("/register", registerUser);
@@ -28,8 +28,6 @@ router.get("/current", validateToken, currentUser);
 
 //delete user
 
-router.delete("/delete/:id",validateToken, deleteAdministrator);
-
-
+router.delete("/delete/:id", validateToken, deleteAdministrator);
 
 module.exports = router;

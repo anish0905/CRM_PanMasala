@@ -1,11 +1,7 @@
-import React from 'react'
+import React from "react";
 
-const SubAdmin = () => {
-  return (
-    <div>
-      
-    </div>
-  )
-}
+const SubAdminDashbord = () => {
+  return <div>SubAdminDashbord</div>;
+};
 
-export default SubAdmin
+export default SubAdminDashbord;
