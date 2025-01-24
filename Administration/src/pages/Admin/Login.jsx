@@ -150,7 +150,7 @@ const Login = () => {
               >
                 Sign In
               </button>
-              <Link to={`/Admin-Register`} className="text-blue-600 mt-2 text-xl">I don't have an account</Link>
+             
             </div>
           </div>
         </div>

@@ -5,7 +5,7 @@ import "react-toastify/dist/ReactToastify.css";
 import { IoMdClose } from "react-icons/io";
 import stateData from "../../../statesData"; // Import stateData
 
-const SubAdminRegistionForm = ({ onClose, selectedsubAdmin }) => {
+const SubAdminRegistionForm = ({ onClose, selectedsubAdmin ,fetchsubAdmins}) => {
   const [formData, setFormData] = useState({
     username: "",
     email: "",
@@ -37,10 +37,7 @@ const SubAdminRegistionForm = ({ onClose, selectedsubAdmin }) => {
   // Handle form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!formData.selectedSuperStockist) {
-      toast.error("Please select a Super Stockist!");
-      return;
-    }
+    
 
     // Check if passwords match
     if (formData.password !== formData.confirmPassword) {
@@ -68,6 +65,7 @@ const SubAdminRegistionForm = ({ onClose, selectedsubAdmin }) => {
         );
         toast.success("User registered successfully!");
       }
+      fetchsubAdmins();
 
       // Reset form after submission
       setFormData({
@@ -102,7 +100,8 @@ const SubAdminRegistionForm = ({ onClose, selectedsubAdmin }) => {
         pinCode: selectedsubAdmin.pinCode,
         state: selectedsubAdmin.state,
         district: selectedsubAdmin.district || "", // Pre-fill district if available
-        selectedSuperStockist: selectedsubAdmin.selectedSuperStockist || "",
+        mobileNo: selectedsubAdmin.mobileNo || "",
+        
       });
     }
   }, [selectedsubAdmin]);
@@ -114,7 +113,7 @@ const SubAdminRegistionForm = ({ onClose, selectedsubAdmin }) => {
   };
 
   return (
-    <div className="flex justify-center items-center h-full">
+    <div className="flex justify-center items-center h-full font-serif ">
       <ToastContainer />
       <div className="bg-white p-6 rounded-lg shadow-md w-full max-w-2xl">
         <div className="flex justify-between items-center mb-4">
@@ -280,7 +279,7 @@ const SubAdminRegistionForm = ({ onClose, selectedsubAdmin }) => {
           <div className="mt-4">
             <button
               type="submit"
-              className="w-full px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 focus:outline-none"
+              className="w-full cursor-pointer px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 focus:outline-none"
             >
               {selectedsubAdmin ? "Update" : "Register"}
             </button>

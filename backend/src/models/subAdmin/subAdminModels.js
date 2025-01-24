@@ -34,6 +34,7 @@ const subAdminSchema = mongoose.Schema(
       type: String,
       required: [true, "Please add the city name"],
     },
+     
     pinCode: {
       type: String,
       required: [true, "Please add the pin code"],
@@ -42,6 +43,10 @@ const subAdminSchema = mongoose.Schema(
     district:{
       type: String,
       required: [true, "Please add the district name"],
+    },
+    state: {
+      type: String,
+      required: [true, "Please add the city name"],
     },
     location: {
       type: {

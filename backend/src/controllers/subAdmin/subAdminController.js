@@ -18,7 +18,8 @@ const registersubAdmin = expressAsyncHandler(async (req, resp) => {
     city, 
     pinCode,
     location ,// Added location here (could be text or coordinates)
-    district
+    district,
+    state
   } = req.body;
 
   // Validate password match
@@ -61,7 +62,8 @@ const registersubAdmin = expressAsyncHandler(async (req, resp) => {
     city,
     pinCode,
     location,
-    district
+    district,
+    state
   });
 
   if (newSubAdmin) {
@@ -73,7 +75,9 @@ const registersubAdmin = expressAsyncHandler(async (req, resp) => {
       address: newSubAdmin.address,
       city: newSubAdmin.city,
       pinCode: newSubAdmin.pinCode,
-      location: newSubAdmin.location
+      location: newSubAdmin.location,
+      district: newSubAdmin.district,
+      state: newSubAdmin.state
     });
   } else {
     resp.status(400);
@@ -133,17 +137,18 @@ const loginsubAdmin = expressAsyncHandler(async (req, resp) => {
 
 const updatesubAdmin = expressAsyncHandler(async (req, res) => {
   const { id } = req.params;
-  const { 
-    username, 
-    email, 
-    newPassword, 
-    confirmNewPassword, 
-    mobileNo, 
-    address, 
-    city, 
-    pinCode, 
-    location ,
-    district
+  const {
+    username,
+    email,
+    newPassword,
+    confirmNewPassword,
+    mobileNo,
+    address,
+    city,
+    pinCode,
+    location,
+    district,
+    state,
   } = req.body;
 
   // Validate the user ID
@@ -167,7 +172,8 @@ const updatesubAdmin = expressAsyncHandler(async (req, res) => {
     if (city) subAdmin.city = city;
     if (pinCode) subAdmin.pinCode = pinCode;
     if (location) subAdmin.location = location;
-    if (district) subAdmin.district = district; // Added district here (could be text or coordinates)
+    if (district) subAdmin.district = district; // Added district here
+    if (state) subAdmin.state = state; // Added state here
 
     // Check and update password if new password and confirmation password are provided
     if (newPassword && confirmNewPassword) {
@@ -175,6 +181,14 @@ const updatesubAdmin = expressAsyncHandler(async (req, res) => {
         res.status(400).json({ message: "New password and confirmation do not match!" });
         return;
       }
+
+      // Check password length (optional, but recommended for security)
+      if (newPassword.length < 6) {
+        res.status(400).json({ message: "Password must be at least 6 characters long." });
+        return;
+      }
+
+      // Hash the new password
       const hashedNewPassword = await bcrypt.hash(newPassword, 10);
       subAdmin.password = hashedNewPassword;
     }
@@ -185,13 +199,10 @@ const updatesubAdmin = expressAsyncHandler(async (req, res) => {
     // Respond with success
     res.status(200).json({ message: "SubAdmin details updated successfully!" });
   } catch (error) {
+    console.error("Error updating SubAdmin:", error);
     res.status(500).json({ message: "Server error. Please try again later." });
   }
 });
-
-
-
-
 // @desc Get all subAdmins
 //@route GET /api/users
 //@access private

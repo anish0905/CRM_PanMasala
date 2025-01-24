@@ -105,13 +105,13 @@ const SubAdminDetails = () => {
 
     if (confirmResult.isConfirmed) {
       try {
-        const response = await fetch(`${BASE_URL}/api/executives/${id}`, {
+        const response = await fetch(`${BASE_URL}/api/subAdmin/${id}`, {
           method: "DELETE",
         });
 
       } catch (error) {
-        console.error("Error deleting delivery boy:", error);
-        Swal.fire("Error", "Could not delete delivery boy", "error");
+        console.error("Error sub Admin:", error);
+        Swal.fire("Error", "Could not delete sub Admin", "error");
       }
     }
   };
@@ -172,7 +172,7 @@ const SubAdminDetails = () => {
           <div className="fixed inset-0 z-50 flex items-center justify-center w-full">
             <div className="absolute inset-0 bg-black opacity-50"></div>
             <div className="z-50   w-full ">
-              <SubAdminRegistionForm onClose={handleCloseModal} selectedsubAdmin={selectedsubAdmin} />
+              <SubAdminRegistionForm onClose={handleCloseModal} selectedsubAdmin={selectedsubAdmin} fetchsubAdmins={fetchsubAdmins} />
             </div>
           </div>
         )}
@@ -199,6 +199,8 @@ const SubAdminDetails = () => {
                     <th className="px-2 py-4 md:text-lg text-xs  border-r-2 border-white">Email</th>
                     <th className="px-2 py-4 md:text-lg text-xs  border-r-2 border-white">Phone No</th>
                     <th className="px-2 py-4 md:text-lg text-xs  border-r-2 border-white">State</th>
+                    <th className="px-2 py-4 md:text-lg text-xs  border-r-2 border-white">district</th>
+                    <th className="px-2 py-4 md:text-lg text-xs  border-r-2 border-white">State</th>
                     <th className="px-2 py-4 md:text-lg text-xs  border-r-2 border-white">Address</th>
                     <th className="px-2 py-4 md:text-lg text-xs   border-r-2 border-white">PinCode</th>
                     <th className="px-2 py-4 md:text-lg text-xs ">Actions</th>
@@ -209,8 +211,10 @@ const SubAdminDetails = () => {
                     <tr key={subAdmin._id} className="bg-gray-200 border-b-2 border-blue-200">
                       <td className="px-2 py-4 md:text-lg text-xs  whitespace-nowrap overflow-hidden overflow-ellipsis border-r-2 border-white">{subAdmin.username}</td>
                       <td className="px-2 py-4 md:text-lg text-xs  whitespace-nowrap overflow-hidden overflow-ellipsis border-r-2 border-white">{subAdmin.email}</td>
-                      <td className="px-2 py-4 md:text-lg text-xs  whitespace-nowrap overflow-hidden overflow-ellipsis border-r-2 border-white">{subAdmin.phoneNO}</td>
+                      <td className="px-2 py-4 md:text-lg text-xs  whitespace-nowrap overflow-hidden overflow-ellipsis border-r-2 border-white">{subAdmin.mobileNo}</td>
                       <td className="px-2 py-4 md:text-lg text-xs  whitespace-nowrap overflow-hidden overflow-ellipsis border-r-2 border-white">{subAdmin.state}</td>
+                      <td className="px-2 py-4 md:text-lg text-xs  whitespace-nowrap overflow-hidden overflow-ellipsis border-r-2 border-white">{subAdmin.district}</td>
+                      <td className="px-2 py-4 md:text-lg text-xs  whitespace-nowrap overflow-hidden overflow-ellipsis border-r-2 border-white">{subAdmin.city}</td>
                       <td className="px-2 py-4 md:text-lg text-xs  whitespace-nowrap overflow-hidden overflow-ellipsis border-r-2 border-white">{subAdmin.address}</td>
                       <td className="px-2 py-4 md:text-lg text-xs  whitespace-nowrap overflow-hidden overflow-ellipsis  border-r-2 border-white">{subAdmin.pinCode}</td>
                       <td className="px-2 py-4 md:text-lg text-xs  whitespace-nowrap overflow-hidden overflow-ellipsis border-r-2 border-white">
