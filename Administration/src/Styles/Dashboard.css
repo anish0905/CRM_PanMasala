@@ -1,0 +1,320 @@
+
+.container{
+   
+   width:100%;
+}
+
+
+
+.sidebar-wrapper {
+    display: none;
+  }
+
+@media screen and (max-width: 768px) {
+    .menu-bar {
+      display: block;
+    }
+  
+    .sidebar-wrapper.show-sidebar {
+      display: block;
+    }
+}
+
+
+@media screen and (max-width:768px){
+    .container{
+        margin-left:0px;
+        width:100%;
+        margin-right:0px;
+    }
+}
+
+
+
+.profile-container{
+   
+    display: flex;
+    flex-direction: row;
+    margin-right:5%;
+    margin-top: 2%;
+    justify-content: space-between;
+    align-items: center;
+
+}
+
+.profile{ 
+    height:35px;
+    width:35px; 
+   
+   
+}
+
+.card-container{
+    
+ 
+    padding: 20px;
+    /* background-color: #f2edf3; */
+  background-size: cover;
+}
+
+.card{
+    display:flex;
+    flex-direction: row;
+    margin-bottom: 20px;
+    transition: transform 0.3s ease-in-out;
+}
+
+
+
+@media screen and (max-width:768px) {
+    .card{
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        margin: 15px;
+      
+        
+    }
+}
+
+@media screen and (min-width:769px) {
+  .card{
+    display: flex;
+    flex-direction: row;
+    width:100%;
+  }
+}
+
+.card1{
+    background:linear-gradient(to right,#ffbb96,#fe8a96,#fe8796) ;
+   
+    width:20vw;
+    border-radius: 10px;
+    margin-right:8px ;
+    padding: 20px;
+    color:#ffffff;
+  
+} 
+
+@media only screen and (max-width:768px) {
+    .card1{
+      width: 100%;
+        
+        margin: 15px;
+    }
+    .card2{
+      width: 100%;
+        
+      margin: 15px;
+    }
+    .card3{
+      width: 100%;
+        
+      margin: 15px;
+    }
+    .card4 {
+        width: 100%;
+        
+        margin: 15px;
+       
+      
+    }
+  }
+
+
+ 
+
+  
+
+
+
+
+
+
+
+
+
+.card2{
+    background:linear-gradient(to right,#88c6f7,#3a9be9) ;    
+    
+    width:20vw;
+    border-radius: 10px;
+    margin-right:8px ;
+    padding: 20px;
+    color:#ffffff;
+}
+
+/* @media screen and (max-width:600px) {
+    .card2{
+      
+       
+        margin: 15px;
+      width: 100%;
+    }
+  } */
+.card3{
+    background:linear-gradient(to right,#77d8cf,#39d2bc) ;
+   
+    width:20vw;
+    border-radius: 10px;
+    margin-right:8px ;
+    padding: 20px;
+    color:#ffffff;
+  
+
+}
+
+/* @media screen and (max-width:600px) {
+    .card3{
+        width: 100%;
+       
+        margin: 15px;
+       
+    }
+  } */
+
+.card4{
+    background:linear-gradient(to right,#cc80ff,#9c57ff) ;
+   
+    width:20vw;
+    border-radius: 10px;
+    margin-right:8px ;
+    padding: 20px;
+    color:#ffffff;
+}
+
+/* @media screen and (max-width:600px) {
+    .card4{
+        width: 100%;
+      
+        margin: 15px;
+      
+    }
+  } */
+
+  @media only screen and (max-width:768px) {
+    .card1,.card2,.card3,.card4
+    
+    
+    
+    {
+      width: 100%;
+        
+        margin: 15px;
+    }
+    
+  }
+
+
+.icon-container{
+    background:linear-gradient(to right,#cc80ff,#9c57ff) ;
+    height:30px;
+    width: 30px;
+    color:#ffffff;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    border-radius: 5px;
+    
+
+}
+
+.home-image{
+    display: flex;
+    flex-direction: row;
+    padding: 30px;
+    align-items: center;
+}
+         
+         
+         
+.btn-grad {
+    background-image: linear-gradient(to right, #F00000 0%, #DC281E  51%, #F00000  100%);
+    margin: 10px;
+    padding: 15px 30px;
+    text-align: center;
+    text-transform: uppercase;
+    transition: 0.5s;
+    background-size: 200% auto; 
+    color: white;            
+    box-shadow: 0 0 20px #eee;
+    border-radius: 10px;
+    display: block;
+  }
+
+  .btn-grad:hover {
+    background-position: right center; /* change the direction of the change here */
+    color: #fff;
+    text-decoration: none;
+  }
+ 
+
+ @media screen and (max-width:600px) {
+  .btn-grad {
+    padding: 10px 10px;
+    border-radius: 5px;
+   
+  }
+ }
+ 
+.row-container{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+.charts{
+  display: flex;
+  flex-direction: row;
+ 
+}
+
+@media screen and (max-width:600px) {
+  .charts{
+    flex-direction: column;
+  }
+}
+.todo-calender{
+  display: flex;
+  flex-direction: row;
+}
+
+hr{
+  margin-top:70px;
+
+}
+
+.footer{
+ 
+  font-size: 20px;
+  color:#50505b;
+}
+
+.icon{
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  
+}
+
+.icons{
+  padding-right: 10px;
+  height:20px;
+  width:30px;
+  color:#ffffff;
+}
+
+.todo-calender{
+  display: flex;
+  flex-direction: row;
+}
+
+@media screen and (max-width:600px) {
+  .todo-calender{
+    flex-direction: column;
+  }
+}
+
+
+
