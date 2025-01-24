@@ -5,21 +5,11 @@
   left: 0;
   width: 320px; /* Width for the sidebar */
   height: 100vh;
-  margin: 0px;
+  margin: 13px;
   z-index: 20;
   background-color: white;
   border-radius: 10px; /* Optional: Add border radius */
-}
-
-.sidebar ul {
-  padding-right: 10px;
-  padding-left: 10px;
-  overflow-y: auto; /* Enable vertical scrolling */
-  scrollbar-width: none; /* Hide scrollbar in Firefox */
-}
-
-.sidebar ul::-webkit-scrollbar {
-  display: none; /* Hide scrollbar in Chrome, Edge, and Safari */
+  overflow-y: auto; /* Optional: Enable vertical scrolling if needed */
 }
 
 /* Sidebar Header */
@@ -93,5 +83,5 @@
   background-color: #93c5fd; /* Yellow background color on hover */
   color: #000000 !important; /* Black text color on hover */
   transform: scale(1.1); /* Slightly enlarge */
-  transition: transform 0.12s ease-in-out;
+  transition: transform 0.2s ease-in-out;
 }
