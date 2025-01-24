@@ -6,6 +6,7 @@ import AdminDashbord from "./pages/Admin/AdminDashbord";
 import SubAdminDashboard from "./pages/SubAdmin/dashboard/Dashboard";
 import SuperStockistDetails from "./pages/SubAdmin/superStockist/SuperStockistDetails";
 
+import SubAdminDetails from "./pages/Admin/subAdmin/SubAdminDetails";
 function App() {
   const navigate = useNavigate();
   const email = localStorage.getItem("email");
@@ -18,6 +19,10 @@ function App() {
       <Route path="/AdminDashBoard" element={<AdminDashbord />} />
 
       <Route path="/SubadminDashBoard" element={<SubAdminDashboard />} />
+      <Route
+        path="/manage/Sub-Admin/:name/:role"
+        element={<SubAdminDetails />}
+      />
 
       <Route path="/SuperStockistDetails" element={<SuperStockistDetails />} />
     </Routes>

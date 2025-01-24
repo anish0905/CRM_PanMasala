@@ -1,83 +1,108 @@
-const asyncHandler = require("express-async-handler");
+const expressAsyncHandler = require("express-async-handler");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
-const subAdmin = require("../../models/subAdmin/subAdminModels");
-const expressAsyncHandler = require("express-async-handler");
+const SubAdmin = require("../../models/subAdmin/subAdminModels");
 const mongoose = require("mongoose");
 
-// @desc Register a admin
-//@route POST/api/users/register
-//@access publics
+// @desc Register a subAdmin
+//@route POST /api/users/register
+//@access public
+const registersubAdmin = expressAsyncHandler(async (req, resp) => {
+  const { 
+    username, 
+    email, 
+    password, 
+    confirmPassword, 
+    mobileNo, 
+    address, 
+    city, 
+    pinCode,
+    location ,// Added location here (could be text or coordinates)
+    district
+  } = req.body;
 
-const registersubAdmin = asyncHandler(async (req, resp) => {
-  const { username, email, password, confirmPassword } = req.body;
+  // Validate password match
   if (password !== confirmPassword) {
     resp.status(400);
-    throw new Error("password and confirmPassword are not matched !");
+    throw new Error("Password and confirmPassword do not match!");
   }
 
-  if (!username || !email || !password || !confirmPassword) {
+  // Validate required fields
+  if (!username || !email || !password || !confirmPassword || !mobileNo || !address || !city || !pinCode ) {
     resp.status(400);
-    throw new Error("All fields are mandatory !");
+    throw new Error("All fields are mandatory!");
   }
 
-  const subAdminUserAvailable = await subAdmin.findOne({ email });
+  // Check if the email is already registered
+  const subAdminUserAvailable = await SubAdmin.findOne({ email });
   if (subAdminUserAvailable) {
     resp.status(400);
-    throw new Error("User already registered !");
+    throw new Error("User already registered!");
   }
 
-  //Hash password;
+  // Check if the mobile number is already registered
+  const subAdminMobileAvailable = await SubAdmin.findOne({ mobileNo });
+  if (subAdminMobileAvailable) {
+    resp.status(400);
+    throw new Error("Mobile number already registered!");
+  }
+
+  // Hash the password
   const hashedPassword = await bcrypt.hash(password, 10);
-  console.log("Hashed Password", hashedPassword);
-  //console.log
-  //Hash confirmPassword;
 
-  const hashedCpassword = await bcrypt.hash(confirmPassword, 10);
-  console.log("Hashed CPassword", hashedCpassword);
-
-  const newSubAdmin = await subAdmin.create({
+  // Create the new subAdmin
+  const newSubAdmin = await SubAdmin.create({
     username,
     email,
     password: hashedPassword,
-    confirmPassword: hashedCpassword,
+    confirmPassword: hashedPassword, // Hashing confirmPassword too, if you want
+    mobileNo,
+    address,
+    city,
+    pinCode,
+    location,
+    district
   });
-  console.log(`subAdmin User created ${subAdmin}`);
+
   if (newSubAdmin) {
-    resp.status(201).json({ _id: newSubAdmin.id, email: newSubAdmin.email });
+    resp.status(201).json({
+      _id: newSubAdmin.id,
+      email: newSubAdmin.email,
+      username: newSubAdmin.username,
+      mobileNo: newSubAdmin.mobileNo,
+      address: newSubAdmin.address,
+      city: newSubAdmin.city,
+      pinCode: newSubAdmin.pinCode,
+      location: newSubAdmin.location
+    });
   } else {
     resp.status(400);
-    throw new Error("subAdmin data us not valid");
+    throw new Error("SubAdmin data is not valid");
   }
-
-  resp.status(200).json({ message: " Register the subAdmin" });
 });
 
-// @desc Login a user
-//@route POST/api/users/login
-//@access public
 
-const loginsubAdmin = asyncHandler(async (req, resp) => {
+// @desc Login a subAdmin
+//@route POST /api/users/login
+//@access public
+const loginsubAdmin = expressAsyncHandler(async (req, resp) => {
   const { email, password } = req.body;
 
-  // Validate input
   if (!email || !password) {
     resp.status(400).json({ message: "All fields are mandatory!" });
     return;
   }
 
   try {
-    // Check if subAdmin exists
-    const SubAdmin = await subAdmin.findOne({ email }); // Ensure the model is imported properly
-
-    if (!SubAdmin) {
+    // Find the subAdmin by email
+    const subAdmin = await SubAdmin.findOne({ email });
+    if (!subAdmin) {
       resp.status(401).json({ message: "Email or password is not valid" });
       return;
     }
 
-    // Compare password with hashed password
-    const isPasswordValid = await bcrypt.compare(password, SubAdmin.password); // Corrected here
-
+    // Compare passwords
+    const isPasswordValid = await bcrypt.compare(password, subAdmin.password);
     if (!isPasswordValid) {
       resp.status(401).json({ message: "Email or password is not valid" });
       return;
@@ -85,20 +110,15 @@ const loginsubAdmin = asyncHandler(async (req, resp) => {
 
     // Generate JWT token
     const accessToken = jwt.sign(
-      {
-        usersubAdmin: {
-          id: SubAdmin.id, // Include only necessary info in the token
-        },
-      },
+      { subAdminId: subAdmin.id },
       process.env.ACCESS_TOKEN_SECRET,
       { expiresIn: "15m" }
     );
 
-    // Respond with the token and userId
     resp.status(200).json({
       message: "Login successful",
       accessToken,
-      userId: SubAdmin.id, // Corrected here
+      userId: subAdmin.id,
     });
   } catch (error) {
     console.error("Login error:", error.message);
@@ -106,104 +126,112 @@ const loginsubAdmin = asyncHandler(async (req, resp) => {
   }
 });
 
-//
+// @desc Update a subAdmin's details
+//@route PUT /api/users/update/:id
+//@access private
 
-// @desc Update a user's password directly by object ID
-// @route PUT /api/users/update-password/:id
-// @access Private
 
-// @desc Update administrator details
-// @route PUT /api/users/update/:id
-// @access Private
 const updatesubAdmin = expressAsyncHandler(async (req, res) => {
   const { id } = req.params;
-  const { username, email, newPassword, confirmNewPassword } = req.body;
+  const { 
+    username, 
+    email, 
+    newPassword, 
+    confirmNewPassword, 
+    mobileNo, 
+    address, 
+    city, 
+    pinCode, 
+    location ,
+    district
+  } = req.body;
+
+  // Validate the user ID
+  if (!mongoose.Types.ObjectId.isValid(id)) {
+    res.status(400).json({ message: "Invalid user ID!" });
+    return;
+  }
 
   try {
-    // Check if ID is valid
-    if (!mongoose.Types.ObjectId.isValid(id)) {
-      res.status(400).json({ message: "Invalid user ID!" });
-      return;
-    }
-
-    // Find the administrator by ID
-    const subAdmin = await subAdmin.findById(id);
+    const subAdmin = await SubAdmin.findById(id);
     if (!subAdmin) {
       res.status(404).json({ message: "User not found!" });
       return;
     }
 
-    // Update only the fields that are provided
+    // Update fields if provided
     if (username) subAdmin.username = username;
     if (email) subAdmin.email = email;
+    if (mobileNo) subAdmin.mobileNo = mobileNo;
+    if (address) subAdmin.address = address;
+    if (city) subAdmin.city = city;
+    if (pinCode) subAdmin.pinCode = pinCode;
+    if (location) subAdmin.location = location;
+    if (district) subAdmin.district = district; // Added district here (could be text or coordinates)
 
-    // If both newPassword and confirmNewPassword are provided, check and update password
+    // Check and update password if new password and confirmation password are provided
     if (newPassword && confirmNewPassword) {
       if (newPassword !== confirmNewPassword) {
-        res
-          .status(400)
-          .json({ message: "New password and confirmation do not match!" });
+        res.status(400).json({ message: "New password and confirmation do not match!" });
         return;
       }
-      // Hash the new password
       const hashedNewPassword = await bcrypt.hash(newPassword, 10);
       subAdmin.password = hashedNewPassword;
     }
 
-    // Save the updated administrator
+    // Save the updated subAdmin document
     await subAdmin.save();
 
-    res.status(200).json({ message: "subAdmin details updated successfully!" });
+    // Respond with success
+    res.status(200).json({ message: "SubAdmin details updated successfully!" });
   } catch (error) {
-    console.error(`Error updating subAdmin details: ${error.message}`);
     res.status(500).json({ message: "Server error. Please try again later." });
   }
 });
 
-const getAllSubAdmin = asyncHandler(async (req, res) => {
-  try {
-    // Fetch all administrators
-    const subAdmin = await subAdmin.find({});
 
-    // Send the retrieved data back as a JSON response
-    res.status(200).json(subAdmin);
+
+
+// @desc Get all subAdmins
+//@route GET /api/users
+//@access private
+const getAllSubAdmin = expressAsyncHandler(async (req, res) => {
+  try {
+    const subAdmins = await SubAdmin.find({});
+    res.status(200).json(subAdmins);
   } catch (error) {
-    // Handle any errors that occur during the database query
     res.status(500).json({ message: error.message });
   }
 });
-// @desc current  userinfo
-//@route POST/api/users/current
-//@access private
 
-const currentUser = asyncHandler(async (req, resp) => {
-  resp.json(req.userAdministrator);
+// @desc Get current user info
+//@route POST /api/users/current
+//@access private
+const currentUser = expressAsyncHandler(async (req, resp) => {
+  resp.json(req.userSubAdmin); // Assuming `req.userSubAdmin` is set after authentication
 });
 
-// @desc Delete an administrator
-// @route DELETE /api/users/delete/:id
-// @access Private
+// @desc Delete a subAdmin
+//@route DELETE /api/users/delete/:id
+//@access private
 const deleteSubAdmin = expressAsyncHandler(async (req, res) => {
   const { id } = req.params;
 
+  // Validate the user ID
+  if (!mongoose.Types.ObjectId.isValid(id)) {
+    res.status(400).json({ message: "Invalid user ID!" });
+    return;
+  }
+
   try {
-    // Check if the ID is valid
-    if (!mongoose.Types.ObjectId.isValid(id)) {
-      res.status(400).json({ message: "Invalid user ID!" });
-      return;
-    }
-
-    // Find and delete the administrator by ID
-    const deletedsubAdmin = await subAdmin.findByIdAndDelete(id);
-
-    if (!deletedsubAdmin) {
+    const deletedSubAdmin = await SubAdmin.findByIdAndDelete(id);
+    if (!deletedSubAdmin) {
       res.status(404).json({ message: "User not found!" });
       return;
     }
 
-    res.status(200).json({ message: "subAdmin  deleted successfully!" });
+    res.status(200).json({ message: "SubAdmin deleted successfully!" });
   } catch (error) {
-    console.error(`Error deleting subAdmin : ${error.message}`);
     res.status(500).json({ message: "Server error. Please try again later." });
   }
 });
