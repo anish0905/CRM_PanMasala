@@ -36,15 +36,15 @@ const registersubAdmin = asyncHandler(async (req, resp) => {
   const hashedCpassword = await bcrypt.hash(confirmPassword, 10);
   console.log("Hashed CPassword", hashedCpassword);
 
-  const subAdmin = await subAdmin.create({
+  const newSubAdmin = await subAdmin.create({
     username,
     email,
     password: hashedPassword,
     confirmPassword: hashedCpassword,
   });
   console.log(`subAdmin User created ${subAdmin}`);
-  if (subAdmin) {
-    resp.status(201).json({ _id: subAdmin.id, email: subAdmin.email });
+  if (newSubAdmin) {
+    resp.status(201).json({ _id: newSubAdmin.id, email: newSubAdmin.email });
   } else {
     resp.status(400);
     throw new Error("subAdmin data us not valid");
@@ -62,32 +62,32 @@ const loginsubAdmin = asyncHandler(async (req, resp) => {
 
   // Validate input
   if (!email || !password) {
-    resp.status(400);
-    throw new Error("All fields are mandatory!");
+    resp.status(400).json({ message: "All fields are mandatory!" });
+    return;
   }
 
   try {
     // Check if subAdmin exists
-    const subAdmin = await subAdmin.findOne({ email });
+    const SubAdmin = await subAdmin.findOne({ email }); // Ensure the model is imported properly
 
-    if (!subAdmin) {
-      resp.status(401);
-      throw new Error("Email or password is not valid");
+    if (!SubAdmin) {
+      resp.status(401).json({ message: "Email or password is not valid" });
+      return;
     }
 
     // Compare password with hashed password
-    const isPasswordValid = await bcrypt.compare(password, subAdmin.password);
+    const isPasswordValid = await bcrypt.compare(password, SubAdmin.password); // Corrected here
 
     if (!isPasswordValid) {
-      resp.status(401);
-      throw new Error("Email or password is not valid");
+      resp.status(401).json({ message: "Email or password is not valid" });
+      return;
     }
 
     // Generate JWT token
     const accessToken = jwt.sign(
       {
         usersubAdmin: {
-          id: subAdmin.id, // Include only necessary info
+          id: SubAdmin.id, // Include only necessary info in the token
         },
       },
       process.env.ACCESS_TOKEN_SECRET,
@@ -96,12 +96,13 @@ const loginsubAdmin = asyncHandler(async (req, resp) => {
 
     // Respond with the token and userId
     resp.status(200).json({
+      message: "Login successful",
       accessToken,
-      userId: subAdmin.id,
+      userId: SubAdmin.id, // Corrected here
     });
   } catch (error) {
-    resp.status(500);
-    throw new Error("An error occurred during login.");
+    console.error("Login error:", error.message);
+    resp.status(500).json({ message: "An error occurred during login." });
   }
 });
 
