@@ -2,6 +2,7 @@ import React, { useEffect } from "react";
 import "./App.css";
 import { Route, Routes, useLocation, useNavigate } from "react-router-dom";
 import Login from "./pages/Admin/Login";
+import AdminDashbord from "./pages/Admin/AdminDashbord";
 import Dashboard from "./pages/SubAdmin/dashboard/Dashboard";
 
 function App() {
@@ -13,6 +14,7 @@ function App() {
   return (
     <Routes>
       <Route path="/" element={<Login />} />
+      <Route path="/AdminDashBoard" element={<AdminDashbord />} />
 
       <Route path="/SubadminDashBoard" element={<Dashboard />} />
     </Routes>
