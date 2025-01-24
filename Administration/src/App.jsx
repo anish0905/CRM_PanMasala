@@ -3,6 +3,8 @@ import "./App.css";
 import { Route, Routes, useLocation, useNavigate } from "react-router-dom";
 import Login from "./pages/Admin/Login";
 import AdminDashbord from "./pages/Admin/AdminDashbord";
+import SubAdminDashboard from "./pages/SubAdmin/dashboard/Dashboard";
+
 import SubAdminDetails from "./pages/Admin/subAdmin/SubAdminDetails";
 function App() {
   const navigate = useNavigate();
@@ -14,6 +16,8 @@ function App() {
     <Routes>
       <Route path="/" element={<Login />} />
       <Route path="/AdminDashBoard" element={<AdminDashbord />} />
+
+      <Route path="/SubadminDashBoard" element={<SubAdminDashboard />} />
       <Route path="/manage/Sub-Admin/:name/:role" element={<SubAdminDetails />} />
     </Routes>
   );
