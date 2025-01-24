@@ -7,6 +7,7 @@ const {
   updatesubAdmin,
   getAllSubAdmin,
   deleteSubAdmin,
+  
 } = require("../../controllers/subAdmin/subAdminController");
 const validateToken = require("../../middleware/validateTokenHandler");
 
@@ -27,7 +28,11 @@ router.get("/users", getAllSubAdmin);
 router.get("/current", validateToken, currentUser);
 
 //delete user
+router.get("/getAlluser/",getAllSubAdmin)
 
 router.delete("/delete/:id", deleteSubAdmin);
+
+
+
 
 module.exports = router;
