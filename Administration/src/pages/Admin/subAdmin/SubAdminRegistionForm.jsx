@@ -126,7 +126,14 @@ const SubAdminRegistionForm = ({ onClose, selectedsubAdmin ,fetchsubAdmins}) => 
           />
         </div>
 
-        <form className="space-y-4" onSubmit={handleSubmit}>
+        <form className="space-y-4" onSubmit={handleSubmit} style={{
+            maxHeight: '800px',
+            overflow: 'scroll',
+            scrollbarWidth: 'none', // Firefox
+            msOverflowStyle: 'none', // Internet Explorer / Edge
+            WebkitOverflowScrolling: 'touch', // Enable smooth scrolling for iOS Safari
+            WebkitScrollbar: 'none' // Chrome/Safari
+          }}>
           {/* Username */}
           <div>
             <label htmlFor="username" className="block text-sm font-medium text-gray-700">Username</label>

@@ -22,6 +22,7 @@ const SubAdminDetails = () => {
   const location = useLocation();
 
   const URI = import.meta.env.VITE_API_URL;
+  const token = localStorage.getItem("token");
 
   // Pagination state
   const [currentPage, setCurrentPage] = useState(1);
@@ -105,9 +106,15 @@ const SubAdminDetails = () => {
 
     if (confirmResult.isConfirmed) {
       try {
-        const response = await fetch(`${BASE_URL}/api/subAdmin/${id}`, {
+        const response = await fetch(`${URI}/api/admin/subAdmin/delete/${id}`, {
           method: "DELETE",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
         });
+
+        Swal.fire("sucess", "sub-Admin delete sucessfully", "error");
+        fetchsubAdmins();
 
       } catch (error) {
         console.error("Error sub Admin:", error);

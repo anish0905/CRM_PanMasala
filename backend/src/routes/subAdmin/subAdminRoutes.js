@@ -30,7 +30,7 @@ router.get("/current", validateToken, currentUser);
 //delete user
 router.get("/getAlluser/",getAllSubAdmin)
 
-router.delete("/delete/:id", deleteSubAdmin);
+router.delete("/delete/:id", validateToken, deleteSubAdmin);
 
 
 

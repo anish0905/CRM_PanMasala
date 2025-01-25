@@ -5,7 +5,8 @@ import "react-toastify/dist/ReactToastify.css";
 import { IoMdClose } from "react-icons/io";
 import stateData from "../../../statesData"; // Import stateData
 
-const CNFRegistionForm = ({ onClose, selectedCNF ,fetchCNFs}) => {
+const CNFRegistionForm = ({ onClose, selectedCNF, fetchCNFs }) => {
+  const [subAdmins, setSubAdmins] = useState([]);
   const [formData, setFormData] = useState({
     username: "",
     email: "",
@@ -18,7 +19,9 @@ const CNFRegistionForm = ({ onClose, selectedCNF ,fetchCNFs}) => {
     address: "",
     pinCode: "",
     selectedsubAdmin: "",
-    district: "", // To handle district selection
+    district: "",
+    subAdmin: "", // This will store subAdmin selection
+    region: "", // Added region to the form data
   });
 
   const URI = import.meta.env.VITE_API_URL;
@@ -34,10 +37,14 @@ const CNFRegistionForm = ({ onClose, selectedCNF ,fetchCNFs}) => {
     setFormData({ ...formData, state: selectedState, district: "" }); // Reset district on state change
   };
 
+  // Handle subAdmin change
+  const handlesubAdminChange = (e) => {
+    setFormData({ ...formData, subAdmin: e.target.value });
+  };
+
   // Handle form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
 
     // Check if passwords match
     if (formData.password !== formData.confirmPassword) {
@@ -47,20 +54,20 @@ const CNFRegistionForm = ({ onClose, selectedCNF ,fetchCNFs}) => {
 
     const requestData = {
       ...formData,
-      selectedsubAdmin: formData.selectedsubAdmin,
+      selectedsubAdmin: formData.subAdmin, // Added subAdmin selection to the request
     };
 
     try {
       let response;
       if (selectedCNF) {
         response = await axios.put(
-          `${URI}/api/CNF/update/${selectedCNF._id}`,
+          `${URI}/api/CNF_Agent/update/${selectedCNF._id}`,
           requestData
         );
         toast.success("User updated successfully!");
       } else {
         response = await axios.post(
-          `${URI}/api/CNF/register`,
+          `${URI}/api/CNF_Agent/register`,
           requestData
         );
         toast.success("User registered successfully!");
@@ -79,13 +86,27 @@ const CNFRegistionForm = ({ onClose, selectedCNF ,fetchCNFs}) => {
         address: "",
         mobileNo: "",
         pinCode: "",
-        selectedsubAdmin: "",
+        subAdmin: "",
         district: "", // Reset district on form submission
+        region: "", // Reset region on form submission
       });
       onClose();
     } catch (error) {
       console.error("Registration failed:", error.response?.data?.error || error.message);
       toast.error("Registration failed!");
+    }
+  };
+
+  useEffect(() => {
+    fetchSubAdmin();
+  }, []);
+
+  const fetchSubAdmin = async () => {
+    try {
+      const respo = await axios.get(`${URI}/api/subAdmin/getAlluser`);
+      setSubAdmins(respo.data);
+    } catch (error) {
+      console.error("Error fetching sub-admins:", error);
     }
   };
 
@@ -101,7 +122,8 @@ const CNFRegistionForm = ({ onClose, selectedCNF ,fetchCNFs}) => {
         state: selectedCNF.state,
         district: selectedCNF.district || "", // Pre-fill district if available
         mobileNo: selectedCNF.mobileNo || "",
-        
+        subAdmin: selectedCNF.subAdmin || "", // Pre-select sub-admin if available
+        region: selectedCNF.region || "", // Pre-fill region if available
       });
     }
   }, [selectedCNF]);
@@ -126,7 +148,17 @@ const CNFRegistionForm = ({ onClose, selectedCNF ,fetchCNFs}) => {
           />
         </div>
 
-        <form className="space-y-4" onSubmit={handleSubmit}>
+        <form className="space-y-4 overflow-hidden"
+          style={{
+            maxHeight: '800px',
+            overflow: 'scroll',
+            scrollbarWidth: 'none', // Firefox
+            msOverflowStyle: 'none', // Internet Explorer / Edge
+            WebkitOverflowScrolling: 'touch', // Enable smooth scrolling for iOS Safari
+            WebkitScrollbar: 'none' // Chrome/Safari
+          }}
+
+          onSubmit={handleSubmit}>
           {/* Username */}
           <div>
             <label htmlFor="username" className="block text-sm font-medium text-gray-700">Username</label>
@@ -273,6 +305,37 @@ const CNFRegistionForm = ({ onClose, selectedCNF ,fetchCNFs}) => {
               className="w-full px-4 py-2 mt-1 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-600"
               placeholder="Pin Code"
             />
+          </div>
+
+          {/* Region */}
+          <div>
+            <label htmlFor="region" className="block text-sm font-medium text-gray-700">Region</label>
+            <input
+              type="text"
+              id="region"
+              name="region"
+              value={formData.region}
+              onChange={handleChange}
+              className="w-full px-4 py-2 mt-1 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-600"
+              placeholder="Region"
+            />
+          </div>
+
+          {/* Sub-Admin */}
+          <div>
+            <label htmlFor="subAdmin" className="block text-sm font-medium text-gray-700">Sub-Admin</label>
+            <select
+              id="subAdmin"
+              name="subAdmin"
+              value={formData.subAdmin}
+              onChange={handlesubAdminChange}
+              className="w-full px-4 py-2 mt-1 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-600"
+            >
+              <option value="">Select Sub-Admin</option>
+              {subAdmins.map((user, index) => (
+                <option key={index} value={user._id}>{user.username} ({user.state} {user.district})</option>
+              ))}
+            </select>
           </div>
 
           {/* Submit Button */}

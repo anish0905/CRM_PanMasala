@@ -28,6 +28,6 @@ router.get("/current", validateToken, currentUser);
 
 //delete user
 
-router.delete("/delete/:id", validateToken, deleteUser);
+router.delete("/:id", validateToken, deleteUser);
 
 module.exports = router;

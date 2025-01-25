@@ -16,10 +16,7 @@ const CNFAgentSchema = new mongoose.Schema(
       type: String,
       required: [true, "Please add the user password"],
     },
-    confirmPassword: {
-      type: String,
-      required: [true, "Please add the confirm password"],
-    },
+   
     mobileNo: {
       type: String,
       required: [true, "Please add the mobile number"],
