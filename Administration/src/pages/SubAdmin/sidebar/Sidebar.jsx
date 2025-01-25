@@ -158,7 +158,11 @@ const Sidebar = ({ onClose }) => {
             <div className="flex justify-start ml-10 flex-col font-semibold text-xl text-black">
               <DropdownItem
                 text="Super Stockist Details"
-                onClick={() => handleItemClick("/SuperStockistDetails")}
+                onClick={() =>
+                  handleItemClick(
+                    "/manage/superstockist/Registration/Sub-Admin"
+                  )
+                }
               />
               <DropdownItem
                 text="Stockist"

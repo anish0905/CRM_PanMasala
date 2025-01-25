@@ -24,12 +24,12 @@ function App() {
         path="/manage/Sub-Admin/:name/:role"
         element={<SubAdminDetails />}
       />
-       <Route
-        path="/manage/CNF/:name/:role"
-        element={<CNFDetails />}
-      />
+      <Route path="/manage/CNF/:name/:role" element={<CNFDetails />} />
 
-      <Route path="/SuperStockistDetails" element={<SuperStockistDetails />} />
+      <Route
+        path="/manage/superstockist/:name/:role"
+        element={<SuperStockistDetails />}
+      />
     </Routes>
   );
 }
