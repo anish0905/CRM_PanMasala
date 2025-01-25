@@ -190,24 +190,31 @@ const ShopInspectionModule = ({ onClose, fetchShops, shopData }) => {
 
   return (
     <div className="flex h-screen">
-      <Sidebar />
-      <ToastContainer />
-      <Card
-        color="transparent"
-        shadow={false}
-        className="p-6 w-full lg:px-[10%]"
-      >
-        <div className="flex justify-center mb-4 mt-20">
-          <Typography variant="h4" className="text-[#1e40af]">
-            {isUpdating ? "Update Shop Inspection" : "Add New Vendor"}
-          </Typography>
-        </div>
-        <form
-          className="w-full space-y-4 bg-white shadow-lg p-4 rounded-lg max-w-8xl"
-          onSubmit={handleSubmit}
+      <div className="h-screen lg:fixed top-0 left-0 lg:w-64 ">
+        <Sidebar />
+      </div>
+      <div className="flex-1 p-6 lg:ml-80 overflow-y-auto">
+        <ToastContainer />
+        <Card
+          color="transparent"
+          shadow={false}
+          className="p-6 w-full lg:px-[10%]"
         >
-          {["shop_name", "shop_address", "shop_contact_number", "shop_owner_name"].map(
-            (field, index) => (
+          <div className="flex justify-center mb-4 mt-20">
+            <Typography variant="h4" className="text-[#1e40af]">
+              {isUpdating ? "Update Shop Inspection" : "Add New Vendor"}
+            </Typography>
+          </div>
+          <form
+            className="w-full space-y-4 bg-white shadow-lg p-4 rounded-lg max-w-8xl"
+            onSubmit={handleSubmit}
+          >
+            {[
+              "shop_name",
+              "shop_address",
+              "shop_contact_number",
+              "shop_owner_name",
+            ].map((field, index) => (
               <div key={index}>
                 <label
                   htmlFor={field}
@@ -228,51 +235,51 @@ const ShopInspectionModule = ({ onClose, fetchShops, shopData }) => {
                   className="p-4"
                 />
               </div>
-            )
-          )}
-          <div>
-            <label
-              htmlFor="Feedback_Provided"
-              className="block text-sm font-medium text-gray-700"
-            >
-              Feedback Provided
-            </label>
-            <Textarea
-              id="Feedback_Provided"
-              name="Feedback_Provided"
-              value={formData.Feedback_Provided}
-              onChange={handleChange}
-              placeholder="Provide Feedback"
-              className="p-4"
-            />
-          </div>
-          <div className="p-4">
-            <label
-              htmlFor="photoUpload"
-              className="block text-sm font-medium text-gray-700 mb-2"
-            >
-              Upload Photo
-            </label>
-            <input
-              id="photoUpload"
-              type="file"
-              accept="image/*"
-              onChange={handleImageUpload}
-              className="block w-full px-4 py-2 border rounded-md"
-            />
-            {imagePreview && (
-              <img
-                src={imagePreview}
-                alt="Selected"
-                className="mt-4 h-32 w-32 object-cover rounded-lg"
+            ))}
+            <div>
+              <label
+                htmlFor="Feedback_Provided"
+                className="block text-sm font-medium text-gray-700"
+              >
+                Feedback Provided
+              </label>
+              <Textarea
+                id="Feedback_Provided"
+                name="Feedback_Provided"
+                value={formData.Feedback_Provided}
+                onChange={handleChange}
+                placeholder="Provide Feedback"
+                className="p-4"
               />
-            )}
-          </div>
-          <Button type="submit" className="w-full bg-[#1e40af] p-4">
-            {isUpdating ? "Update" : "Submit"}
-          </Button>
-        </form>
-      </Card>
+            </div>
+            <div className="p-4">
+              <label
+                htmlFor="photoUpload"
+                className="block text-sm font-medium text-gray-700 mb-2"
+              >
+                Upload Photo
+              </label>
+              <input
+                id="photoUpload"
+                type="file"
+                accept="image/*"
+                onChange={handleImageUpload}
+                className="block w-full px-4 py-2 border rounded-md"
+              />
+              {imagePreview && (
+                <img
+                  src={imagePreview}
+                  alt="Selected"
+                  className="mt-4 h-32 w-32 object-cover rounded-lg"
+                />
+              )}
+            </div>
+            <Button type="submit" className="w-full bg-[#1e40af] p-4">
+              {isUpdating ? "Update" : "Submit"}
+            </Button>
+          </form>
+        </Card>
+      </div>
     </div>
   );
 };

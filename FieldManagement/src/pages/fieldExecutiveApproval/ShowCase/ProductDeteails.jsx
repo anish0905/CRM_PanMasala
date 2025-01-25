@@ -19,7 +19,7 @@ const ProductModelDeteails = ({ show, onClose, product }) => {
 
   const getProductDetails = async (productId) => {
     try {
-      const response = await axios.get(`${BASE_URL}/api/producteomm/${productId}`);
+      const response = await axios.get(`${BASE_URL}/api/e-commerce_product/${productId}`);
       setProductDetails(response.data);
     } catch (error) {
       console.error("Error fetching product details:", error);

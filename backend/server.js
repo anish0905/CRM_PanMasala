@@ -34,15 +34,16 @@ app.use(express.json()); // Parse JSON payloads
 // Field Management Routes
 app.use("/api/fieldManager", fieldManagerLogin);
 app.use("/api/inspectionShop", inspectionShopRoutes);
-app.use("/api/fieldManagerLocation", fieldManagerLocation); // Fixed typo
+app.use("/api/fieldManagerLocation", fieldManagerLocation); 
 app.use("/api/showCase", showCaseRoute);
-app.use("/api/vendorNotInterested", vendorNotInterested); // Fixed typo
+app.use("/api/vendornotIntrested", vendorNotInterested); 
 
 // Attendance Routes
 app.use("/api/attendance", attendanceRoute);
 
 // E-commerce Routes
-app.use("/api/productEcomm", productEcomm); 
+
+app.use("/api/e-commerce_product", productEcomm); 
 
 // Admin Routes
 app.use("/api/admin", adminRoutes);

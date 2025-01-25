@@ -20,7 +20,7 @@ export function Product() {
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const response = await axios.get(`${BASE_URL}/api/producteomm/`);
+        const response = await axios.get(`${BASE_URL}/api/e-commerce_product/`);
         setProducts(response.data.products);
         setFilteredProducts(response.data.products);
       } catch (error) {
