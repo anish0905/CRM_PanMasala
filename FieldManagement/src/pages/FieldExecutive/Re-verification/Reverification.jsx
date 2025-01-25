@@ -81,7 +81,7 @@ const Reverification = () => {
   };
 
   return (
-    <div className="flex gap-10 min-h-screen">
+    <div className="flex gap-10 min-h-screen ">
       <div>
         <Sidebar />
       </div>

@@ -1,5 +1,5 @@
 const asyncHandler = require("express-async-handler");
-const SuperStockistRegistered = require("../../models/superStockist/superStockistModel");
+const SuperStockistRegistered = require("../../models/superStockist/superStockist.Model");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const expressAsyncHandler = require("express-async-handler");

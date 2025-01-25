@@ -6,6 +6,7 @@ import Login from "./pages/CNF/Login";
 import CNFDashbord from "./pages/CNF/CNFDashbord";
 // import SubAdminDashboard from "./pages/SubAdmin/dashboard/Dashboard";
 import SuperStockistDetails from "./pages/SuperStockist/superStockist/SuperStockistDetails";
+import SuperStockistDashbord from "./pages/SuperStockists/SuperStockistDashbord";
 
 // import SubAdminDetails from "./pages/Admin/subAdmin/SubAdminDetails";
 // import CNFDetails from "./pages/Admin/CNF/CNFDetails";
@@ -19,6 +20,7 @@ function App() {
     <Routes>
       <Route path="/" element={<Login />} />
       <Route path="/CNFDashBoard" element={<CNFDashbord />} />
+      <Route path="/SuperStockistDashBoard" element={<SuperStockistDashbord />} />
       {/* 
       <Route path="/SubadminDashBoard" element={<SubAdminDashboard />} /> */}
       {/* <Route
