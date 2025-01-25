@@ -119,7 +119,7 @@ const CNFSidebar = ({ onClose }) => {
               <DropdownItem
                 text="Add Super Stockist"
                 onClick={() =>
-                  handleItemClick("/manage/superstockist/SuperStockist/CNF")
+                  handleItemClick("/manage/superstockist/Registration/CNF")
                 }
               />
               <DropdownItem

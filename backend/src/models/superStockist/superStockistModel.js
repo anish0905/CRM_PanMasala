@@ -4,6 +4,11 @@ const bcrypt = require("bcrypt");
 // Super Stockist Schema for user registration
 const superStockistSchema = new mongoose.Schema(
   {
+    cnf: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "CNFAgent",
+      required: true,
+    },
     username: {
       type: String,
       required: [true, "Please add the user name"],
@@ -20,7 +25,7 @@ const superStockistSchema = new mongoose.Schema(
       type: String,
       required: [true, "Please add the user password"],
     },
-    phoneNo: {
+    mobileNo: {
       type: String,
       required: [true, "Please add the user phone number"],
       unique: [true, "Phone number already registered"],
@@ -39,6 +44,10 @@ const superStockistSchema = new mongoose.Schema(
       type: String,
       required: [true, "please add the city"],
     },
+    district: {
+      type: String,
+      required: [true, "please add the district"],
+    },
     address: {
       type: String,
       required: [true, "please add the address"],
@@ -47,10 +56,7 @@ const superStockistSchema = new mongoose.Schema(
       type: String,
       required: [true, "please add the pinCode"],
     },
-    wareHouseName: {
-      type: String,
-      required: [true, "please add the wareHouseName"],
-    },
+
     locations: {
       longitude: { type: Number },
       latitude: { type: Number },

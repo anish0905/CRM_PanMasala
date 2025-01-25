@@ -1,198 +1,363 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import axios from "axios";
-import {
-  Card,
-  Input,
-  Button,
-  Typography,
-  Select,
-  Option,
-} from "@material-tailwind/react";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { BASE_URL } from "../../../constants";
 import { IoMdClose } from "react-icons/io";
+import stateData from "../../../statesData"; // Import stateData
 
-const SuperstockistRegister = ({ onClose, selectSuperStockist }) => {
+const SuperstockistRegister = ({
+  onClose,
+  selectedsubAdmin,
+  fetchsubAdmins,
+}) => {
+  const cnfId = localStorage.getItem("userId");
   const [formData, setFormData] = useState({
+    cnf: cnfId,
     username: "",
     email: "",
+    mobileNo: "",
     password: "",
     confirmPassword: "",
     country: "India",
-    phoneNo: "",
-    address: "",
     state: "",
-    pinCode: "",
     city: "",
-    wareHouseName: "",
+    address: "",
+    pinCode: "",
+    selectedSuperStockist: "",
+    district: "", // To handle district selection
   });
 
+  const URI = import.meta.env.VITE_API_URL;
+
+  // Handle form field changes
   const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData({
-      ...formData,
-      [name]: value,
-    });
+    setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
+  // Handle state change to update district options
+  const handleStateChange = (e) => {
+    const selectedState = e.target.value;
+    setFormData({ ...formData, state: selectedState, district: "" }); // Reset district on state change
+  };
+
+  // Handle form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // Validate required fields
-    for (const key in formData) {
-      if (!formData[key]) {
-        toast.error(`${key} is required!`);
-        return;
-      }
+    // Check if passwords match
+    if (formData.password !== formData.confirmPassword) {
+      toast.error("Passwords do not match!");
+      return;
     }
+    // Check if super stockist already exists
+
+    const requestData = {
+      ...formData,
+      selectedSuperStockist: formData.selectedSuperStockist,
+    };
 
     try {
-      const response = selectSuperStockist
-        ? await axios.put(
-            `${BASE_URL}/api/superstockist/${selectSuperStockist._id}`,
-            formData
-          )
-        : await axios.post(`${BASE_URL}/api/superstockist/register`, formData);
+      let response;
+      if (selectedsubAdmin) {
+        response = await axios.put(
+          `${URI}/api/superstockist/${selectedsubAdmin._id}`,
+          requestData
+        );
+        toast.success("Super stockist updated successfully!");
+      } else {
+        response = await axios.post(
+          `${URI}/api/superstockist/register`,
+          requestData
+        );
+        toast.success("Super stockist registered successfully!");
+      }
+      fetchsubAdmins();
 
-      console.log("Response:", response.data);
-      toast.success(
-        selectSuperStockist
-          ? "Superstockist updated successfully!"
-          : "Superstockist registered successfully!"
-      );
-
-      // Clear form data after successful submission
+      // Reset form after submission
       setFormData({
         username: "",
         email: "",
         password: "",
         confirmPassword: "",
         country: "India",
-        phoneNo: "",
-        address: "",
         state: "",
-        pinCode: "",
         city: "",
-        wareHouseName: "",
+        address: "",
+        mobileNo: "",
+        pinCode: "",
+        selectedSuperStockist: "",
+        district: "",
       });
+      onClose();
     } catch (error) {
-      const errorMessage = error.response?.data?.message || error.message;
+      console.error(error.response?.data?.error);
+      const errorMessage =
+        error.response?.data?.error || "Registration failed!";
+      // console.error("Registration failed:", errorMessage);
       toast.error(errorMessage);
-      console.error("Error:", errorMessage);
     }
   };
 
+  // Effect to pre-fill data when editing an existing sub-admin
   useEffect(() => {
-    if (selectSuperStockist) {
+    if (selectedsubAdmin) {
       setFormData({
-        username: selectSuperStockist.username,
-        email: selectSuperStockist.email,
-        phoneNo: selectSuperStockist.phoneNo,
-        address: selectSuperStockist.address,
-        city: selectSuperStockist.city,
-        pinCode: selectSuperStockist.pinCode,
-        state: selectSuperStockist.state,
-        wareHouseName: selectSuperStockist.wareHouseName,
+        username: selectedsubAdmin.username,
+        email: selectedsubAdmin.email,
+        address: selectedsubAdmin.address,
+        city: selectedsubAdmin.city,
+        pinCode: selectedsubAdmin.pinCode,
+        state: selectedsubAdmin.state,
+        district: selectedsubAdmin.district || "",
+        mobileNo: selectedsubAdmin.mobileNo || "",
       });
     }
-  }, [selectSuperStockist]);
+  }, [selectedsubAdmin]);
+
+  // Get districts based on selected state
+  const getDistricts = (stateName) => {
+    const stateInfo = stateData.find((state) => state.state === stateName);
+    return stateInfo ? stateInfo.districts : [];
+  };
 
   return (
-    <div className="h-full flex justify-center items-center">
+    <div className="flex justify-center items-center h-full font-serif ">
       <ToastContainer />
-      <Card color="transparent" shadow={false} className="w-full max-w-md p-2">
-        <Typography variant="h4" className="text-[#1e40af]">
-          {selectSuperStockist ? "Update super Stockist" : "Registration"}
-        </Typography>
-        <IoMdClose
-          onClick={onClose}
-          className="absolute top-4 right-3 cursor-pointer  text-2xl"
-        />
-        <form onSubmit={handleSubmit} className="mt-8">
-          <div className=" grid lg:grid-cols-2 grid-cols-1 gap-4 ">
-            <div>
-              <Input
-                size="lg"
-                placeholder="Your Name"
-                name="username"
-                value={formData.username}
-                onChange={handleChange}
-              />
-            </div>
-            <Input
-              size="lg"
-              placeholder="Your Email"
+      <div className="bg-white p-6 rounded-lg shadow-md w-full max-w-2xl">
+        <div className="flex justify-between items-center mb-4">
+          <h4 className="text-xl font-bold text-blue-700">
+            {selectedsubAdmin ? "Update Super Stockist" : "Registration"}
+          </h4>
+          <IoMdClose
+            onClick={onClose}
+            className="cursor-pointer text-2xl text-gray-600"
+          />
+        </div>
+
+        <form
+          className="space-y-4"
+          onSubmit={handleSubmit}
+          style={{
+            maxHeight: "800px",
+            overflow: "scroll",
+            scrollbarWidth: "none", // Firefox
+            msOverflowStyle: "none", // Internet Explorer / Edge
+            WebkitOverflowScrolling: "touch", // Enable smooth scrolling for iOS Safari
+            WebkitScrollbar: "none", // Chrome/Safari
+          }}
+        >
+          {/* Username */}
+          <div>
+            <label
+              htmlFor="username"
+              className="block text-sm font-medium text-gray-700"
+            >
+              Username
+            </label>
+            <input
+              type="text"
+              id="username"
+              name="username"
+              value={formData.username}
+              onChange={handleChange}
+              className="w-full px-4 py-2 mt-1 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-600"
+              placeholder="Username"
+            />
+          </div>
+
+          {/* Email */}
+          <div>
+            <label
+              htmlFor="email"
+              className="block text-sm font-medium text-gray-700"
+            >
+              Email
+            </label>
+            <input
               type="email"
+              id="email"
               name="email"
               value={formData.email}
               onChange={handleChange}
+              className="w-full px-4 py-2 mt-1 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-600"
+              placeholder="Email"
             />
-            <Input
-              size="lg"
-              placeholder="Password"
+          </div>
+
+          {/* Mobile Number */}
+          <div>
+            <label
+              htmlFor="mobileNo"
+              className="block text-sm font-medium text-gray-700"
+            >
+              Mobile No
+            </label>
+            <input
+              type="text"
+              id="mobileNo"
+              name="mobileNo"
+              value={formData.mobileNo}
+              onChange={handleChange}
+              className="w-full px-4 py-2 mt-1 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-600"
+              placeholder="Mobile Number"
+            />
+          </div>
+
+          {/* Password */}
+          <div>
+            <label
+              htmlFor="password"
+              className="block text-sm font-medium text-gray-700"
+            >
+              Password
+            </label>
+            <input
               type="password"
+              id="password"
               name="password"
               value={formData.password}
               onChange={handleChange}
+              className="w-full px-4 py-2 mt-1 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-600"
+              placeholder="Password"
             />
-            <Input
-              size="lg"
-              placeholder="Confirm Password"
+          </div>
+
+          {/* Confirm Password */}
+          <div>
+            <label
+              htmlFor="confirmPassword"
+              className="block text-sm font-medium text-gray-700"
+            >
+              Confirm Password
+            </label>
+            <input
               type="password"
+              id="confirmPassword"
               name="confirmPassword"
               value={formData.confirmPassword}
               onChange={handleChange}
+              className="w-full px-4 py-2 mt-1 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-600"
+              placeholder="Confirm Password"
             />
-            <Input
-              size="lg"
-              placeholder="Phone Number"
-              type="tel"
-              name="phoneNo"
-              value={formData.phoneNo}
-              onChange={handleChange}
-            />
-            <Input
-              size="lg"
-              placeholder="Address"
-              name="address"
-              value={formData.address}
-              onChange={handleChange}
-            />
-            <Input
-              size="lg"
-              placeholder="State"
+          </div>
+
+          {/* State */}
+          <div>
+            <label
+              htmlFor="state"
+              className="block text-sm font-medium text-gray-700"
+            >
+              State
+            </label>
+            <select
+              id="state"
               name="state"
               value={formData.state}
+              onChange={handleStateChange}
+              className="w-full px-4 py-2 mt-1 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-600"
+            >
+              <option value="">Select State</option>
+              {stateData.map((state) => (
+                <option key={state.state} value={state.state}>
+                  {state.state}
+                </option>
+              ))}
+            </select>
+          </div>
+
+          {/* District */}
+          <div>
+            <label
+              htmlFor="district"
+              className="block text-sm font-medium text-gray-700"
+            >
+              District
+            </label>
+            <select
+              id="district"
+              name="district"
+              value={formData.district}
               onChange={handleChange}
-            />
-            <Input
-              size="lg"
-              placeholder="Pin Code"
-              name="pinCode"
-              value={formData.pinCode}
-              onChange={handleChange}
-            />
-            <Input
-              size="lg"
-              placeholder="City"
+              className="w-full px-4 py-2 mt-1 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-600"
+              disabled={!formData.state} // Disable if no state is selected
+            >
+              <option value="">Select District</option>
+              {getDistricts(formData.state).map((district) => (
+                <option key={district} value={district}>
+                  {district}
+                </option>
+              ))}
+            </select>
+          </div>
+
+          {/* City */}
+          <div>
+            <label
+              htmlFor="city"
+              className="block text-sm font-medium text-gray-700"
+            >
+              City
+            </label>
+            <input
+              type="text"
+              id="city"
               name="city"
               value={formData.city}
               onChange={handleChange}
-            />
-            <Input
-              size="lg"
-              placeholder="Warehouse Name"
-              name="wareHouseName"
-              value={formData.wareHouseName}
-              onChange={handleChange}
+              className="w-full px-4 py-2 mt-1 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-600"
+              placeholder="City"
             />
           </div>
-          <Button type="submit" className="mt-4 bg-[#1e40af]" fullWidth>
-            {selectSuperStockist ? "Update" : "submit"}
-          </Button>
+
+          {/* Address */}
+          <div>
+            <label
+              htmlFor="address"
+              className="block text-sm font-medium text-gray-700"
+            >
+              Address
+            </label>
+            <input
+              type="text"
+              id="address"
+              name="address"
+              value={formData.address}
+              onChange={handleChange}
+              className="w-full px-4 py-2 mt-1 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-600"
+              placeholder="Address"
+            />
+          </div>
+
+          {/* Pin Code */}
+          <div>
+            <label
+              htmlFor="pinCode"
+              className="block text-sm font-medium text-gray-700"
+            >
+              Pin Code
+            </label>
+            <input
+              type="text"
+              id="pinCode"
+              name="pinCode"
+              value={formData.pinCode}
+              onChange={handleChange}
+              className="w-full px-4 py-2 mt-1 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-600"
+              placeholder="Pin Code"
+            />
+          </div>
+
+          {/* Submit Button */}
+          <div className="flex justify-end">
+            <button
+              type="submit"
+              className="px-6 py-2 text-white bg-blue-600 rounded-lg hover:bg-blue-700 focus:outline-none"
+            >
+              {selectedsubAdmin ? "Update" : "Register"}
+            </button>
+          </div>
         </form>
-      </Card>
+      </div>
     </div>
   );
 };

@@ -17,6 +17,7 @@ function validatePassword(password) {
 
 const registerUser = asyncHandler(async (req, resp) => {
   const {
+    cnf, // Ensure `cnf` is provided in the request body
     username,
     email,
     password,
@@ -24,23 +25,16 @@ const registerUser = asyncHandler(async (req, resp) => {
     country,
     state,
     city,
+    district,
     address,
     pinCode,
     wareHouseName,
-    phoneNo,
+    mobileNo,
   } = req.body;
-
-  // Validate passwords
-  if (password !== confirmPassword) {
-    throw new Error("Password and confirmPassword do not match!");
-  }
-
-  if (!validatePassword(password)) {
-    throw new Error("Password must be between 8 and 20 characters long.");
-  }
 
   // Validate required fields
   if (
+    !cnf || // Validate `cnf` here
     !username ||
     !email ||
     !password ||
@@ -50,9 +44,19 @@ const registerUser = asyncHandler(async (req, resp) => {
     !city ||
     !address ||
     !pinCode ||
-    !wareHouseName
+    !district ||
+    !mobileNo
   ) {
     throw new Error("All fields are mandatory!");
+  }
+
+  // Validate passwords
+  if (password !== confirmPassword) {
+    throw new Error("Password and confirmPassword do not match!");
+  }
+
+  if (!validatePassword(password)) {
+    throw new Error("Password must be between 8 and 20 characters long.");
   }
 
   // Check if user already exists
@@ -66,27 +70,23 @@ const registerUser = asyncHandler(async (req, resp) => {
 
   // Hash passwords
   const hashedPassword = await bcrypt.hash(password, 10);
-  console.log("Hashed Password", hashedPassword);
-
-  const hashedCpassword = await bcrypt.hash(confirmPassword, 10);
-  console.log("Hashed CPassword", hashedCpassword);
 
   // Create user
   const superStockistRegistered = await SuperStockistRegistered.create({
+    cnf, // Include `cnf` here
     username,
     email,
     password: hashedPassword,
-    confirmPassword: hashedCpassword,
     country,
     state,
     city,
     address,
     pinCode,
     wareHouseName,
-    phoneNo,
+    mobileNo,
+    district,
   });
 
-  // console.log(`Executive User created ${superStockistRegistered}`);
   if (superStockistRegistered) {
     return resp.status(201).json({
       _id: superStockistRegistered.id,
@@ -278,7 +278,7 @@ const updateUser = asyncHandler(async (req, res) => {
     address,
     pinCode,
     wareHouseName,
-    phoneNo,
+    mobileNo,
   } = req.body;
 
   // Check if the ID is valid
@@ -304,7 +304,8 @@ const updateUser = asyncHandler(async (req, res) => {
   superStockistRegistered.pinCode = pinCode || superStockistRegistered.pinCode;
   superStockistRegistered.wareHouseName =
     wareHouseName || superStockistRegistered.wareHouseName;
-  superStockistRegistered.phoneNo = phoneNo || superStockistRegistered.phoneNo;
+  superStockistRegistered.mobileNo =
+    mobileNo || superStockistRegistered.mobileNo;
 
   try {
     // Save the updated user details, wait for it to complete

@@ -3,9 +3,9 @@ import Swal from "sweetalert2";
 import { TbHomeStats } from "react-icons/tb";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 
-import SidebarModal from "../sidebar/SidebarModel";
-import Sidebar from "../sidebar/Sidebar";
-import SuperstockistRegister from "./SuperstockistRegister";
+import SuperstockistRegister from "../../CNF/superStockist/SuperstockistRegister";
+import CNFSidebar from "../../CNF/CNFSidebar";
+import CNFSideBarModal from "../../CNF/CNFSideBarModal";
 
 const SubAdminDetails = () => {
   const [subAdmins, setsubAdmins] = useState([]);
@@ -20,7 +20,7 @@ const SubAdminDetails = () => {
   const navigate = useNavigate();
   const location = useLocation();
 
-  const URI = import.meta.env.VITE_API_URL;
+  const BASE_URL = import.meta.env.VITE_API_URL;
 
   // Pagination state
   const [currentPage, setCurrentPage] = useState(1);
@@ -33,9 +33,11 @@ const SubAdminDetails = () => {
   const fetchSuperStockists = async () => {
     try {
       const response =
-        location.pathname === "/manage/superstockist/Registration/Sub-Admin"
-          ? await fetch(`${URI}/api/superstockist/getAlluser`)
-          : await fetch(`${URI}/api/superstockist/getAlluser/${currentUserId}`);
+        location.pathname === "/manage/superstockist/Registration/CNF"
+          ? await fetch(`${BASE_URL}/api/superstockist/getAlluser`)
+          : await fetch(
+              `${BASE_URL}/api/superstockist/getAlluser/${currentUserId}`
+            );
 
       if (!response.ok) {
         throw new Error("Failed to fetch subAdmins");
@@ -106,7 +108,7 @@ const SubAdminDetails = () => {
 
     if (confirmResult.isConfirmed) {
       try {
-        const response = await fetch(`${BASE_URL}/api/subAdmin/${id}`, {
+        const response = await fetch(`${BASE_URL}/api/superstockist/${id}`, {
           method: "DELETE",
         });
       } catch (error) {
@@ -114,6 +116,7 @@ const SubAdminDetails = () => {
         Swal.fire("Error", "Could not delete Super Stockist", "error");
       }
     }
+    fetchSuperStockists();
   };
 
   const handleUpdate = (deliveryBoy) => {
@@ -133,19 +136,14 @@ const SubAdminDetails = () => {
     <div className="flex gap-6  min-h-sreen w-full">
       {role === "CNF" && (
         <div className="min-h-screen  lg:block hidden">
-          <Sidebar />
-        </div>
-      )}
-      {role === "supersubAdmin" && (
-        <div className="lg:p-5 xl:p-5 ml-0 p-0 h-screen">
-          {/* <SupersubAdminSideBar /> */}
+          <CNFSidebar />
         </div>
       )}
 
       <div className="lg:ml-80 font-serif w-full  md:p-5 p-4">
         <div className=" bg-[#93c5fd] rounded-md shadow p-4 flex gap-4 items-center justify-between">
           <h1 className="flex-grow text-start text-xs sm:text-sm md:text-lg lg:text-xl font-bold text-gray-800">
-            {name === "user"
+            {name === "Registration"
               ? "Manage Super Stockist"
               : name === "stock"
               ? "Super Stockist Inventory"
@@ -168,7 +166,7 @@ const SubAdminDetails = () => {
           )}
           {role === "CNF" && (
             <div className="lg:hidden block">
-              <SidebarModal />
+              <CNFSideBarModal />
             </div>
           )}
         </div>
@@ -180,7 +178,7 @@ const SubAdminDetails = () => {
               <SuperstockistRegister
                 onClose={handleCloseModal}
                 selectedsubAdmin={selectedsubAdmin}
-                fetchsubAdmins={fetchsubAdmins}
+                fetchsubAdmins={fetchSuperStockists}
               />
             </div>
           </div>
