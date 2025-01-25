@@ -8,7 +8,7 @@ const mongoose = require("mongoose");
 // @route POST /api/users/register
 // @access public
 const registerUser = asyncHandler(async (req, resp) => {
-  const { username, email, password, confirmPassword, mobileNo, address, city, pinCode, district, state, region, location } = req.body;
+  const { username, email, password, confirmPassword, mobileNo, address, city, pinCode, district, state, region, location,subAdmin } = req.body;
   
   // Check if passwords match
   if (password !== confirmPassword) {
@@ -44,7 +44,8 @@ const registerUser = asyncHandler(async (req, resp) => {
     district,
     state,
     region, // Added region here
-    location
+    location,
+    subAdmin
   });
 
   if (newUser) {
@@ -102,7 +103,7 @@ const loginUser = asyncHandler(async (req, resp) => {
 // @access Private
 const updateUserDetails = asyncHandler(async (req, res) => {
   const { id } = req.params;
-  const { username, email, newPassword, confirmNewPassword, mobileNo, address, city, pinCode, district, state, region, location } = req.body;
+  const { username, email, newPassword, confirmNewPassword, mobileNo, address, city, pinCode, district, state, region, location ,subAdmin} = req.body;
 
   // Validate user ID
   if (!mongoose.Types.ObjectId.isValid(id)) {
@@ -128,6 +129,7 @@ const updateUserDetails = asyncHandler(async (req, res) => {
   if (state) user.state = state;
   if (region) user.region = region; // Added region here
   if (location) user.location = location;
+  if (subAdmin) user.subAdmin = subAdmin; // Added subAdmin here
 
   // If both new password and confirm new password are provided, check and update password
   if (newPassword && confirmNewPassword) {
@@ -192,6 +194,8 @@ const deleteUser = asyncHandler(async (req, res) => {
     res.status(500).json({ message: "Server error. Please try again later." });
   }
 });
+
+
 
 module.exports = {
   registerUser,

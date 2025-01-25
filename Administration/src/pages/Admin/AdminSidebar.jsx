@@ -117,11 +117,11 @@ const AdminSidebar = ({ onClose }) => {
 
               <DropdownItem
                 text="Sub-Admin"
-                onClick={() =>handleItemClick("/manage/Sub-Admin/Registration/Sub-Admin")}
+                onClick={() =>handleItemClick("/manage/Sub-Admin/Registration/Admin")}
               />
               <DropdownItem
                 text="CNF"
-                onClick={() => handleItemClick("/superstockistDetails")}
+                onClick={() => handleItemClick("/manage/CNF/Registration/Admin")}
               />
               <DropdownItem
                 text="Super Stockist"

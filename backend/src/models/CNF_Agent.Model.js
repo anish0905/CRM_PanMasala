@@ -63,6 +63,11 @@ const CNFAgentSchema = new mongoose.Schema(
       type: String,
       required: [true, "Please add the region"],
     },
+    subAdmin:{
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "subAdmin", // Reference to SubAdmin model
+    }
+
   },
   {
     timestamps: true, // Automatically adds `createdAt` and `updatedAt`

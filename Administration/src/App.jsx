@@ -7,6 +7,7 @@ import SubAdminDashboard from "./pages/SubAdmin/dashboard/Dashboard";
 import SuperStockistDetails from "./pages/SubAdmin/superStockist/SuperStockistDetails";
 
 import SubAdminDetails from "./pages/Admin/subAdmin/SubAdminDetails";
+import CNFDetails from "./pages/Admin/CNF/CNFDetails";
 function App() {
   const navigate = useNavigate();
   const email = localStorage.getItem("email");
@@ -22,6 +23,10 @@ function App() {
       <Route
         path="/manage/Sub-Admin/:name/:role"
         element={<SubAdminDetails />}
+      />
+       <Route
+        path="/manage/CNF/:name/:role"
+        element={<CNFDetails />}
       />
 
       <Route path="/SuperStockistDetails" element={<SuperStockistDetails />} />

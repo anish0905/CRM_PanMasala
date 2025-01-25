@@ -2,19 +2,19 @@ import React, { useState, useEffect } from 'react';
 import Swal from "sweetalert2";
 import { TbHomeStats } from 'react-icons/tb';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
-import SubAdminRegistionForm from './SubAdminRegistionForm';
+import CNFRegistionForm from './CNFRegistionForm';
 import AdminSideBarModal from '../AdminSideBarModal'
 import AdminSidebar from '../AdminSideBar';
 
 
 
-const SubAdminDetails = () => {
-  const [subAdmins, setsubAdmins] = useState([]);
+const CNFDetails = () => {
+  const [CNFs, setCNFs] = useState([]);
   const [showModal, setShowModal] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
   const [sortField, setSortField] = useState('username');
   const [sortDirection, setSortDirection] = useState('asc');
-  const [selectedsubAdmin, setSelectedsubAdmin] = useState();
+  const [selectedCNF, setSelectedCNF] = useState();
   const email = localStorage.getItem("email");
   const currentUserId = localStorage.getItem("currentUserId");
   const { name,role } = useParams();
@@ -28,24 +28,24 @@ const SubAdminDetails = () => {
   const [itemsPerPage] = useState(10); // Change this for different pagination sizes
 
   useEffect(() => {
-    fetchsubAdmins();
+    fetchCNFs();
   }, []);
 
-  const fetchsubAdmins = async () => {
+  const fetchCNFs = async () => {
     try {
       const response =
-        location.pathname === "/manage/Sub-Admin/Registration/Admin"
-          ? await fetch(`${URI}/api/subAdmin/getAlluser`)
-          : await fetch(`${URI}/api/subAdmin/getAlluser/${currentUserId}`)
+        location.pathname === "/manage/CNF/Registration/Admin"
+          ? await fetch(`${URI}/api/CNF_Agent/getAlluser`)
+          : await fetch(`${URI}/api/CNF_Agent/getAlluser/${currentUserId}`)
   
       if (!response.ok) {
-        throw new Error("Failed to fetch subAdmins");
+        throw new Error("Failed to fetch CNFs");
       }
   
       const data = await response.json();
-      setsubAdmins(data);
+      setCNFs(data);
     } catch (error) {
-      console.error("Error fetching subAdmins:", error);
+      console.error("Error fetching CNFs:", error);
     }
   };
   
@@ -57,14 +57,14 @@ const SubAdminDetails = () => {
     setShowModal(false);
   };
 
-  const filteredAndSortedsubAdmins = () => {
-    return subAdmins
-      .filter(subAdmin => {
+  const filteredAndSortedCNFs = () => {
+    return CNFs
+      .filter(CNF => {
         const term = searchTerm.toLowerCase();
         return (
-          subAdmin.username.toLowerCase().includes(term) ||
-          subAdmin.state.toLowerCase().includes(term) ||
-          subAdmin.email.toLowerCase().includes(term)
+          CNF.username.toLowerCase().includes(term) ||
+          CNF.state.toLowerCase().includes(term) ||
+          CNF.email.toLowerCase().includes(term)
         );
       })
       .sort((a, b) => {
@@ -78,15 +78,15 @@ const SubAdminDetails = () => {
   };
 
   // Pagination logic
-  const paginatedsubAdmins = () => {
-    const filteredsubAdmins = filteredAndSortedsubAdmins();
+  const paginatedCNFs = () => {
+    const filteredCNFs = filteredAndSortedCNFs();
     const startIndex = (currentPage - 1) * itemsPerPage;
     const endIndex = startIndex + itemsPerPage;
-    return filteredsubAdmins.slice(startIndex, endIndex);
+    return filteredCNFs.slice(startIndex, endIndex);
   };
 
   // Calculate total pages
-  const totalPages = Math.ceil(filteredAndSortedsubAdmins().length / itemsPerPage);
+  const totalPages = Math.ceil(filteredAndSortedCNFs().length / itemsPerPage);
 
   const handleDeleteClick = async (id) => {
     const confirmResult = await Swal.fire({
@@ -105,24 +105,24 @@ const SubAdminDetails = () => {
 
     if (confirmResult.isConfirmed) {
       try {
-        const response = await fetch(`${BASE_URL}/api/subAdmin/${id}`, {
+        const response = await fetch(`${BASE_URL}/api/CNF/${id}`, {
           method: "DELETE",
         });
 
       } catch (error) {
-        console.error("Error sub Admin:", error);
-        Swal.fire("Error", "Could not delete sub Admin", "error");
+        console.error("Error CNF:", error);
+        Swal.fire("Error", "Could not delete CNF", "error");
       }
     }
   };
 
   const handleUpdate = (deliveryBoy) => {
-    setSelectedsubAdmin(deliveryBoy);
+    setSelectedCNF(deliveryBoy);
     setShowModal(true);
   };
 
   const handleInventory = (user) => {
-    navigate(`/manage/Inventory/${user._id}/${role}/subAdmin`, {
+    navigate(`/manage/Inventory/${user._id}/${role}/CNF`, {
       state: {
         user: user,
       },
@@ -135,20 +135,20 @@ const SubAdminDetails = () => {
      { role ==="Admin" && ( <div className="min-h-screen  lg:block hidden">
         <AdminSidebar />
       </div>)}
-       {role === "supersubAdmin" && (
+       {role === "superCNF" && (
               <div className="lg:p-5 xl:p-5 ml-0 p-0 h-screen">
-                {/* <SupersubAdminSideBar /> */}
+                {/* <SuperCNFSideBar /> */}
               </div>
             )}
 
-      <div className="lg:ml-80 font-serif w-full  md:p-5 p-4">
-        <div className=" bg-[#93c5fd] rounded-md shadow p-4 flex gap-4 items-center justify-between">
+      <div className="lg:ml-80  font-serif w-full  md:p-5 p-4">
+        <div className="bg-[#93c5fd] rounded-md shadow p-4 flex gap-4 items-center justify-between">
           <h1 className="flex-grow text-start text-xs sm:text-sm md:text-lg lg:text-xl font-bold text-gray-800">
             {name === "user"
-              ? "Manage Sub Admin"
+              ? "Manage CNF"
               : name === "stock"
-                ? "Sub Admin Inventory"
-                : "Sub Admin Registration"}
+                ? "CNF Inventory"
+                : "CNF Registration"}
           </h1>
 
           {name === "Registration" && (<button
@@ -163,7 +163,7 @@ const SubAdminDetails = () => {
               {email}
             </div>
           )}
-          { role ==="Admin" && (<div className="lg:hidden block">
+          { role ==="Admin" && (<div className="lg:hidden  block">
             <AdminSideBarModal />
           </div>)}
         </div>
@@ -172,14 +172,14 @@ const SubAdminDetails = () => {
           <div className="fixed inset-0 z-50 flex items-center justify-center w-full">
             <div className="absolute inset-0 bg-black opacity-50"></div>
             <div className="z-50   w-full ">
-              <SubAdminRegistionForm onClose={handleCloseModal} selectedsubAdmin={selectedsubAdmin} fetchsubAdmins={fetchsubAdmins} />
+              <CNFRegistionForm onClose={handleCloseModal} selectedCNF={selectedCNF} fetchCNFs={fetchCNFs} />
             </div>
           </div>
         )}
 
         <div className=" py-8">
           <div className="bg-[#1e40af]  rounded-xl p-4">
-            <h2 className="2xl:text-2xl xl:text-xl md:text-lg text-sm text-white font-bold p-1 mt-1">Sub Admin List</h2>
+            <h2 className="2xl:text-2xl xl:text-xl md:text-lg text-sm text-white font-bold p-1 mt-1">CNF List</h2>
             <div className=" grid lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-4 my-4 text-white ">
               <input
                 type="text"
@@ -207,22 +207,22 @@ const SubAdminDetails = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  {paginatedsubAdmins().map((subAdmin) => (
-                    <tr key={subAdmin._id} className="bg-gray-200 border-b-2 border-blue-200">
-                      <td className="px-2 py-4 md:text-lg text-xs  whitespace-nowrap overflow-hidden overflow-ellipsis border-r-2 border-white">{subAdmin.username}</td>
-                      <td className="px-2 py-4 md:text-lg text-xs  whitespace-nowrap overflow-hidden overflow-ellipsis border-r-2 border-white">{subAdmin.email}</td>
-                      <td className="px-2 py-4 md:text-lg text-xs  whitespace-nowrap overflow-hidden overflow-ellipsis border-r-2 border-white">{subAdmin.mobileNo}</td>
-                      <td className="px-2 py-4 md:text-lg text-xs  whitespace-nowrap overflow-hidden overflow-ellipsis border-r-2 border-white">{subAdmin.state}</td>
-                      <td className="px-2 py-4 md:text-lg text-xs  whitespace-nowrap overflow-hidden overflow-ellipsis border-r-2 border-white">{subAdmin.district}</td>
-                      <td className="px-2 py-4 md:text-lg text-xs  whitespace-nowrap overflow-hidden overflow-ellipsis border-r-2 border-white">{subAdmin.city}</td>
-                      <td className="px-2 py-4 md:text-lg text-xs  whitespace-nowrap overflow-hidden overflow-ellipsis border-r-2 border-white">{subAdmin.address}</td>
-                      <td className="px-2 py-4 md:text-lg text-xs  whitespace-nowrap overflow-hidden overflow-ellipsis  border-r-2 border-white">{subAdmin.pinCode}</td>
+                  {paginatedCNFs().map((CNF) => (
+                    <tr key={CNF._id} className="bg-gray-200 border-b-2 border-blue-200">
+                      <td className="px-2 py-4 md:text-lg text-xs  whitespace-nowrap overflow-hidden overflow-ellipsis border-r-2 border-white">{CNF.username}</td>
+                      <td className="px-2 py-4 md:text-lg text-xs  whitespace-nowrap overflow-hidden overflow-ellipsis border-r-2 border-white">{CNF.email}</td>
+                      <td className="px-2 py-4 md:text-lg text-xs  whitespace-nowrap overflow-hidden overflow-ellipsis border-r-2 border-white">{CNF.mobileNo}</td>
+                      <td className="px-2 py-4 md:text-lg text-xs  whitespace-nowrap overflow-hidden overflow-ellipsis border-r-2 border-white">{CNF.state}</td>
+                      <td className="px-2 py-4 md:text-lg text-xs  whitespace-nowrap overflow-hidden overflow-ellipsis border-r-2 border-white">{CNF.district}</td>
+                      <td className="px-2 py-4 md:text-lg text-xs  whitespace-nowrap overflow-hidden overflow-ellipsis border-r-2 border-white">{CNF.city}</td>
+                      <td className="px-2 py-4 md:text-lg text-xs  whitespace-nowrap overflow-hidden overflow-ellipsis border-r-2 border-white">{CNF.address}</td>
+                      <td className="px-2 py-4 md:text-lg text-xs  whitespace-nowrap overflow-hidden overflow-ellipsis  border-r-2 border-white">{CNF.pinCode}</td>
                       <td className="px-2 py-4 md:text-lg text-xs  whitespace-nowrap overflow-hidden overflow-ellipsis border-r-2 border-white">
-                        {name != "stock" && (<><button onClick={() => handleUpdate(subAdmin)} className="bg-blue-500 text-white p-2 rounded cursor-pointer">
+                        {name != "stock" && (<><button onClick={() => handleUpdate(CNF)} className="bg-blue-500 text-white p-2 rounded cursor-pointer">
                           Update
                         </button>
                           <button
-                            onClick={() => handleDeleteClick(subAdmin._id)}
+                            onClick={() => handleDeleteClick(CNF._id)}
                             className="bg-red-500 text-white p-2 rounded ml-2 cursor-pointer"
                           >
                             Delete
@@ -231,7 +231,7 @@ const SubAdminDetails = () => {
                         )}
                         {name === "stock" && (
                           <button
-                            onClick={() => handleInventory(subAdmin)}
+                            onClick={() => handleInventory(CNF)}
                             className="bg-yellow-500 text-white p-2 rounded ml-2 cursor-pointer"
                           >
                             <TbHomeStats />
@@ -273,4 +273,4 @@ const SubAdminDetails = () => {
   );
 };
 
-export default SubAdminDetails;
+export default CNFDetails;
