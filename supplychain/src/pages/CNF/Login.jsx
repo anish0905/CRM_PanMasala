@@ -53,7 +53,7 @@ const Login = () => {
     try {
       const endpointMap = {
         CNF: "/api/CNF_Agent/login",
-        "Super Stockist": "/api/subadmin/login",
+        "Super Stockist": "/api/superstockist/login",
         Distributer: "/api/distributer/login", // Example endpoint
       };
 
