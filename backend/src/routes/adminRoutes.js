@@ -10,6 +10,9 @@ const {
 } = require("../controllers/adminController");
 const validateToken = require("../middleware/validateTokenHandler");
 
+const { deleteUser }  = require("../controllers/CNF_AgentController");
+const { deleteSubAdmin }  = require("../controllers/subAdmin/subAdminController");
+
 // Register
 router.post("/register", registerUser);
 
@@ -29,5 +32,14 @@ router.get("/current", validateToken, currentUser);
 //delete user
 
 router.delete("/delete/:id", validateToken, deleteAdministrator);
+
+//delete user
+
+router.delete("/cnf/delete/:id", validateToken, deleteUser);
+
+//delete user
+
+router.delete("/subAdmin/delete/:id", validateToken, deleteSubAdmin);
+
 
 module.exports = router;

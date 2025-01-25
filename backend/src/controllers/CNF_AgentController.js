@@ -17,7 +17,7 @@ const registerUser = asyncHandler(async (req, resp) => {
   }
 
   // Check if required fields are provided
-  if (!username || !email || !password || !confirmPassword || !mobileNo || !address || !city || !pinCode || !district || !state || !region || !location) {
+  if (!username || !email || !password || !confirmPassword || !mobileNo || !address || !city || !pinCode || !district || !state || !region ) {
     resp.status(400);
     throw new Error("All fields are mandatory!");
   }

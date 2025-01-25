@@ -23,6 +23,8 @@ const CNFDetails = () => {
 
   const URI = import.meta.env.VITE_API_URL;
 
+  const token = localStorage.getItem("token");
+
   // Pagination state
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage] = useState(10); // Change this for different pagination sizes
@@ -35,7 +37,7 @@ const CNFDetails = () => {
     try {
       const response =
         location.pathname === "/manage/CNF/Registration/Admin"
-          ? await fetch(`${URI}/api/CNF_Agent/getAlluser`)
+          ? await fetch(`${URI}/api/CNF_Agent/users`)
           : await fetch(`${URI}/api/CNF_Agent/getAlluser/${currentUserId}`)
   
       if (!response.ok) {
@@ -105,9 +107,16 @@ const CNFDetails = () => {
 
     if (confirmResult.isConfirmed) {
       try {
-        const response = await fetch(`${BASE_URL}/api/CNF/${id}`, {
+        const response = await fetch(`${URI}/api/admin/cnf/delete/${id}`, {
+
           method: "DELETE",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
         });
+       
+        fetchCNFs();
+        Swal.fire("Deleted!", "CNF has been deleted.", "success");
 
       } catch (error) {
         console.error("Error CNF:", error);
@@ -199,8 +208,8 @@ const CNFDetails = () => {
                     <th className="px-2 py-4 md:text-lg text-xs  border-r-2 border-white">Email</th>
                     <th className="px-2 py-4 md:text-lg text-xs  border-r-2 border-white">Phone No</th>
                     <th className="px-2 py-4 md:text-lg text-xs  border-r-2 border-white">State</th>
-                    <th className="px-2 py-4 md:text-lg text-xs  border-r-2 border-white">district</th>
-                    <th className="px-2 py-4 md:text-lg text-xs  border-r-2 border-white">State</th>
+                    <th className="px-2 py-4 md:text-lg text-xs  border-r-2 border-white">District</th>
+                    <th className="px-2 py-4 md:text-lg text-xs  border-r-2 border-white">City</th>
                     <th className="px-2 py-4 md:text-lg text-xs  border-r-2 border-white">Address</th>
                     <th className="px-2 py-4 md:text-lg text-xs   border-r-2 border-white">PinCode</th>
                     <th className="px-2 py-4 md:text-lg text-xs ">Actions</th>
