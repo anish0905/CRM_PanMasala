@@ -19,10 +19,7 @@ const attendanceRoute = require("./src/routes/Attendance/attendance.router");
 // E-commerce Variables
 const productEcomm = require("./src/routes/e-commerce/e-commerce.router");
 
-// CNF_Agents Variables
-const CNF_Agents_Register = require("./src/routes/CNF_Agent/CNF_Agent_register.router");
-const CNF_Agents_Login = require("./src/routes/CNF_Agent/CNF_Agent_Login.rout");
-
+const CNF_AgentRoute = require("./src/routes/CNF_AgentRouter");
 
 // Connect to the database
 connectDb();
@@ -45,14 +42,15 @@ app.use("/api/vendorNotInterested", vendorNotInterested); // Fixed typo
 app.use("/api/attendance", attendanceRoute);
 
 // E-commerce Routes
-app.use("/api/productEcomm", productEcomm); // Fixed typo
+app.use("/api/productEcomm", productEcomm); 
 
 // Admin Routes
 app.use("/api/admin", adminRoutes);
 
 // CNF_Agents Routes
-app.use("/api/CNF_Agents_Register", CNF_Agents_Register);
-app.use("/api/CNF_Agents_Login", CNF_Agents_Login);
+app.use("/api/CNF_Agent", CNF_AgentRoute);
+
+
 
 // Server Listening
 const port = process.env.PORT || 5001;
