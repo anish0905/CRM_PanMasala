@@ -32,7 +32,9 @@ const VendorNotIntrestedModule = () => {
         const parsedData = JSON.parse(storedData);
 
         // Extract IDs
-        const reviewIds = parsedData.map((data) => data?.review?.data?._id || "");
+        const reviewIds = parsedData.map(
+          (data) => data?.review?.data?._id || ""
+        );
         const productIds = parsedData.map((data) => data?.Product?._id || "");
 
         // Set form data
@@ -130,88 +132,104 @@ const VendorNotIntrestedModule = () => {
       });
       navigate("/showcase");
     } catch (error) {
-      console.error("Error during submission:", error.response?.data || error.message);
+      console.error(
+        "Error during submission:",
+        error.response?.data || error.message
+      );
       toast.error("An error occurred while submitting data. Please try again.");
     }
   };
 
   return (
     <div className="flex h-screen bg-gray-100">
-      <Sidebar className="text-white" />
-      <div className="flex-grow p-4 justify-between items-center content-center lg:w-1/2">
-        <ToastContainer />
-        <form onSubmit={handleSubmit} className="bg-white p-6 rounded-lg shadow-md">
-          <h2 className="text-2xl mb-4 text-center font-semibold">
-            Vendor Not Interested Form
-          </h2>
-          <div className="mb-4">
-            <label className="block text-gray-700">Shop Name</label>
-            <input
-              type="text"
-              name="shopName"
-              value={formData.shopName}
-              onChange={handleChange}
-              className="mt-1 block w-full border border-gray-300 rounded-md p-2"
-            />
-          </div>
-          <div className="mb-4">
-            <label className="block text-gray-700">Owner Name</label>
-            <input
-              type="text"
-              name="ownerName"
-              required
-              value={formData.ownerName}
-              onChange={handleChange}
-              className="mt-1 block w-full border border-gray-300 rounded-md p-2"
-            />
-          </div>
-          <div className="mb-4">
-            <label className="block text-gray-700">Contact Number</label>
-            <input
-              type="text"
-              name="contactNumber"
-              required
-              value={formData.contactNumber}
-              onChange={handleChange}
-              className="mt-1 block w-full border border-gray-300 rounded-md p-2"
-            />
-          </div>
-          <div className="mb-4">
-            <label className="block text-gray-700">Reason for Not Registering</label>
-            <select
-              name="reasonForNotRegistering"
-              required
-              value={formData.reasonForNotRegistering}
-              onChange={handleChange}
-              className="mt-1 block w-full border border-gray-300 rounded-md p-2"
-            >
-              <option value="">Select a reason</option>
-              <option value="unknown_brand">Unknown Brand</option>
-              <option value="not_applicable_product">Not Applicable Product</option>
-              <option value="need_more_time">Need More Time</option>
-              <option value="too_expensive">Too Expensive</option>
-              <option value="other">Other</option>
-            </select>
-          </div>
-          {formData.reasonForNotRegistering === "other" && (
+      <div className="h-screen lg:fixed top-0 left-0 lg:w-64 ">
+        <Sidebar />
+      </div>
+      <div className="flex-1 p-6 lg:ml-80 overflow-y-auto">
+        <div className="mt-28">
+          <ToastContainer />
+            <h2 className="text-2xl mb-4 text-center font-semibold">
+              Vendor Not Interested Form
+            </h2>
+          <form
+            onSubmit={handleSubmit}
+            className="bg-white p-6 rounded-lg shadow-md"
+          >
             <div className="mb-4">
-              <label className="block text-gray-700">Other Reason Details</label>
+              <label className="block text-gray-700">Shop Name</label>
               <input
                 type="text"
-                name="otherReasonDetails"
-                value={formData.otherReasonDetails}
+                name="shopName"
+                value={formData.shopName}
                 onChange={handleChange}
                 className="mt-1 block w-full border border-gray-300 rounded-md p-2"
               />
             </div>
-          )}
-          <button
-            type="submit"
-            className="w-full bg-[#1e40af] hover:bg-[#163a91] text-white py-2 rounded-lg font-medium text-lg"
-          >
-            Submit
-          </button>
-        </form>
+            <div className="mb-4">
+              <label className="block text-gray-700">Owner Name</label>
+              <input
+                type="text"
+                name="ownerName"
+                required
+                value={formData.ownerName}
+                onChange={handleChange}
+                className="mt-1 block w-full border border-gray-300 rounded-md p-2"
+              />
+            </div>
+            <div className="mb-4">
+              <label className="block text-gray-700">Contact Number</label>
+              <input
+                type="text"
+                name="contactNumber"
+                required
+                value={formData.contactNumber}
+                onChange={handleChange}
+                className="mt-1 block w-full border border-gray-300 rounded-md p-2"
+              />
+            </div>
+            <div className="mb-4">
+              <label className="block text-gray-700">
+                Reason for Not Registering
+              </label>
+              <select
+                name="reasonForNotRegistering"
+                required
+                value={formData.reasonForNotRegistering}
+                onChange={handleChange}
+                className="mt-1 block w-full border border-gray-300 rounded-md p-2"
+              >
+                <option value="">Select a reason</option>
+                <option value="unknown_brand">Unknown Brand</option>
+                <option value="not_applicable_product">
+                  Not Applicable Product
+                </option>
+                <option value="need_more_time">Need More Time</option>
+                <option value="too_expensive">Too Expensive</option>
+                <option value="other">Other</option>
+              </select>
+            </div>
+            {formData.reasonForNotRegistering === "other" && (
+              <div className="mb-4">
+                <label className="block text-gray-700">
+                  Other Reason Details
+                </label>
+                <input
+                  type="text"
+                  name="otherReasonDetails"
+                  value={formData.otherReasonDetails}
+                  onChange={handleChange}
+                  className="mt-1 block w-full border border-gray-300 rounded-md p-2"
+                />
+              </div>
+            )}
+            <button
+              type="submit"
+              className="w-full bg-[#1e40af] hover:bg-[#163a91] text-white py-2 rounded-lg font-medium text-lg"
+            >
+              Submit
+            </button>
+          </form>
+        </div>
       </div>
     </div>
   );
