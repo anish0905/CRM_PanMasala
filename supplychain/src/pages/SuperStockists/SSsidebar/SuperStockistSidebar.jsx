@@ -9,7 +9,7 @@ import {
   MdOutlineDeliveryDining,
   MdOutlineManageAccounts,
   MdOutlineEventAvailable,
-  MdInventory
+  MdInventory,
 } from "react-icons/md";
 import { GiShop } from "react-icons/gi";
 import { TbReport } from "react-icons/tb";
@@ -31,9 +31,11 @@ const SuperStockistSidebar = ({ onClose }) => {
   const toggleVendorDropdown = () => setVendorDropdown(!vendorDropdown);
   const toggleShopDropdown = () => setShopDropdown(!shopDropdown);
   const toggleTrackerDropdown = () => setTrackerDropdown(!trackerDropdown);
-  const toggleAttendanceDropdown = () => setAttendanceDropdown(!AttendanceDropdown);
+  const toggleAttendanceDropdown = () =>
+    setAttendanceDropdown(!AttendanceDropdown);
   const toggleNearByDropdown = () => setNearByDropdown(!nearByDropdown);
-  const togglemanageInventoryDropdown = () => setManageInventory(!manageInventory);
+  const togglemanageInventoryDropdown = () =>
+    setManageInventory(!manageInventory);
 
   const handleItemClick = (route) => {
     if (route) {
@@ -78,7 +80,7 @@ const SuperStockistSidebar = ({ onClose }) => {
           text="Orders"
           onClick={() => handleItemClick("/orderHistory")}
         />
-        <div className="relative" >
+        <div className="relative">
           <span
             className="nav-item nav-item-dropdown flex items-center gap-4 cursor-pointer p-4 transition duration-300 ease-in-out transform rounded-full mb-2"
             onClick={togglemanageInventoryDropdown}
@@ -94,19 +96,15 @@ const SuperStockistSidebar = ({ onClose }) => {
               />
 
               <DropdownItem
-                text="Super Stockist Inventory"
-                onClick={() => handleItemClick("/manage/superStockit/Inventory")}
+                text="Distributor Inventory"
+                onClick={() =>
+                  handleItemClick("/manage/superStockit/Inventory")
+                }
               />
-              <DropdownItem
-                text="Stockist Inventory"
-                onClick={() => handleItemClick("/manage/stockist/stock/management")}
-              />
-
-
             </div>
           )}
         </div>
-        <div className="relative" ref={dropdownRef}>
+        {/* <div className="relative" ref={dropdownRef}>
           <span
             className="nav-item nav-item-dropdown flex items-center gap-4 cursor-pointer p-4 transition duration-300 ease-in-out transform rounded-full mb-2"
             onClick={toggleDropdown}
@@ -148,9 +146,7 @@ const SuperStockistSidebar = ({ onClose }) => {
 
             </div>
           )}
-        </div>
-
-
+        </div> */}
 
         <div className="relative">
           <span
@@ -160,35 +156,19 @@ const SuperStockistSidebar = ({ onClose }) => {
             <MdOutlineManageAccounts
               style={{ color: "#047857", fontSize: "2rem" }}
             />
-            <span className="text-lg font-semibold">Manage Users</span>
+            <span className="text-lg font-semibold">Manage Distributor </span>
           </span>
           {manageDropdown && (
             <div className="flex justify-start ml-10 flex-col font-semibold text-xl text-black">
               <DropdownItem
-                text="Sub-Admin"
-                onClick={() => handleItemClick("/superstockistDetails")}
-              />
-              <DropdownItem
-                text="CNF"
-                onClick={() => handleItemClick("/superstockistDetails")}
-              />
-              <DropdownItem
-                text="Super Stockist"
-                onClick={() => handleItemClick("/superstockistDetails")}
+                text="Add-Distributor "
+                onClick={() => handleItemClick("")}
               />
               <DropdownItem
                 text="Distributor"
-                onClick={() => handleItemClick("/manage/stockist/Registration/management")}
+                onClick={() => handleItemClick("")}
               />
-              <DropdownItem
-                text="Field Executive Approval"
-                onClick={() => handleItemClick("/Field-Executive-Approval")}
-              />
-              <DropdownItem
-                text="Delivery Boy"
-                onClick={() => handleItemClick("/deliveryboyDetails")}
-              />
-
+              <DropdownItem text="Report" onClick={() => handleItemClick("")} />
             </div>
           )}
         </div>
@@ -206,24 +186,8 @@ const SuperStockistSidebar = ({ onClose }) => {
           {vendorDropdown && (
             <div className="flex justify-start ml-10 flex-col font-semibold text-xl text-black">
               <DropdownItem
-                text="Pending Vendor"
+                text=" Vendor Lists"
                 onClick={() => handleItemClick("/mange/vendor/pending")}
-              />
-              <DropdownItem
-                text="Re-verification vendor"
-                onClick={() => handleItemClick("/mange/vendor/re-verify")}
-              />
-              <DropdownItem
-                text="Approved Vendor"
-                onClick={() => handleItemClick("/mange/vendor/approved")}
-              />
-              <DropdownItem
-                text="Rejected Vendor"
-                onClick={() => handleItemClick("/mange/vendor/rejected")}
-              />
-              <DropdownItem
-                text="Vendor Not Intrested"
-                onClick={() => handleItemClick("/mange/vendor/Not-intrested")}
               />
             </div>
           )}
@@ -244,26 +208,34 @@ const SuperStockistSidebar = ({ onClose }) => {
           {AttendanceDropdown && (
             <div className="flex justify-start ml-10 flex-col font-semibold text-xl text-black">
               <DropdownItem
-                text={
-                  <>
-                    Field Executive
-                  </>
+                text={<>Distributor</>}
+                onClick={() =>
+                  handleItemClick(
+                    "/mange/Field-Executive-Approval/FieldManager/Attendance"
+                  )
                 }
-                onClick={() => handleItemClick("/mange/Field-Executive-Approval/FieldManager/Attendance")}
               />
               <DropdownItem
-                text={
-                  <>
-                    Field Executive Approval
-                  </>
+                text={<>Field Executive</>}
+                onClick={() =>
+                  handleItemClick(
+                    "/mange/Field-Executive-Approval/FieldManager/Attendance"
+                  )
                 }
-                onClick={() => handleItemClick("/mange/Field-Executive-Approval/Admin/Attendance")}
+              />
+              <DropdownItem
+                text={<>Field Executive Approval</>}
+                onClick={() =>
+                  handleItemClick(
+                    "/mange/Field-Executive-Approval/Admin/Attendance"
+                  )
+                }
               />
             </div>
           )}
         </div>
 
-        <div className="relative">
+        {/* <div className="relative">
           <span
             className="nav-item nav-item-dropdown flex items-center gap-4 cursor-pointer p-4 transition duration-300 ease-in-out transform rounded-full mb-2"
             onClick={toggleShopDropdown}
@@ -280,7 +252,7 @@ const SuperStockistSidebar = ({ onClose }) => {
               
             </div>
           )}
-        </div>
+        </div> */}
 
         <div className="relative">
           <span
@@ -298,9 +270,9 @@ const SuperStockistSidebar = ({ onClose }) => {
                 text="Delivery Tracker"
                 onClick={() => handleItemClick("/deliveryBoyTracker")}
               />
-             
+
               <DropdownItem
-                text="Field Executive"
+                text="Distributor"
                 onClick={() => handleItemClick("/field-executive/details")}
               />
             </div>
@@ -320,20 +292,12 @@ const SuperStockistSidebar = ({ onClose }) => {
           {nearByDropdown && (
             <div className="flex justify-start ml-10 flex-col font-semibold text-xl text-black">
               <DropdownItem
-                text="Super Stockist"
-                onClick={() => handleItemClick("/manage/nearby/superStockit")}
+                text="Distributor"
+                onClick={() => handleItemClick("")}    // use the path to filter
               />
             </div>
           )}
         </div>
-
-       
-        <NavItem
-          icon={<FaUserPlus style={{ color: "green", fontSize: "2rem" }} />}
-          text="Create Product"
-          onClick={() => handleItemClick("/productadded")}
-        />
-
         <LogoutItem
           icon={<FaSignOutAlt style={{ color: "gray", fontSize: "2rem" }} />}
           text="Logout"
