@@ -5,7 +5,7 @@ import "react-toastify/dist/ReactToastify.css";
 import { IoMdClose } from "react-icons/io";
 import stateData from "../../../statesData"; // Import stateData
 
-const SubAdminRegistionForm = ({ onClose, selectedsubAdmin ,fetchsubAdmins}) => {
+const CNFRegistionForm = ({ onClose, selectedCNF ,fetchCNFs}) => {
   const [formData, setFormData] = useState({
     username: "",
     email: "",
@@ -17,7 +17,7 @@ const SubAdminRegistionForm = ({ onClose, selectedsubAdmin ,fetchsubAdmins}) => 
     city: "",
     address: "",
     pinCode: "",
-    selectedSuperStockist: "",
+    selectedsubAdmin: "",
     district: "", // To handle district selection
   });
 
@@ -47,25 +47,25 @@ const SubAdminRegistionForm = ({ onClose, selectedsubAdmin ,fetchsubAdmins}) => 
 
     const requestData = {
       ...formData,
-      selectedSuperStockist: formData.selectedSuperStockist,
+      selectedsubAdmin: formData.selectedsubAdmin,
     };
 
     try {
       let response;
-      if (selectedsubAdmin) {
+      if (selectedCNF) {
         response = await axios.put(
-          `${URI}/api/subAdmin/update/${selectedsubAdmin._id}`,
+          `${URI}/api/CNF/update/${selectedCNF._id}`,
           requestData
         );
         toast.success("User updated successfully!");
       } else {
         response = await axios.post(
-          `${URI}/api/subAdmin/register`,
+          `${URI}/api/CNF/register`,
           requestData
         );
         toast.success("User registered successfully!");
       }
-      fetchsubAdmins();
+      fetchCNFs();
 
       // Reset form after submission
       setFormData({
@@ -79,7 +79,7 @@ const SubAdminRegistionForm = ({ onClose, selectedsubAdmin ,fetchsubAdmins}) => 
         address: "",
         mobileNo: "",
         pinCode: "",
-        selectedSuperStockist: "",
+        selectedsubAdmin: "",
         district: "", // Reset district on form submission
       });
       onClose();
@@ -91,20 +91,20 @@ const SubAdminRegistionForm = ({ onClose, selectedsubAdmin ,fetchsubAdmins}) => 
 
   // Effect to pre-fill data when editing an existing sub-admin
   useEffect(() => {
-    if (selectedsubAdmin) {
+    if (selectedCNF) {
       setFormData({
-        username: selectedsubAdmin.username,
-        email: selectedsubAdmin.email,
-        address: selectedsubAdmin.address,
-        city: selectedsubAdmin.city,
-        pinCode: selectedsubAdmin.pinCode,
-        state: selectedsubAdmin.state,
-        district: selectedsubAdmin.district || "", // Pre-fill district if available
-        mobileNo: selectedsubAdmin.mobileNo || "",
+        username: selectedCNF.username,
+        email: selectedCNF.email,
+        address: selectedCNF.address,
+        city: selectedCNF.city,
+        pinCode: selectedCNF.pinCode,
+        state: selectedCNF.state,
+        district: selectedCNF.district || "", // Pre-fill district if available
+        mobileNo: selectedCNF.mobileNo || "",
         
       });
     }
-  }, [selectedsubAdmin]);
+  }, [selectedCNF]);
 
   // Get districts based on selected state
   const getDistricts = (stateName) => {
@@ -118,7 +118,7 @@ const SubAdminRegistionForm = ({ onClose, selectedsubAdmin ,fetchsubAdmins}) => 
       <div className="bg-white p-6 rounded-lg shadow-md w-full max-w-2xl">
         <div className="flex justify-between items-center mb-4">
           <h4 className="text-xl font-bold text-blue-700">
-            {selectedsubAdmin ? "Update Delivery Boy" : "Registration"}
+            {selectedCNF ? "Update Delivery Boy" : "Registration"}
           </h4>
           <IoMdClose
             onClick={onClose}
@@ -281,7 +281,7 @@ const SubAdminRegistionForm = ({ onClose, selectedsubAdmin ,fetchsubAdmins}) => 
               type="submit"
               className="w-full cursor-pointer px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 focus:outline-none"
             >
-              {selectedsubAdmin ? "Update" : "Register"}
+              {selectedCNF ? "Update" : "Register"}
             </button>
           </div>
         </form>
@@ -290,4 +290,4 @@ const SubAdminRegistionForm = ({ onClose, selectedsubAdmin ,fetchsubAdmins}) => 
   );
 };
 
-export default SubAdminRegistionForm;
+export default CNFRegistionForm;

@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom"; // Import useNavigate
 import "./AdminSidebar.css";
-import "../../Styles/Styles.css";
+// import "../../Styles/Styles.css";
 import logo from "../../assets/logo.png";
 import { FaShoppingCart, FaUserPlus, FaSignOutAlt } from "react-icons/fa";
 import { RxDashboard } from "react-icons/rx";
@@ -117,11 +117,11 @@ const AdminSidebar = ({ onClose }) => {
 
               <DropdownItem
                 text="Sub-Admin"
-                onClick={() =>handleItemClick("/manage/Sub-Admin/Registration/Sub-Admin")}
+                onClick={() =>handleItemClick("/manage/Sub-Admin/Registration/Admin")}
               />
               <DropdownItem
                 text="CNF"
-                onClick={() => handleItemClick("/superstockistDetails")}
+                onClick={() => handleItemClick("/manage/CNF/Registration/Admin")}
               />
               <DropdownItem
                 text="Super Stockist"
@@ -275,10 +275,7 @@ const AdminSidebar = ({ onClose }) => {
                 text="Pan Shop Details"
                 onClick={() => handleItemClick("/panshowDetails")}
               />
-              {/* <DropdownItem
-                text="Inspection Shop"
-                onClick={() => handleItemClick("/management/inspection/shop")}
-              /> */}
+              
             </div>
           )}
         </div>
@@ -299,10 +296,7 @@ const AdminSidebar = ({ onClose }) => {
                 text="Delivery Tracker"
                 onClick={() => handleItemClick("/deliveryBoyTracker")}
               />
-              {/* <DropdownItem
-                text="Area Seal Manager"
-                onClick={() => handleItemClick("/areaManagerTracker")}
-              /> */}
+             
               <DropdownItem
                 text="Field Executive"
                 onClick={() => handleItemClick("/field-executive/details")}
@@ -331,23 +325,7 @@ const AdminSidebar = ({ onClose }) => {
           )}
         </div>
 
-        {/* <NavItem
-          icon={<TbReport style={{ color: "red", fontSize: "2rem" }} />}
-          text="ShowCase"
-          onClick={() => handleItemClick("/showCase")}
-        /> */}
-
-        {/* <NavItem
-          icon={<MdSos style={{ color: "red", fontSize: "2rem" }} />}
-          text="SOS"
-          onClick={() => handleItemClick("/sos-homepage")}
-        /> */}
-
-        {/* <NavItem
-          icon={<GiShop style={{ color: "green", fontSize: "2rem" }} />}
-          text="Pan Shop Details"
-          onClick={() => handleItemClick("/panshowDetails")}
-        /> */}
+       
         <NavItem
           icon={<FaUserPlus style={{ color: "green", fontSize: "2rem" }} />}
           text="Create Product"
@@ -378,7 +356,7 @@ const NavItem = ({ icon, text, onClick }) => (
 
 const DropdownItem = ({ text, onClick }) => (
   <div
-    className="block px-4 py-2 text-sm text-gray-800 hover:bg-gray-200 cursor-pointer rounded-full"
+    className="block px-6 py-3 text-sm text-gray-800 hover:bg-gray-200 cursor-pointer rounded-full"
     onClick={onClick}
   >
     {text}

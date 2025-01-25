@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 
-const subAdminSchema = mongoose.Schema(
+const CNFAgentSchema = new mongoose.Schema(
   {
     username: {
       type: String,
@@ -34,13 +34,12 @@ const subAdminSchema = mongoose.Schema(
       type: String,
       required: [true, "Please add the city name"],
     },
-     
     pinCode: {
       type: String,
       required: [true, "Please add the pin code"],
       match: [/^\d{6}$/, "Please enter a valid 6-digit pin code"], // Validates pin code format (Indian pin code format assumed)
     },
-    district:{
+    district: {
       type: String,
       required: [true, "Please add the district name"],
     },
@@ -52,27 +51,33 @@ const subAdminSchema = mongoose.Schema(
       type: {
         latitude: {
           type: Number,
-          required: [true, "Please add the latitude"]
+          required: [true, "Please add the latitude"],
         },
         longitude: {
           type: Number,
-          required: [true, "Please add the longitude"]
-        }
+          required: [true, "Please add the longitude"],
+        },
       },
-     
+    },
+    region: { // Added region field
+      type: String,
+      required: [true, "Please add the region"],
+    },
+    subAdmin:{
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "subAdmin", // Reference to SubAdmin model
     }
+
   },
   {
     timestamps: true, // Automatically adds `createdAt` and `updatedAt`
   }
 );
 
-// Pre-save hook to convert email to lowercase
-subAdminSchema.pre("save", function (next) {
-  if (this.email) {
-    this.email = this.email.toLowerCase();
-  }
+// Pre-save middleware to convert email to lowercase before saving
+CNFAgentSchema.pre("save", function(next) {
+  this.email = this.email.toLowerCase(); // Convert email to lowercase
   next();
 });
 
-module.exports = mongoose.model("subAdmin", subAdminSchema);
+module.exports = mongoose.model("CNFAgent", CNFAgentSchema);
