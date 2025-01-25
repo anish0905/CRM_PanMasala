@@ -45,7 +45,7 @@ app.use("/api/vendorNotInterested", vendorNotInterested); // Fixed typo
 app.use("/api/attendance", attendanceRoute);
 
 // E-commerce Routes
-app.use("/api/productEcomm", productEcomm); // Fixed typo
+app.use("/api/e-commerce_product", productEcomm); // Fixed typo
 
 // Admin Routes
 app.use("/api/admin", adminRoutes);

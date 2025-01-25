@@ -7,7 +7,7 @@ const ProductList = () => {
     // Fetch products from the API
     const fetchProducts = async () => {
       try {
-        const response = await fetch("http://localhost:5001/api/producteomm");
+        const response = await fetch("http://localhost:5001/api/e-commerce_product");
         const data = await response.json();
         setProducts(data.products);
         console.log("Fetched products:", data.products);
