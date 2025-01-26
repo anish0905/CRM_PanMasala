@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Swal from "sweetalert2";
-import { FiLogIn } from "react-icons/fi";
 
 const Login = () => {
   const navigate = useNavigate();
+  const location = useLocation();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [role, setRole] = useState(""); // Empty initially, user must select one role
@@ -18,10 +18,10 @@ const Login = () => {
       "Super Stockist": "Welcome Super Stockist!",
       Distributer: "Welcome Distributer!",
     };
-  
+
     const showRoleSelection = async () => {
       let selectedRole = null;
-  
+
       while (!selectedRole) {
         const result = await Swal.fire({
           title: "Welcome!",
@@ -29,14 +29,14 @@ const Login = () => {
           icon: "question",
           showDenyButton: true,
           showCancelButton: true,
-          showCloseButton: true, // Add close button
+          showCloseButton: true,
           confirmButtonText: "CNF",
           denyButtonText: "Super Stockist",
           cancelButtonText: "Distributer",
-          allowOutsideClick: false, // Prevent closing the modal by clicking outside
-          allowEscapeKey: false,   // Prevent closing the modal with the escape key
+          allowOutsideClick: false,
+          allowEscapeKey: false,
         });
-  
+
         if (result.isConfirmed) {
           selectedRole = "CNF";
         } else if (result.isDenied) {
@@ -47,12 +47,11 @@ const Login = () => {
         ) {
           selectedRole = "Distributer";
         }
-  
+
         if (selectedRole) {
           setRole(selectedRole);
           Swal.fire(roles[selectedRole], "", "success");
         } else if (result.dismiss === Swal.DismissReason.close) {
-          // Handle close button action
           await Swal.fire({
             title: "Role Required",
             text: "You need to select a role to proceed.",
@@ -62,10 +61,9 @@ const Login = () => {
         }
       }
     };
-  
+
     showRoleSelection();
   }, []);
-  
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -123,6 +121,10 @@ const Login = () => {
         theme: "colored",
       });
     }
+  };
+
+  const handleBack = () => {
+    window.location.reload(); // Reload the page
   };
 
   return (
@@ -195,6 +197,12 @@ const Login = () => {
                 }`}
               >
                 Sign In
+              </button>
+              <button
+                onClick={handleBack}
+                className="w-full py-3 mt-4 mb-20 rounded-lg font-bold text-lg shadow-lg bg-gray-200 text-blue-600 hover:bg-gray-300 hover:shadow-xl"
+              >
+                Select Role
               </button>
             </div>
           </div>
