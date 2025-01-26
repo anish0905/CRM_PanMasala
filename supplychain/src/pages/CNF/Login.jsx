@@ -13,31 +13,60 @@ const Login = () => {
   const URI = import.meta.env.VITE_API_URL;
 
   useEffect(() => {
-    Swal.fire({
-      title: "Welcome!",
-      text: "Please select your role:",
-      icon: "question",
-      showDenyButton: true,
-      showCancelButton: true,
-      confirmButtonText: "CNF",
-      denyButtonText: "Super Stockist",
-      cancelButtonText: "Distributer",
-    }).then((result) => {
-      if (result.isConfirmed) {
-        setRole("CNF");
-        Swal.fire("Welcome CNF!", "", "success");
-      } else if (result.isDenied) {
-        setRole("Super Stockist");
-        Swal.fire("Welcome Super Stockist!", "", "success");
-      } else if (
-        result.isDismissed &&
-        result.dismiss === Swal.DismissReason.cancel
-      ) {
-        setRole("Distributer");
-        Swal.fire("Welcome Distributer!", "", "success");
+    const roles = {
+      CNF: "Welcome CNF!",
+      "Super Stockist": "Welcome Super Stockist!",
+      Distributer: "Welcome Distributer!",
+    };
+  
+    const showRoleSelection = async () => {
+      let selectedRole = null;
+  
+      while (!selectedRole) {
+        const result = await Swal.fire({
+          title: "Welcome!",
+          text: "Please select your role:",
+          icon: "question",
+          showDenyButton: true,
+          showCancelButton: true,
+          showCloseButton: true, // Add close button
+          confirmButtonText: "CNF",
+          denyButtonText: "Super Stockist",
+          cancelButtonText: "Distributer",
+          allowOutsideClick: false, // Prevent closing the modal by clicking outside
+          allowEscapeKey: false,   // Prevent closing the modal with the escape key
+        });
+  
+        if (result.isConfirmed) {
+          selectedRole = "CNF";
+        } else if (result.isDenied) {
+          selectedRole = "Super Stockist";
+        } else if (
+          result.isDismissed &&
+          result.dismiss === Swal.DismissReason.cancel
+        ) {
+          selectedRole = "Distributer";
+        }
+  
+        if (selectedRole) {
+          setRole(selectedRole);
+          Swal.fire(roles[selectedRole], "", "success");
+        } else if (result.dismiss === Swal.DismissReason.close) {
+          // Handle close button action
+          await Swal.fire({
+            title: "Role Required",
+            text: "You need to select a role to proceed.",
+            icon: "warning",
+            confirmButtonText: "OK",
+          });
+        }
       }
-    });
+    };
+  
+    showRoleSelection();
   }, []);
+  
+
   const handleLogin = async (e) => {
     e.preventDefault();
 
@@ -54,7 +83,7 @@ const Login = () => {
       const endpointMap = {
         CNF: "/api/CNF_Agent/login",
         "Super Stockist": "/api/superstockist/login",
-        Distributer: "/api/distributer/login", // Example endpoint
+        Distributer: "/api/distributer/login",
       };
 
       const url = `${URI}${endpointMap[role]}`;
@@ -130,8 +159,8 @@ const Login = () => {
             <h1 className="text-3xl lg:text-5xl md:text-4xl font-bold text-blue-950 text-center mb-8">
               {role === "CNF"
                 ? "CNF Login"
-                : role === "subadmin"
-                ? "Subadmin Login"
+                : role === "Super Stockist"
+                ? "Super Stockist Login"
                 : "Select Role and Login"}
             </h1>
 
@@ -158,7 +187,12 @@ const Login = () => {
               </form>
               <button
                 onClick={handleLogin}
-                className="w-full bg-blue-600 text-white py-3 rounded-lg font-bold text-lg shadow-lg hover:bg-white hover:text-blue-600 hover:border hover:border-blue-600 hover:shadow-xl transition-all duration-300 mt-4"
+                disabled={!role}
+                className={`w-full py-3 rounded-lg font-bold text-lg shadow-lg mt-4 ${
+                  role
+                    ? "bg-blue-600 text-white hover:bg-white hover:text-blue-600 hover:border hover:border-blue-600 hover:shadow-xl"
+                    : "bg-gray-400 text-gray-700 cursor-not-allowed"
+                }`}
               >
                 Sign In
               </button>
