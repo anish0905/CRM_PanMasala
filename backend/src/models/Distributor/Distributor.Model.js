@@ -21,10 +21,7 @@ const DistributorSchema = mongoose.Schema(
       type: String,
       required: [true, "Please add the user password"],
     },
-    confirmPassword: {
-      type: String,
-      required: [true, "Please add the user confirm password"],
-    },
+
     country: {
       type: String,
       required: true,

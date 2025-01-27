@@ -94,10 +94,13 @@ const Login = () => {
       });
 
       if (response.ok) {
-        const { accessToken, userId } = await response.json();
+        const { accessToken, userId, cnf } = await response.json();
         localStorage.setItem("email", email);
         localStorage.setItem("token", accessToken);
         localStorage.setItem("userId", userId);
+        if (role === "Super Stockist") {
+          localStorage.setItem("cnfId", cnf);
+        }
 
         toast.success("Login successful!", {
           position: "top-center",
