@@ -6,14 +6,16 @@ import { useLocation, useNavigate, useParams } from "react-router-dom";
 import SidebarModal from "../sidebar/SidebarModel";
 import Sidebar from "../sidebar/Sidebar";
 import SuperstockistRegister from "./SuperstockistRegister";
+import AdminSidebar from "../../Admin/AdminSidebar";
+import AdminSideBarModal from "../../Admin/AdminSideBarModal";
 
-const SubAdminDetails = () => {
-  const [subAdmins, setsubAdmins] = useState([]);
+const superstockistDetails = () => {
+  const [superstockists, setsuperstockists] = useState([]);
   const [showModal, setShowModal] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
   const [sortField, setSortField] = useState("username");
   const [sortDirection, setSortDirection] = useState("asc");
-  const [selectedsubAdmin, setSelectedsubAdmin] = useState();
+  const [selectedsuperstockist, setSelectedsuperstockist] = useState();
   const email = localStorage.getItem("email");
   const currentUserId = localStorage.getItem("currentUserId");
   const { name, role } = useParams();
@@ -33,18 +35,17 @@ const SubAdminDetails = () => {
   const fetchSuperStockists = async () => {
     try {
       const response =
-        location.pathname === "/manage/superstockist/Registration/Sub-Admin"
-          ? await fetch(`${URI}/api/superstockist/getAlluser`)
-          : await fetch(`${URI}/api/superstockist/getAlluser/${currentUserId}`);
+         await fetch(`${URI}/api/superstockist/getAlluser`)
+          
 
       if (!response.ok) {
-        throw new Error("Failed to fetch subAdmins");
+        throw new Error("Failed to fetch superstockists");
       }
 
       const data = await response.json();
-      setsubAdmins(data);
+      setsuperstockists(data);
     } catch (error) {
-      console.error("Error fetching subAdmins:", error);
+      console.error("Error fetching superstockists:", error);
     }
   };
 
@@ -56,14 +57,14 @@ const SubAdminDetails = () => {
     setShowModal(false);
   };
 
-  const filteredAndSortedsubAdmins = () => {
-    return subAdmins
-      .filter((subAdmin) => {
+  const filteredAndSortedsuperstockists = () => {
+    return superstockists
+      .filter((superstockist) => {
         const term = searchTerm.toLowerCase();
         return (
-          subAdmin.username.toLowerCase().includes(term) ||
-          subAdmin.state.toLowerCase().includes(term) ||
-          subAdmin.email.toLowerCase().includes(term)
+          superstockist.username.toLowerCase().includes(term) ||
+          superstockist.state.toLowerCase().includes(term) ||
+          superstockist.email.toLowerCase().includes(term)
         );
       })
       .sort((a, b) => {
@@ -77,16 +78,16 @@ const SubAdminDetails = () => {
   };
 
   // Pagination logic
-  const paginatedsubAdmins = () => {
-    const filteredsubAdmins = filteredAndSortedsubAdmins();
+  const paginatedsuperstockists = () => {
+    const filteredsuperstockists = filteredAndSortedsuperstockists();
     const startIndex = (currentPage - 1) * itemsPerPage;
     const endIndex = startIndex + itemsPerPage;
-    return filteredsubAdmins.slice(startIndex, endIndex);
+    return filteredsuperstockists.slice(startIndex, endIndex);
   };
 
   // Calculate total pages
   const totalPages = Math.ceil(
-    filteredAndSortedsubAdmins().length / itemsPerPage
+    filteredAndSortedsuperstockists().length / itemsPerPage
   );
 
   const handleDeleteClick = async (id) => {
@@ -106,9 +107,11 @@ const SubAdminDetails = () => {
 
     if (confirmResult.isConfirmed) {
       try {
-        const response = await fetch(`${BASE_URL}/api/subAdmin/${id}`, {
+        const response = await fetch(`${URI}/api/superstockist/${id}`, {
           method: "DELETE",
         });
+        fetchSuperStockists();
+        Swal.fire("Deleted!", "Super Stockist has been deleted.", "success");
       } catch (error) {
         console.error("Error Super Stockist:", error);
         Swal.fire("Error", "Could not delete Super Stockist", "error");
@@ -117,12 +120,12 @@ const SubAdminDetails = () => {
   };
 
   const handleUpdate = (deliveryBoy) => {
-    setSelectedsubAdmin(deliveryBoy);
+    setSelectedsuperstockist(deliveryBoy);
     setShowModal(true);
   };
 
   const handleInventory = (user) => {
-    navigate(`/manage/Inventory/${user._id}/${role}/subAdmin`, {
+    navigate(`/manage/Inventory/${user._id}/${role}/superstockist`, {
       state: {
         user: user,
       },
@@ -136,10 +139,10 @@ const SubAdminDetails = () => {
           <Sidebar />
         </div>
       )}
-      {role === "supersubAdmin" && (
-        <div className="lg:p-5 xl:p-5 ml-0 p-0 h-screen">
-          {/* <SupersubAdminSideBar /> */}
-        </div>
+      {role === "Admin" && (
+       <div className="min-h-screen  lg:block hidden">
+       <AdminSidebar />
+     </div>
       )}
 
       <div className="lg:ml-80 font-serif w-full  md:p-5 p-4">
@@ -171,6 +174,11 @@ const SubAdminDetails = () => {
               <SidebarModal />
             </div>
           )}
+          {role === "Admin" && (
+            <div className="lg:hidden block">
+              <AdminSideBarModal/>
+            </div>
+          )}
         </div>
 
         {showModal && (
@@ -179,8 +187,8 @@ const SubAdminDetails = () => {
             <div className="z-50   w-full ">
               <SuperstockistRegister
                 onClose={handleCloseModal}
-                selectedsubAdmin={selectedsubAdmin}
-                fetchsubAdmins={fetchsubAdmins}
+                selectedsuperstockist={selectedsuperstockist}
+                fetchsuperstockists={fetchSuperStockists}
               />
             </div>
           </div>
@@ -235,46 +243,46 @@ const SubAdminDetails = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  {paginatedsubAdmins().map((subAdmin) => (
+                  {paginatedsuperstockists().map((superstockist) => (
                     <tr
-                      key={subAdmin._id}
+                      key={superstockist._id}
                       className="bg-gray-200 border-b-2 border-blue-200"
                     >
                       <td className="px-2 py-4 md:text-lg text-xs  whitespace-nowrap overflow-hidden overflow-ellipsis border-r-2 border-white">
-                        {subAdmin.username}
+                        {superstockist.username}
                       </td>
                       <td className="px-2 py-4 md:text-lg text-xs  whitespace-nowrap overflow-hidden overflow-ellipsis border-r-2 border-white">
-                        {subAdmin.email}
+                        {superstockist.email}
                       </td>
                       <td className="px-2 py-4 md:text-lg text-xs  whitespace-nowrap overflow-hidden overflow-ellipsis border-r-2 border-white">
-                        {subAdmin.mobileNo}
+                        {superstockist.mobileNo}
                       </td>
                       <td className="px-2 py-4 md:text-lg text-xs  whitespace-nowrap overflow-hidden overflow-ellipsis border-r-2 border-white">
-                        {subAdmin.state}
+                        {superstockist.state}
                       </td>
                       <td className="px-2 py-4 md:text-lg text-xs  whitespace-nowrap overflow-hidden overflow-ellipsis border-r-2 border-white">
-                        {subAdmin.district}
+                        {superstockist.district}
                       </td>
                       <td className="px-2 py-4 md:text-lg text-xs  whitespace-nowrap overflow-hidden overflow-ellipsis border-r-2 border-white">
-                        {subAdmin.city}
+                        {superstockist.city}
                       </td>
                       <td className="px-2 py-4 md:text-lg text-xs  whitespace-nowrap overflow-hidden overflow-ellipsis border-r-2 border-white">
-                        {subAdmin.address}
+                        {superstockist.address}
                       </td>
                       <td className="px-2 py-4 md:text-lg text-xs  whitespace-nowrap overflow-hidden overflow-ellipsis  border-r-2 border-white">
-                        {subAdmin.pinCode}
+                        {superstockist.pinCode}
                       </td>
                       <td className="px-2 py-4 md:text-lg text-xs  whitespace-nowrap overflow-hidden overflow-ellipsis border-r-2 border-white">
                         {name != "stock" && (
                           <>
                             <button
-                              onClick={() => handleUpdate(subAdmin)}
+                              onClick={() => handleUpdate(superstockist)}
                               className="bg-blue-500 text-white p-2 rounded cursor-pointer"
                             >
                               Update
                             </button>
                             <button
-                              onClick={() => handleDeleteClick(subAdmin._id)}
+                              onClick={() => handleDeleteClick(superstockist._id)}
                               className="bg-red-500 text-white p-2 rounded ml-2 cursor-pointer"
                             >
                               Delete
@@ -283,7 +291,7 @@ const SubAdminDetails = () => {
                         )}
                         {name === "stock" && (
                           <button
-                            onClick={() => handleInventory(subAdmin)}
+                            onClick={() => handleInventory(superstockist)}
                             className="bg-yellow-500 text-white p-2 rounded ml-2 cursor-pointer"
                           >
                             <TbHomeStats />
@@ -324,4 +332,4 @@ const SubAdminDetails = () => {
   );
 };
 
-export default SubAdminDetails;
+export default superstockistDetails;

@@ -1,6 +1,6 @@
 const asyncHandler = require("express-async-handler");
 const Joi = require("joi");
-const SuperStockistProduct = require("../../models/superStockist/superStockistProductDetails.Model");
+const SuperStockistProduct = require("../../models/superStockist/superStockistProductDetails.Model.js");
 
 // Joi schema for validation
 const validateProductInput = (data) => {
