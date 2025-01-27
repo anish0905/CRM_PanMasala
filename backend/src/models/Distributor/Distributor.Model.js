@@ -12,6 +12,11 @@ const DistributorSchema = mongoose.Schema(
       required: [true, "Please add the user email address"],
       unique: [true, "Email address already taken"],
     },
+    mobileNo: {
+      type: String,
+      required: [true, "Please add the user phone number"],
+      unique: [true, "Phone number already registered"],
+    },
     password: {
       type: String,
       required: [true, "Please add the user password"],
@@ -29,9 +34,9 @@ const DistributorSchema = mongoose.Schema(
     state: {
       type: String,
       required: true,
-     
     },
-    region: { // Added region field
+    district: {
+      // Added region field
       type: String,
       required: [true, "Please add the region"],
     },
@@ -57,7 +62,7 @@ const DistributorSchema = mongoose.Schema(
     resetToken: String,
     resetTokenExpiration: Date,
   },
-  
+
   {
     timestamps: true,
   }
