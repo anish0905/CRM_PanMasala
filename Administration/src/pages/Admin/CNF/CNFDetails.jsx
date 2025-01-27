@@ -188,7 +188,7 @@ const CNFDetails = () => {
 
         <div className=" py-8">
           <div className="bg-[#1e40af]  rounded-xl p-4">
-            <h2 className="2xl:text-2xl xl:text-xl md:text-lg text-sm text-white font-bold p-1 mt-1">CNF List</h2>
+            <h2 className="2xl:text-2xl xl:text-xl md:text-lg text-sm text-white font-bold p-1 mt-1">CNF List ({CNFs.length||0})</h2>
             <div className=" grid lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-4 my-4 text-white ">
               <input
                 type="text"

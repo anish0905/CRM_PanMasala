@@ -32,23 +32,23 @@ const AdminDashbord = () => {
     const fetchData = async () => {
       try {
         const [
-          superStockistRes,
-          // stockistRes,
+          superDistributor,
+          Distributor,
           orderRes,
           // deliveryBoyRes,
           panShopDetailsRes,
           fieldManager
         ] = await Promise.all([
           axios.get(`${URI}/api/superstockist/getAllUser`),
-          // axios.get(`${URI }/api/executives/getAlluser/`),
+          axios.get(`${URI }/api/executives/getAlluser/`),
           axios.get(`${URI}/api/panshop/order/`),
           // axios.get(`${URI }/api/qrGeneraterBoy/allDetailsDeliverBoy`),
           axios.get(`${URI}/api/panShop/`),
           axios.get(`${URI}/api/fieldManager/getFieldManager`)
         ]);
 
-        setSuperStockist(superStockistRes.data);
-        // setStockist(stockistRes.data);
+        setSuperStockist(superDistributor.data);
+        // setStockist(Distributor.data);
         setOrders(orderRes.data);
         // setDeliveryBoy(deliveryBoyRes.data);
         setPanShopDetails(panShopDetailsRes.data.data);
