@@ -6,9 +6,9 @@ import { IoMdClose } from "react-icons/io";
 import stateData from "../../../statesData"; // Import stateData
 
 const DistributorRegister = ({ onClose, selectedsubAdmin, fetchsubAdmins }) => {
-  const cnfId = localStorage.getItem("userId");
+  const superstockistId = localStorage.getItem("userId");
   const [formData, setFormData] = useState({
-    cnf: cnfId,
+    superstockist: superstockistId,
     username: "",
     email: "",
     mobileNo: "",
