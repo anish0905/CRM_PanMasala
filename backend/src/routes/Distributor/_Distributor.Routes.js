@@ -5,11 +5,11 @@ const executiveValidateToken = require("../../middleware/executiveValidateTokenH
 
 
 //Register
-router.post("/registerexecutive",registerUser);
+router.post("/registerDistributor",registerUser);
 
 //Login
 
-router.post("/loginexecutive",loginUser);
+router.post("/loginexDistributor",loginUser);
 
 router.post("/email",getUserDetailsByEmail)
 
@@ -19,7 +19,7 @@ router.delete("/:id", deleteUser)
 
 //Current user information
 
-router.get("/currentexecutive",executiveValidateToken,currentUser);
+router.get("/currentDistributor",executiveValidateToken,currentUser);
 router.get("/getAlluser",GetAllUser)
 router.get('/getStateCity/:email', getStateCity);
 router.get('/superStockist/:id', getDistributorBySuperByID);

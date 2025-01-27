@@ -1,7 +1,7 @@
 const asyncHandler = require("express-async-handler");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
-const Executives = require("../models/DistributorModel");
+const Executives = require("../../models/Distributor/Distributor.Model");
 
 function validatePassword(password) {
   const minLength = 8; // Minimum length for the password
