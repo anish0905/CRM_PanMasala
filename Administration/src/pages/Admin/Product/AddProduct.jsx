@@ -27,7 +27,7 @@ const AddProduct = () => {
 
   const fetchProducts = async () => {
     try {
-      const response = await axios.get(`${URI}/api/e-commerce_product/`);
+      const response = await axios.get(`${URI}/api/e-commerce/`);
       setProducts(response.data.products);
     } catch (error) {
       console.error("Error fetching products:", error);
@@ -53,7 +53,7 @@ const AddProduct = () => {
       if (updateProductId) {
         // If updating, send a PUT request
         const response = await axios.put(
-          `${URI}/api/e-commerce_product/update/${updateProductId}`,
+          `${URI}/api/e-commerce/update/${updateProductId}`,
           formData,
           {
             headers: {
@@ -66,7 +66,7 @@ const AddProduct = () => {
       } else {
         // If adding a new product, send a POST request
         const response = await axios.post(
-          `${URI}/api/e-commerce_product`,
+          `${URI}/api/e-commerce`,
           formData,
           {
             headers: {
@@ -104,7 +104,7 @@ const AddProduct = () => {
 
     if (confirmDelete) {
       try {
-        await axios.delete(`${URI}/api/e-commerce_product/${id}`);
+        await axios.delete(`${URI}/api/e-commerce/${id}`);
         console.log("Product deleted successfully");
         fetchProducts(); // Fetch updated products after deleting
       } catch (error) {
@@ -125,7 +125,7 @@ const AddProduct = () => {
       <div className=" hidden lg:block">
         <AdminSidebar />
       </div>
-      
+
 
       <div className="lg:ml-80  font-serif w-full lg:p-10 md:p-5 ">
         <div className=" bg-[#93c5fd] rounded-md shadow p-4 flex gap-4 items-center justify-between">
@@ -135,10 +135,13 @@ const AddProduct = () => {
 
           <button
             onClick={handleToggleModal}
-            className="text-xl font-bold border-2 border-blue-600 text-blue-600 py-2 px-4 rounded cursor-pointer"
+            className="text-base font-bold border-2 border-blue-600 text-blue-600 py-1 px-3 rounded cursor-pointer 
+    sm:text-sm sm:px-2 sm:py-1 md:text-base md:px-3 md:py-2 lg:text-xl lg:px-4 lg:py-3"
           >
             Add Product
           </button>
+
+
           {email && (
             <div className="hidden sm:flex items-center lg:text-2xl md:text-xl text-sm font-bold text-white border-4 border-[#1e40af] p-2 rounded-lg bg-[rgb(42,108,194)] hover:bg-blue-800 transition-colors duration-300 ease-in-out">
               {email}
@@ -148,7 +151,7 @@ const AddProduct = () => {
             <AdminSideBarModal />
           </div>
         </div>
-        
+
 
         {/* Search bar */}
         <div className="my-6">
@@ -261,7 +264,7 @@ const AddProduct = () => {
         )}
 
         <div className="mt-8">
-         
+
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
             {filteredProducts.map((product) => (
               <div

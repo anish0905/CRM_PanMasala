@@ -257,7 +257,7 @@ const AdminSidebar = ({ onClose }) => {
                     Field Executive
                   </>
                 }
-                onClick={() => handleItemClick("/mange/Field-Executive-Approval/FieldManager/Attendance")}
+                onClick={() => handleItemClick("/Field-Executive-Approval/FieldManager/Attendance")}
               />
               <DropdownItem
                 text={
@@ -265,7 +265,7 @@ const AdminSidebar = ({ onClose }) => {
                     Field Executive Approval
                   </>
                 }
-                onClick={() => handleItemClick("/mange/Field-Executive-Approval/Admin/Attendance")}
+                onClick={() => handleItemClick("/Field-Executive-Approval/Admin/Attendance")}
               />
             </div>
           )}

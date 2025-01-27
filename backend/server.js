@@ -30,6 +30,12 @@ const superStockistDeliveryBoyRoutes = require("./src/routes/superStockist/Super
 const superStockistProductDetailsRoutes = require("./src/routes/superStockist/superStockistProductDetails.Routes");
 const superStockistInventoryRoutes = require("./src/routes/superStockist/SuperStockistInvertory.Routes");
 
+
+//Distributor variables
+const DistributorOrderRoutes = require("./src/routes/Distributor/Router.Routes");
+const DistributorInventoryRoute = require("./src/routes/Distributor/DistributorInventory.Routes");
+// const DistributorRoutes = require("./src/routes/Distributor/Distributer.Routes");
+
 // Connect to Database
 connectDb();
 
@@ -69,6 +75,11 @@ app.use("/api/e-commerce", productEcommRoutes);
 
 // CNF Agent Routes
 app.use("/api/cnfAgent", cnfAgentRoutes);
+
+// Distributor Routes
+app.use("/api/Distributor/order", DistributorOrderRoutes);
+app.use("/api/Distributorinventory", DistributorInventoryRoute);
+// app.use("/api/DistributorRoutes", DistributorRoutes);
 
 // Fallback Route for Undefined Endpoints
 app.use((req, res, next) => {

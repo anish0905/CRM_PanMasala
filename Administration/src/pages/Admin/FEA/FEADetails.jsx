@@ -12,7 +12,6 @@ const FEADetails = () => {
   const [selectedState, setSelectedState] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [showModal, setShowModal] = useState(false);
-  const [editModal, setEditModal] = useState(false);
   const [selectedFEA, setSelectedFEA] = useState(null);
   const [sortField, setSortField] = useState("name"); // Default sort by name
   const [sortDirection, setSortDirection] = useState("asc");
@@ -121,6 +120,12 @@ const FEADetails = () => {
 
   const handlePrevPage = () => {
     if (currentPage > 1) setCurrentPage(currentPage - 1);
+  };
+
+  const NavigateToAttendanceRecord = (user) => {
+    navigate("/Attendance-Dashboard", {
+      state: { user },
+    });
   };
 
   return (
@@ -235,9 +240,9 @@ const FEADetails = () => {
                       <td className="px-2 py-4 md:text-lg text-xs text-left">{filedManager.address}</td>
                       <td className="px-2 py-4 md:text-lg text-xs text-left">{filedManager.state}</td>
                       <td className="px-2 py-4 md:text-lg text-xs text-left flex gap-2 justify-center items-center">
-                        {route === "Attendance" ? (
+                        {work === "Attendance" ? (
                           <span className="lg:text-3xl text-blue-600 cursor-pointer">
-                            <MdOutlineAssignment onClick={() => navigateToAttendanceRecord(filedManager)} />
+                            <MdOutlineAssignment onClick={() => NavigateToAttendanceRecord(filedManager)} />
                           </span>
                         ) : (
                           <>
