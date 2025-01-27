@@ -71,14 +71,16 @@ const SuperStockistSidebar = ({ onClose }) => {
         <NavItem
           icon={<RxDashboard style={{ color: "#eab308", fontSize: "2rem" }} />}
           text="Dashboard"
-          onClick={() => handleItemClick("/managementDashboard")}
+          onClick={() => handleItemClick("")}     // add dashboard
         />
         <NavItem
           icon={
             <FaShoppingCart style={{ color: "#047857", fontSize: "2rem" }} />
           }
           text="Orders"
-          onClick={() => handleItemClick("/orderHistory")}
+          onClick={() => handleItemClick(
+            // "/order"
+          )}   
         />
         <div className="relative">
           <span
@@ -104,50 +106,6 @@ const SuperStockistSidebar = ({ onClose }) => {
             </div>
           )}
         </div>
-        {/* <div className="relative" ref={dropdownRef}>
-          <span
-            className="nav-item nav-item-dropdown flex items-center gap-4 cursor-pointer p-4 transition duration-300 ease-in-out transform rounded-full mb-2"
-            onClick={toggleDropdown}
-          >
-            <FaUserPlus style={{ color: "violet", fontSize: "2rem" }} />
-            <span className="text-lg font-semibold">Registrations</span>
-          </span>
-          {showDropdown && (
-            <div className="flex justify-start ml-10 flex-col font-semibold text-xl text-black">
-
-              <DropdownItem
-                text="Sub-Admin"
-                onClick={() =>handleItemClick("/manage/Sub-Admin/Registration/Admin")}
-              />
-              <DropdownItem
-                text="CNF"
-                onClick={() => handleItemClick("/manage/CNF/Registration/Admin")}
-              />
-              <DropdownItem
-                text="Super Stockist"
-                onClick={() => handleItemClick("/superstockistDetails")}
-              />
-              <DropdownItem
-                text="Distributor"
-                onClick={() => handleItemClick("/manage/stockist/Registration/management")}
-              />
-              <DropdownItem
-                text="Field Executive Approval"
-                onClick={() => handleItemClick("/Field-Executive-Approval")}
-              />
-              <DropdownItem
-                text="Delivery Boy"
-                onClick={() => handleItemClick("/deliveryboyDetails")}
-              />
-
-
-              
-
-
-            </div>
-          )}
-        </div> */}
-
         <div className="relative">
           <span
             className="nav-item nav-item-dropdown flex items-center gap-4 cursor-pointer p-4 transition duration-300 ease-in-out transform rounded-full mb-2"
@@ -235,24 +193,6 @@ const SuperStockistSidebar = ({ onClose }) => {
           )}
         </div>
 
-        {/* <div className="relative">
-          <span
-            className="nav-item nav-item-dropdown flex items-center gap-4 cursor-pointer p-4 transition duration-300 ease-in-out transform rounded-full mb-2"
-            onClick={toggleShopDropdown}
-          >
-            <GiShop style={{ color: "#047857", fontSize: "2rem" }} />
-            <span className="text-lg font-semibold">Shop Details</span>
-          </span>
-          {shopDropdown && (
-            <div className="flex justify-start ml-10 flex-col font-semibold text-xl text-black">
-              <DropdownItem
-                text="Pan Shop Details"
-                onClick={() => handleItemClick("/panshowDetails")}
-              />
-              
-            </div>
-          )}
-        </div> */}
 
         <div className="relative">
           <span
