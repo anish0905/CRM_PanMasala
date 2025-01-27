@@ -6,6 +6,8 @@ import Login from "./pages/CNF/Login";
 import CNFDashbord from "./pages/CNF/CNFDashbord";
 // import SubAdminDashboard from "./pages/SubAdmin/dashboard/Dashboard";
 import SuperStockistDetails from "./pages/CNF/superStockist/SuperStockistDetails";
+import SuperStockistdashboard from "./pages/SuperStockists/SuperStockistdashboard";
+import DistributorDetails from "./pages/SuperStockists/distributor/DistributorDetails";
 
 function App() {
   const navigate = useNavigate();
@@ -17,10 +19,18 @@ function App() {
     <Routes>
       <Route path="/" element={<Login />} />
       <Route path="/CNFDashBoard" element={<CNFDashbord />} />
+      <Route
+        path="/SuperStockistDashBoard"
+        element={<SuperStockistdashboard />}
+      />
 
       <Route
         path="/manage/superstockist/:name/:role"
         element={<SuperStockistDetails />}
+      />
+      <Route
+        path="/manage/distributor/:name/:role"
+        element={<DistributorDetails />}
       />
     </Routes>
   );

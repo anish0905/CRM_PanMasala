@@ -71,7 +71,7 @@ const SuperStockistSidebar = ({ onClose }) => {
         <NavItem
           icon={<RxDashboard style={{ color: "#eab308", fontSize: "2rem" }} />}
           text="Dashboard"
-          onClick={() => handleItemClick("/managementDashboard")}
+          onClick={() => handleItemClick("/SuperStockistDashBoard")}
         />
         <NavItem
           icon={
@@ -162,7 +162,11 @@ const SuperStockistSidebar = ({ onClose }) => {
             <div className="flex justify-start ml-10 flex-col font-semibold text-xl text-black">
               <DropdownItem
                 text="Add-Distributor "
-                onClick={() => handleItemClick("")}
+                onClick={() =>
+                  handleItemClick(
+                    "/manage/distributor/Registration/superStockist"
+                  )
+                }
               />
               <DropdownItem
                 text="Distributor"
@@ -293,7 +297,7 @@ const SuperStockistSidebar = ({ onClose }) => {
             <div className="flex justify-start ml-10 flex-col font-semibold text-xl text-black">
               <DropdownItem
                 text="Distributor"
-                onClick={() => handleItemClick("")}    // use the path to filter
+                onClick={() => handleItemClick("")} // use the path to filter
               />
             </div>
           )}
