@@ -129,7 +129,7 @@ const AdminSidebar = ({ onClose }) => {
               />
               <DropdownItem
                 text="Distributor"
-                onClick={() => handleItemClick("/manage/stockist/Registration/management")}
+                onClick={() => handleItemClick("/manage/Distributor/Registration/Admin")}
               />
               <DropdownItem
                 text="Field Executive Approval"
@@ -182,7 +182,7 @@ const AdminSidebar = ({ onClose }) => {
               />
               <DropdownItem
                 text="Distributor"
-                onClick={() => handleItemClick("/manage/stockist/user/management")}
+                onClick={() => handleItemClick("/manage/Distributor/user/Admin")}
               />
               <DropdownItem
                 text="Field Executive Approval"
