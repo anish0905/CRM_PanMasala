@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom"; // Import useNavigate
-import "./SuperStockistSidebar.css";
+import "./DistributorSidebar.css";
 // import "../../Styles/Styles.css";
 import logo from "../../../assets/logo.png";
 import { FaShoppingCart, FaUserPlus, FaSignOutAlt } from "react-icons/fa";
@@ -14,9 +14,9 @@ import {
 import { GiShop } from "react-icons/gi";
 import { TbReport } from "react-icons/tb";
 
-const SuperStockistSidebar = ({ onClose }) => {
+const DistributorSidebar = ({ onClose }) => {
   const [showDropdown, setShowDropdown] = useState(false);
-  const [manageDropdown, setManageDropdown] = useState(false);
+  const [manageFEADropdown, setmanageFEADropdown] = useState(false);
   const [vendorDropdown, setVendorDropdown] = useState(false);
   const [shopDropdown, setShopDropdown] = useState(false);
   const [trackerDropdown, setTrackerDropdown] = useState(false);
@@ -27,7 +27,7 @@ const SuperStockistSidebar = ({ onClose }) => {
   const navigate = useNavigate();
 
   const toggleDropdown = () => setShowDropdown(!showDropdown);
-  const togglemanageDropdown = () => setManageDropdown(!manageDropdown);
+  const togglemanageFEADropdown = () => setmanageFEADropdown(!manageFEADropdown);
   const toggleVendorDropdown = () => setVendorDropdown(!vendorDropdown);
   const toggleShopDropdown = () => setShopDropdown(!shopDropdown);
   const toggleTrackerDropdown = () => setTrackerDropdown(!trackerDropdown);
@@ -106,24 +106,26 @@ const SuperStockistSidebar = ({ onClose }) => {
             </div>
           )}
         </div>
+
+        {/* FEA and FE */}
         <div className="relative">
           <span
             className="nav-item nav-item-dropdown flex items-center gap-4 cursor-pointer p-4 transition duration-300 ease-in-out transform rounded-full mb-2"
-            onClick={togglemanageDropdown}
+            onClick={togglemanageFEADropdown}
           >
             <MdOutlineManageAccounts
               style={{ color: "#047857", fontSize: "2rem" }}
             />
-            <span className="text-lg font-semibold">Manage Distributor </span>
+            <span className="text-lg font-semibold">Manage FEA </span>
           </span>
-          {manageDropdown && (
+          {manageFEADropdown && (
             <div className="flex justify-start ml-10 flex-col font-semibold text-xl text-black">
               <DropdownItem
-                text="Add-Distributor "
+                text="Add-FEA"
                 onClick={() => handleItemClick("")}
               />
               <DropdownItem
-                text="Distributor"
+                text="FEA Details"
                 onClick={() => handleItemClick("")}
               />
               <DropdownItem text="Report" onClick={() => handleItemClick("")} />
@@ -144,6 +146,10 @@ const SuperStockistSidebar = ({ onClose }) => {
           {vendorDropdown && (
             <div className="flex justify-start ml-10 flex-col font-semibold text-xl text-black">
               <DropdownItem
+                text=" Add-Vendor"
+                onClick={() => handleItemClick("/mange/vendor/pending")}
+              />
+              <DropdownItem
                 text=" Vendor Lists"
                 onClick={() => handleItemClick("/mange/vendor/pending")}
               />
@@ -151,47 +157,6 @@ const SuperStockistSidebar = ({ onClose }) => {
           )}
         </div>
 
-        {/* Manage Attendance Record */}
-
-        <div className="relative">
-          <span
-            className="nav-item nav-item-dropdown flex items-center gap-4 cursor-pointer p-4 transition duration-300 ease-in-out transform rounded-full mb-2"
-            onClick={toggleAttendanceDropdown}
-          >
-            <MdOutlineEventAvailable
-              style={{ color: "blue", fontSize: "2rem" }}
-            />
-            <span className="text-lg font-semibold">Manage Attendance</span>
-          </span>
-          {AttendanceDropdown && (
-            <div className="flex justify-start ml-10 flex-col font-semibold text-xl text-black">
-              <DropdownItem
-                text={<>Distributor</>}
-                onClick={() =>
-                  handleItemClick(
-                    "/mange/Field-Executive-Approval/FieldManager/Attendance"
-                  )
-                }
-              />
-              <DropdownItem
-                text={<>Field Executive</>}
-                onClick={() =>
-                  handleItemClick(
-                    "/mange/Field-Executive-Approval/FieldManager/Attendance"
-                  )
-                }
-              />
-              <DropdownItem
-                text={<>Field Executive Approval</>}
-                onClick={() =>
-                  handleItemClick(
-                    "/mange/Field-Executive-Approval/Admin/Attendance"
-                  )
-                }
-              />
-            </div>
-          )}
-        </div>
 
 
         <div className="relative">
@@ -210,11 +175,6 @@ const SuperStockistSidebar = ({ onClose }) => {
                 text="Delivery Tracker"
                 onClick={() => handleItemClick("/deliveryBoyTracker")}
               />
-
-              <DropdownItem
-                text="Distributor"
-                onClick={() => handleItemClick("/field-executive/details")}
-              />
             </div>
           )}
         </div>
@@ -232,7 +192,7 @@ const SuperStockistSidebar = ({ onClose }) => {
           {nearByDropdown && (
             <div className="flex justify-start ml-10 flex-col font-semibold text-xl text-black">
               <DropdownItem
-                text="Distributor"
+                text="Vendors"
                 onClick={() => handleItemClick("")}    // use the path to filter
               />
             </div>
@@ -281,4 +241,4 @@ const LogoutItem = ({ icon, text, onClick }) => (
   </div>
 );
 
-export default SuperStockistSidebar;
+export default DistributorSidebar;

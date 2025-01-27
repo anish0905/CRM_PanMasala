@@ -8,6 +8,7 @@ import CNFDashbord from "./pages/CNF/CNFDashbord";
 import SuperStockistDetails from "./pages/CNF/superStockist/SuperStockistDetails";
 import SuperStockistdashboard from "./pages/SuperStockists/SuperStockistdashboard";
 import DistributorDetails from "./pages/SuperStockists/distributor/DistributorDetails";
+import DistributerDashBoard from "./pages/Distributer/dashboard/DistributerDashBoard";
 
 function App() {
   const navigate = useNavigate();
@@ -22,6 +23,12 @@ function App() {
       <Route
         path="/SuperStockistDashBoard"
         element={<SuperStockistdashboard />}
+      />
+
+      // Distributer 
+      <Route
+        path="/DistributerDashBoard"
+        element={<DistributerDashBoard />}
       />
 
       <Route

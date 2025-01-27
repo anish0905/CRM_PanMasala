@@ -5,7 +5,7 @@
   left: 0;
   width: 350px; /* Width for the sidebar */
   height: 100vh;
-  margin: 13px;
+  margin: 0;
   z-index: 20;
   background-color: white;
   border-radius: 10px; /* Optional: Add border radius */
