@@ -39,7 +39,7 @@ const AdminDashbord = () => {
           panShopDetailsRes,
           fieldManager
         ] = await Promise.all([
-          axios.get(`${URI }/api/superStockist/getAllUser`),
+          axios.get(`${URI }/api/superstockist/getAllUser`),
           axios.get(`${URI }/api/executives/getAlluser/`),
           axios.get(`${URI }/api/panshop/order/`),
           axios.get(`${URI }/api/qrGeneraterBoy/allDetailsDeliverBoy`),

@@ -36,7 +36,7 @@ const CNFDetails = () => {
   const fetchCNFs = async () => {
     try {
       const response =
-        location.pathname === "/manage/CNF/Registration/Admin"
+        location.pathname === "/manage/CNF/Registration/Admin"|| location.pathname === "/manage/CNF/user/Admin" 
           ? await fetch(`${URI}/api/CNF_Agent/users`)
           : await fetch(`${URI}/api/CNF_Agent/getAlluser/${currentUserId}`)
   
@@ -212,6 +212,7 @@ const CNFDetails = () => {
                     <th className="px-2 py-4 md:text-lg text-xs  border-r-2 border-white">City</th>
                     <th className="px-2 py-4 md:text-lg text-xs  border-r-2 border-white">Address</th>
                     <th className="px-2 py-4 md:text-lg text-xs   border-r-2 border-white">PinCode</th>
+                    <th className="px-2 py-4 md:text-lg text-xs   border-r-2 border-white">Region</th>
                     <th className="px-2 py-4 md:text-lg text-xs ">Actions</th>
                   </tr>
                 </thead>
@@ -226,6 +227,7 @@ const CNFDetails = () => {
                       <td className="px-2 py-4 md:text-lg text-xs  whitespace-nowrap overflow-hidden overflow-ellipsis border-r-2 border-white">{CNF.city}</td>
                       <td className="px-2 py-4 md:text-lg text-xs  whitespace-nowrap overflow-hidden overflow-ellipsis border-r-2 border-white">{CNF.address}</td>
                       <td className="px-2 py-4 md:text-lg text-xs  whitespace-nowrap overflow-hidden overflow-ellipsis  border-r-2 border-white">{CNF.pinCode}</td>
+                      <td className="px-2 py-4 md:text-lg text-xs  whitespace-nowrap overflow-hidden overflow-ellipsis  border-r-2 border-white">{CNF.region}</td>
                       <td className="px-2 py-4 md:text-lg text-xs  whitespace-nowrap overflow-hidden overflow-ellipsis border-r-2 border-white">
                         {name != "stock" && (<><button onClick={() => handleUpdate(CNF)} className="bg-blue-500 text-white p-2 rounded cursor-pointer">
                           Update

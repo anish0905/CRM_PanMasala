@@ -67,7 +67,7 @@ const AdminSidebar = ({ onClose }) => {
         <NavItem
           icon={<RxDashboard style={{ color: "#eab308", fontSize: "2rem" }} />}
           text="Dashboard"
-          onClick={() => handleItemClick("/managementDashboard")}
+          onClick={() => handleItemClick("/AdminDashBoard")}
         />
         <NavItem
           icon={
@@ -125,7 +125,7 @@ const AdminSidebar = ({ onClose }) => {
               />
               <DropdownItem
                 text="Super Stockist"
-                onClick={() => handleItemClick("/superstockistDetails")}
+                onClick={() => handleItemClick("/manage/superstockist/Registration/Admin")}
               />
               <DropdownItem
                 text="Distributor"
@@ -133,8 +133,14 @@ const AdminSidebar = ({ onClose }) => {
               />
               <DropdownItem
                 text="Field Executive Approval"
-                onClick={() => handleItemClick("/Field-Executive-Approval")}
+                onClick={() => handleItemClick("/Field-Executive-Approval/Admin/Registration")}
               />
+              
+              <DropdownItem
+                text="Field Executive "
+                onClick={() => handleItemClick("/Field-Executive-Approval/FieldManager/Registration")}
+              />
+
               <DropdownItem
                 text="Delivery Boy"
                 onClick={() => handleItemClick("/deliveryboyDetails")}
@@ -164,23 +170,27 @@ const AdminSidebar = ({ onClose }) => {
             <div className="flex justify-start ml-10 flex-col font-semibold text-xl text-black">
               <DropdownItem
                 text="Sub-Admin"
-                onClick={() => handleItemClick("/superstockistDetails")}
+                onClick={() =>handleItemClick("/manage/Sub-Admin/user/Admin")}
               />
               <DropdownItem
                 text="CNF"
-                onClick={() => handleItemClick("/superstockistDetails")}
+                onClick={() => handleItemClick("/manage/CNF/user/Admin")}
               />
               <DropdownItem
                 text="Super Stockist"
-                onClick={() => handleItemClick("/superstockistDetails")}
+                onClick={() => handleItemClick("/manage/superstockist/Registration/Admin")}
               />
               <DropdownItem
                 text="Distributor"
-                onClick={() => handleItemClick("/manage/stockist/Registration/management")}
+                onClick={() => handleItemClick("/manage/stockist/user/management")}
               />
               <DropdownItem
                 text="Field Executive Approval"
-                onClick={() => handleItemClick("/Field-Executive-Approval")}
+                onClick={() => handleItemClick("/Field-Executive-Approval/Admin/user")}
+              />
+              <DropdownItem
+                text="Field Executive "
+                onClick={() => handleItemClick("/Field-Executive-Approval/FieldManager/user")}
               />
               <DropdownItem
                 text="Delivery Boy"
@@ -247,7 +257,7 @@ const AdminSidebar = ({ onClose }) => {
                     Field Executive
                   </>
                 }
-                onClick={() => handleItemClick("/mange/Field-Executive-Approval/FieldManager/Attendance")}
+                onClick={() => handleItemClick("/Field-Executive-Approval/FieldManager/Attendance")}
               />
               <DropdownItem
                 text={
@@ -255,7 +265,7 @@ const AdminSidebar = ({ onClose }) => {
                     Field Executive Approval
                   </>
                 }
-                onClick={() => handleItemClick("/mange/Field-Executive-Approval/Admin/Attendance")}
+                onClick={() => handleItemClick("/Field-Executive-Approval/Admin/Attendance")}
               />
             </div>
           )}
@@ -329,7 +339,7 @@ const AdminSidebar = ({ onClose }) => {
         <NavItem
           icon={<FaUserPlus style={{ color: "green", fontSize: "2rem" }} />}
           text="Create Product"
-          onClick={() => handleItemClick("/productadded")}
+          onClick={() => handleItemClick("/Add-product")}
         />
 
         <LogoutItem

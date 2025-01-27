@@ -35,7 +35,7 @@ const SubAdminDetails = () => {
   const fetchsubAdmins = async () => {
     try {
       const response =
-        location.pathname === "/manage/Sub-Admin/Registration/Admin"
+        location.pathname === "/manage/Sub-Admin/Registration/Admin" || location.pathname === "/manage/Sub-Admin/user/Admin"
           ? await fetch(`${URI}/api/subAdmin/getAlluser`)
           : await fetch(`${URI}/api/subAdmin/getAlluser/${currentUserId}`)
   
@@ -206,8 +206,8 @@ const SubAdminDetails = () => {
                     <th className="px-2 py-4 md:text-lg text-xs  border-r-2 border-white">Email</th>
                     <th className="px-2 py-4 md:text-lg text-xs  border-r-2 border-white">Phone No</th>
                     <th className="px-2 py-4 md:text-lg text-xs  border-r-2 border-white">State</th>
-                    <th className="px-2 py-4 md:text-lg text-xs  border-r-2 border-white">district</th>
-                    <th className="px-2 py-4 md:text-lg text-xs  border-r-2 border-white">State</th>
+                    <th className="px-2 py-4 md:text-lg text-xs  border-r-2 border-white">District</th>
+                    <th className="px-2 py-4 md:text-lg text-xs  border-r-2 border-white">City</th>
                     <th className="px-2 py-4 md:text-lg text-xs  border-r-2 border-white">Address</th>
                     <th className="px-2 py-4 md:text-lg text-xs   border-r-2 border-white">PinCode</th>
                     <th className="px-2 py-4 md:text-lg text-xs ">Actions</th>

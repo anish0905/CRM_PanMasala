@@ -1,6 +1,6 @@
 const asyncHandler = require("express-async-handler");
 const Joi = require("joi");
-const SuperStockistProduct = require("../../models/superStockist/superStockistProductDetails.Model");
+const SuperStockistProduct = require("../../models/superStockist/superStockistProductDetails.Model.js");
 
 // Joi schema for validation
 const validateProductInput = (data) => {
@@ -19,7 +19,9 @@ const validateProductInput = (data) => {
 // @route GET /api/superstockistproducts
 // @access Private
 const getSuperStockistProducts = asyncHandler(async (req, res) => {
-  const products = await SuperStockistProduct.find({ user_id: req.userExecutive.id });
+  const products = await SuperStockistProduct.find({
+    user_id: req.userExecutive.id,
+  });
   res.status(200).json(products);
 });
 
@@ -51,7 +53,14 @@ const createSuperStockistProduct = asyncHandler(async (req, res) => {
     throw new Error(error.details[0].message);
   }
 
-  const { productName, productDescription, flavour, productSize, price, quantity } = req.body;
+  const {
+    productName,
+    productDescription,
+    flavour,
+    productSize,
+    price,
+    quantity,
+  } = req.body;
   const newProduct = await SuperStockistProduct.create({
     user_id: req.userExecutive.id,
     productName,
@@ -80,7 +89,11 @@ const updateSuperStockistProduct = asyncHandler(async (req, res) => {
     throw new Error("User doesn't have permission to update this product");
   }
 
-  const updatedProduct = await SuperStockistProduct.findByIdAndUpdate(req.params.id, req.body, { new: true });
+  const updatedProduct = await SuperStockistProduct.findByIdAndUpdate(
+    req.params.id,
+    req.body,
+    { new: true }
+  );
   res.status(200).json(updatedProduct);
 });
 
