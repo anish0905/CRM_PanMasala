@@ -14,7 +14,7 @@ import DistributorSidebar from "../sidebar/DistributorSidebar";
 // import OrderDetailsCityTaluka from "./OrderDetailsCityTaluka";
 
 const DistributerDashBoard = () => {
-  const [superStockist, setSuperStockist] = useState([]);
+  const [Distributor, setDistributor] = useState([]);
   const [stockist, setStockist] = useState([]);
   const [deliveryBoy, setDeliveryBoy] = useState([]);
   const [panShopDetails, setPanShopDetails] = useState([]);
@@ -86,7 +86,7 @@ const DistributerDashBoard = () => {
   const sortedProducts = orders.sort((a, b) => b.totalPrice - a.totalPrice);
   const top5Products = sortedProducts.slice(0, 5);
 
-  if (!superStockist.length) {
+  if (!Distributor.length) {
     return (
       <div className="flex justify-center items-center flex-col min-h-screen bg-blue-300">
         <DistributorSidebar />

@@ -4,6 +4,7 @@ import "./DistributorSidebar.css";
 // import "../../Styles/Styles.css";
 import logo from "../../../assets/logo.png";
 import { FaShoppingCart, FaUserPlus, FaSignOutAlt } from "react-icons/fa";
+import { GiShop, GiGlassBall } from "react-icons/gi";
 import { RxDashboard } from "react-icons/rx";
 import {
   MdOutlineDeliveryDining,
@@ -11,7 +12,6 @@ import {
   MdOutlineEventAvailable,
   MdInventory,
 } from "react-icons/md";
-import { GiShop } from "react-icons/gi";
 import { TbReport } from "react-icons/tb";
 
 const DistributorSidebar = ({ onClose }) => {
@@ -75,6 +75,15 @@ const DistributorSidebar = ({ onClose }) => {
         />
         <NavItem
           icon={
+            <GiGlassBall style={{ color: "#eab308", fontSize: "2rem" }} />
+          }
+          text="Showcase Report"
+          onClick={() => handleItemClick(
+            "/DistributorProductReport"
+          )}   
+        />
+        <NavItem
+          icon={
             <FaShoppingCart style={{ color: "#047857", fontSize: "2rem" }} />
           }
           text="Orders"
@@ -106,6 +115,41 @@ const DistributorSidebar = ({ onClose }) => {
             </div>
           )}
         </div>
+
+
+        {/* Manage Attendance Record */}
+        
+                <div className="relative">
+                  <span
+                    className="nav-item nav-item-dropdown flex items-center gap-4 cursor-pointer p-4 transition duration-300 ease-in-out transform rounded-full mb-2"
+                    onClick={toggleAttendanceDropdown}
+                  >
+                    <MdOutlineEventAvailable
+                      style={{ color: "blue", fontSize: "2rem" }}
+                    />
+                    <span className="text-lg font-semibold">Manage Attendance</span>
+                  </span>
+                  {AttendanceDropdown && (
+                    <div className="flex justify-start ml-10 flex-col font-semibold text-xl text-black">
+                      <DropdownItem
+                        text={<>Field Executive</>}
+                        onClick={() =>
+                          handleItemClick(
+                            "/mange/Field-Executive-Approval/FieldManager/Attendance"
+                          )
+                        }
+                      />
+                      <DropdownItem
+                        text={<>Field Executive Approval</>}
+                        onClick={() =>
+                          handleItemClick(
+                            "/mange/Field-Executive-Approval/Admin/Attendance"
+                          )
+                        }
+                      />
+                    </div>
+                  )}
+                </div>
 
         {/* FEA and FE */}
         <div className="relative">

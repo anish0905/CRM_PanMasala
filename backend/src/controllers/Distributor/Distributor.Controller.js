@@ -235,53 +235,68 @@ const getDistributorBySuperByID = asyncHandler(async (req, res) => {
 const updateUser = asyncHandler(async (req, resp) => {
   const { id } = req.params;
   const {
-    username,
-    email,
-    password,
-    country,
-    state,
-    city,
-    address,
-    pinCode,
-    selectedSuperDistributor,
+    username = "",
+    email = "",
+    mobileNo = "",
+    password = "",
+    confirmPassword = "",
+    country = "India", // Default value
+    state = "",
+    city = "",
+    address = "",
+    pinCode = "",
+    district = "",
+    selectedSuperDistributor = "",
   } = req.body;
 
-  // Validate password if provided
-  if (password && !validatePassword(password)) {
-    resp.status(400);
-    throw new Error("Password must be between 8 and 20 characters long.");
+  try {
+    // Validate email and mobile number if provided
+    if (email && !/^\S+@\S+\.\S+$/.test(email)) {
+      resp.status(400);
+      throw new Error("Invalid email address.");
+    }
+    if (mobileNo && !/^\d{10}$/.test(mobileNo)) {
+      resp.status(400);
+      throw new Error("Invalid mobile number.");
+    }
+
+    // Validate password if provided
+    if (password && !validatePassword(password)) {
+      resp.status(400);
+      throw new Error("Password must be between 8 and 20 characters long.");
+    }
+
+    // Find the distributor by id
+    const distributor = await Distributor.findById(id);
+    if (!distributor) {
+      resp.status(404);
+      throw new Error("Distributor not found.");
+    }
+
+    // Update fields if provided
+    if (username) distributor.username = username;
+    if (email) distributor.email = email;
+    if (password) distributor.password = await bcrypt.hash(password, 10); // Hash password if it's being updated
+    if (req.body.hasOwnProperty("country")) distributor.country = country;
+    if (state) distributor.state = state;
+    if (city) distributor.city = city;
+    if (address) distributor.address = address;
+    if (district) distributor.district = district;
+    if (pinCode) distributor.pinCode = pinCode;
+    if (selectedSuperDistributor)
+      distributor.superDistributorId = selectedSuperDistributor;
+
+    // Save the updated distributor data
+    const updatedDistributor = await distributor.save();
+
+    resp.status(200).json({
+      message: "Distributor updated successfully",
+      distributor: updatedDistributor,
+    });
+  } catch (error) {
+    resp.status(500);
+    throw new Error(error.message || "Server error");
   }
-
-  // Find the distributor by id
-  const distributor = await Distributor.findById(id);
-  if (!distributor) {
-    resp.status(404);
-    throw new Error("distributor not found.");
-  }
-
-  // Update fields if provided
-  if (username) distributor.username = username;
-  if (email) distributor.email = email;
-  if (password) distributor.password = await bcrypt.hash(password, 10); // Hash password if it's being updated
-  if (country) distributor.country = country;
-  if (state) distributor.state = state;
-  if (city) distributor.city = city;
-  if (address) distributor.address = address;
-  if (pinCode) distributor.pinCode = pinCode;
-  if (selectedSuperDistributor)
-    distributor.superDistributorId = selectedSuperDistributor;
-
-  // Save the updated distributor data
-  const updateddistributor = await distributor.save();
-
-  resp.status(200).json({
-    message: "distributor updated successfully",
-    updateddistributor: {
-      _id: updateddistributor.id,
-      username: updateddistributor.username,
-      email: updateddistributor.email,
-    },
-  });
 });
 
 // @desc Delete an distributor's record
