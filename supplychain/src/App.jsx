@@ -5,8 +5,10 @@ import Login from "./pages/CNF/Login";
 
 import CNFDashbord from "./pages/CNF/CNFDashbord";
 // import SubAdminDashboard from "./pages/SubAdmin/dashboard/Dashboard";
+// import SuperStockistDetails from "./pages/SuperStockists/";
 import SuperStockistDashbord from "./pages/SuperStockists/SuperStockistDashbord";
-import SuperStockistDetails from "./pages/CNF/superStockist/SuperStockistDetails"
+
+import SuperStockistDetails from "./pages/CNF/superStockist/SuperStockistDetails";
 function App() {
   const navigate = useNavigate();
   const email = localStorage.getItem("email");

@@ -7,7 +7,7 @@ import SuperstockistRegister from "../../CNF/superStockist/SuperstockistRegister
 import CNFSidebar from "../../CNF/CNFSidebar";
 import CNFSideBarModal from "../../CNF/CNFSideBarModal";
 
-const SubAdminDetails = () => {
+const SuperStockistDetails = () => {
   const [subAdmins, setsubAdmins] = useState([]);
   const [showModal, setShowModal] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
@@ -33,7 +33,8 @@ const SubAdminDetails = () => {
   const fetchSuperStockists = async () => {
     try {
       const response =
-        location.pathname === "/manage/superstockist/Registration/CNF"
+        location.pathname === "/manage/superstockist/Registration/CNF" ||
+        location.pathname === "/manage/superstockist/Super-Stockist/CNF"
           ? await fetch(`${BASE_URL}/api/superstockist/getAlluser`)
           : await fetch(
               `${BASE_URL}/api/superstockist/getAlluser/${currentUserId}`
@@ -145,6 +146,8 @@ const SubAdminDetails = () => {
           <h1 className="flex-grow text-start text-xs sm:text-sm md:text-lg lg:text-xl font-bold text-gray-800">
             {name === "Registration"
               ? "Manage Super Stockist"
+              : name === "Super-Stockist"
+              ? "Super Stockist List"
               : name === "stock"
               ? "Super Stockist Inventory"
               : "Super Stockist Registration"}
@@ -187,7 +190,7 @@ const SubAdminDetails = () => {
         <div className=" py-8">
           <div className="bg-[#1e40af]  rounded-xl p-4">
             <h2 className="2xl:text-2xl xl:text-xl md:text-lg text-sm text-white font-bold p-1 mt-1">
-              Super Stockist List
+              Super Stockist details
             </h2>
             <div className=" grid lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-4 my-4 text-white ">
               <input
@@ -229,7 +232,9 @@ const SubAdminDetails = () => {
                     <th className="px-2 py-4 md:text-lg text-xs   border-r-2 border-white">
                       PinCode
                     </th>
-                    <th className="px-2 py-4 md:text-lg text-xs ">Actions</th>
+                    {name !== "stock" && name !== "Super-Stockist" && (
+                      <th className="px-2 py-4 md:text-lg text-xs">Actions</th>
+                    )}
                   </tr>
                 </thead>
                 <tbody>
@@ -263,7 +268,7 @@ const SubAdminDetails = () => {
                         {subAdmin.pinCode}
                       </td>
                       <td className="px-2 py-4 md:text-lg text-xs  whitespace-nowrap overflow-hidden overflow-ellipsis border-r-2 border-white">
-                        {name != "stock" && (
+                        {name != "stock" && name != "Super-Stockist" && (
                           <>
                             <button
                               onClick={() => handleUpdate(subAdmin)}
@@ -322,4 +327,4 @@ const SubAdminDetails = () => {
   );
 };
 
-export default SubAdminDetails;
+export default SuperStockistDetails;
