@@ -15,6 +15,7 @@ import {
 import { MdDateRange } from "react-icons/md";
 import AdminSidebar from "../AdminSidebar";
 import AdminSideBarModal from "../AdminSideBarModal";
+import RightSideDrawer from "../../../components/RightSideDrawer";
 
 
 const AttendanceRecordDashboard = () => {
@@ -147,6 +148,10 @@ const AttendanceRecordDashboard = () => {
           <h1 className="flex-grow text-center text-xs sm:text-sm md:text-lg lg:text-xl font-bold text-gray-800">
             Attendance Record
           </h1>
+
+          <div className="relative">
+           <RightSideDrawer />
+           </div>
 
           {/* Email Section */}
           <div className="hidden sm:flex items-center lg:text-2xl md:text-xl text-sm font-bold text-white border-4 border-[#1e40af] p-2 rounded-lg bg-[rgb(42,108,194)] hover:bg-blue-800 transition-colors duration-300 ease-in-out">

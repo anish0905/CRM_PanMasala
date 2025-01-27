@@ -146,6 +146,8 @@ const AdminSidebar = ({ onClose }) => {
                 onClick={() => handleItemClick("/deliveryboyDetails")}
               />
 
+              
+
 
               
 
@@ -178,7 +180,7 @@ const AdminSidebar = ({ onClose }) => {
               />
               <DropdownItem
                 text="Super Stockist"
-                onClick={() => handleItemClick("/manage/superstockist/Registration/Admin")}
+                onClick={() => handleItemClick("/manage/superstockist/user/Admin")}
               />
               <DropdownItem
                 text="Distributor"
@@ -341,6 +343,7 @@ const AdminSidebar = ({ onClose }) => {
           text="Create Product"
           onClick={() => handleItemClick("/Add-product")}
         />
+        
 
         <LogoutItem
           icon={<FaSignOutAlt style={{ color: "gray", fontSize: "2rem" }} />}

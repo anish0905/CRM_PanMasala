@@ -5,6 +5,7 @@ import AdminSidebar from "../AdminSidebar";
 import { FaRegEdit } from "react-icons/fa";
 import { MdAutoDelete, MdOutlineAssignment } from "react-icons/md";
 import FEARegistaionForm from "./FEARegistaionForm";
+import RightSideDrawer from "../../../components/RightSideDrawer";
 
 const FEADetails = () => {
   const [filedManagers, setFiledManagers] = useState([]);
@@ -143,10 +144,11 @@ const FEADetails = () => {
           </h1>
           {work==="Registration" &&(<button
             onClick={handleRegisterButtonClick}
-            className="lg:mr-12 lg:-ml-2 md:mr-8 mr-2 lg:text-md md:text-md p-3 bg-[#1e40af] rounded-md text-white text-lg font-semibold cursor-pointer"
+          className="lg:mr-12 lg:-ml-2 md:mr-8 mr-2 lg:text-xl md:text-lg  lg:p-3 bg-[#1e40af] rounded-md text-white p-2 text-xs  font-semibold cursor-pointer"
           >
             Register
           </button>)}
+          <RightSideDrawer/>
           {email && (
             <div className="hidden sm:flex items-center lg:text-2xl md:text-xl text-sm font-bold text-white border-4 border-[#1e40af] p-2 rounded-lg bg-[rgb(42,108,194)] hover:bg-blue-800 transition-colors duration-300 ease-in-out">
               {email}

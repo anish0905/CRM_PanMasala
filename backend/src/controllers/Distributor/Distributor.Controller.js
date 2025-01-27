@@ -2,6 +2,7 @@ const asyncHandler = require("express-async-handler");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const Distributor = require("../../models/Distributor/Distributor.Model");
+const  mongoose = require("mongoose");
 
 function validatePassword(password) {
   const minLength = 8; // Minimum length for the password
@@ -309,14 +310,15 @@ const deleteUser = asyncHandler(async (req, resp) => {
     throw new Error("Distributor not found");
   }
 
-  // Delete the distributor
-  await distributor.remove();
+  // Delete the distributor using deleteOne
+  await Distributor.deleteOne({ _id: id });
 
   resp.status(200).json({
     message: "Distributor deleted successfully",
     distributorId: id,
   });
 });
+
 
 module.exports = {
   registerUser,

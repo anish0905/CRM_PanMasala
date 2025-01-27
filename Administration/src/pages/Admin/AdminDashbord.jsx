@@ -11,11 +11,14 @@ import AdminSidebar from "./AdminSidebar";
 import AdminSideBarModal from "./AdminSideBarModal";
 import OrderChart from "./OrderChart";
 import OrderDetailsCityTaluka from "./OrderDetailsCityTaluka";
+import RightSideDrawer from "../../components/RightSideDrawer";
 
 
 const AdminDashbord = () => {
+  const [subAdmin,setsubAdmins] = useState([])
+  const [cnf,setCnf] = useState([])
   const [superStockist, setSuperStockist] = useState([]);
-  const [stockist, setStockist] = useState([]);
+  const [Distributor, setDistributor] = useState([]);
   const [deliveryBoy, setDeliveryBoy] = useState([]);
   const [panShopDetails, setPanShopDetails] = useState([]);
   const [pendingOrder, setPendingOrder] = useState(0);
@@ -32,6 +35,8 @@ const AdminDashbord = () => {
     const fetchData = async () => {
       try {
         const [
+          SubAdmin,
+          CNF,
           superDistributor,
           Distributor,
           orderRes,
@@ -39,16 +44,20 @@ const AdminDashbord = () => {
           panShopDetailsRes,
           fieldManager
         ] = await Promise.all([
+          axios.get(`${URI}/api/subAdmin/getAllUser`),
+          axios.get(`${URI }/api/cnfAgent/users`),
           axios.get(`${URI}/api/superstockist/getAllUser`),
-          axios.get(`${URI }/api/executives/getAlluser/`),
+          axios.get(`${URI }/api/distributor/getAlluser/`),
           axios.get(`${URI}/api/panshop/order/`),
           // axios.get(`${URI }/api/qrGeneraterBoy/allDetailsDeliverBoy`),
           axios.get(`${URI}/api/panShop/`),
           axios.get(`${URI}/api/fieldManager/getFieldManager`)
         ]);
-
+         
+        setsubAdmins(SubAdmin.data);
+        setCnf(CNF.data)
         setSuperStockist(superDistributor.data);
-        // setStockist(Distributor.data);
+        setDistributor(Distributor.data);
         setOrders(orderRes.data);
         // setDeliveryBoy(deliveryBoyRes.data);
         setPanShopDetails(panShopDetailsRes.data.data);
@@ -97,14 +106,18 @@ const AdminDashbord = () => {
       <div className="min-h-screen  lg:block hidden">
         <AdminSidebar />
       </div>
-      <div className="lg:ml-80 md:ml-40 font-serif w-full lg:p-10 md:p-5">
-        <div className="flex items-center flex-wrap justify-between gap-5 p-10 bg-blue-300 rounded-xl">
-          <h1 className="flex-grow text-start text-xs sm:text-sm md:text-lg lg:text-xl font-bold text-gray-800">
+      <div className="lg:ml-80 font-serif w-full lg:p-10 md:p-5">
+        <div className="flex items-center  justify-between gap-5 p-10 bg-blue-300 rounded-xl">
+          <h1 className="flex-grow text-start text-base sm:text-base md:text-lg lg:text-xl font-bold text-gray-800">
             Admin Dashboard
           </h1>
+          <div className="relative">
+           <RightSideDrawer />
+           </div>
           <div className="hidden sm:flex items-center lg:text-2xl md:text-xl text-sm font-bold text-white border-4 border-[#1e40af] p-2 rounded-lg bg-[rgb(42,108,194)] hover:bg-blue-800 transition-colors duration-300 ease-in-out">
             {email}
           </div>
+          
           <div className="lg:hidden  block">
             <AdminSideBarModal />
           </div>
@@ -135,12 +148,15 @@ const AdminDashbord = () => {
           <div className="bg-blue-800 text-white p-5 rounded-lg w-full">
             <h1 className="text-2xl bg-blue-300 p-3 rounded-lg my-4">Users</h1>
             {[
-              { name: "SuperStockist", count: superStockist.length, link: "/superstockistDetails" },
-              { name: "Stockist", count: stockist.length, link: "/stockistDetails" },
+              { name: "Sub Admin", count: subAdmin.length, link: "/manage/Sub-Admin/user/Admin" },
+              { name: "CNF", count: cnf.length, link: "/manage/CNF/user/Admin" },
+              { name: "SuperStockist", count: superStockist.length, link: "/manage/superstockist/user/Admin" },
+              { name: "Distributor", count: Distributor.length, link: "/manage/Distributor/user/Admin" },
+              { name: "Field Executive Approval", count: fieldManagerAdmin.length, link: "/Field-Executive-Approval/Admin/user" },
+              { name: "Field Executive", count: fieldManager.length, link: "/Field-Executive-Approval/FieldManager/user" },
               { name: "Delivery Boy", count: deliveryBoy.length, link: "/deliveryboyDetails" },
               { name: "PanShop", count: panShopDetails.length, link: "/panshowDetails" },
-              { name: "Field Executive Approval", count: fieldManagerAdmin.length, link: "/mange/fieldManagerAdmin" },
-              { name: "Field Executive", count: fieldManager.length, link: "/manage/field/manager" },
+            
             ].map(({ name, count, link }, idx) => (
               <Link
                 key={idx}
