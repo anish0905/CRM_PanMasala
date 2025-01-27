@@ -1,7 +1,7 @@
 const asyncHandler = require("express-async-handler");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
-const Executives = require("../models/DistributorModel");
+const Distributor = require("../../models/Distributor/Distributor.Model");
 
 function validatePassword(password) {
   const minLength = 8; // Minimum length for the password
@@ -13,8 +13,10 @@ function validatePassword(password) {
 //@route POST/api/users/register
 //@access public
 
-const registerDistributor = asyncHandler(async (req, resp) => {
+const registerUser = asyncHandler(async (req, resp) => {
   const {
+    cnf,
+    superstockist,
     username,
     email,
     password,
@@ -24,65 +26,82 @@ const registerDistributor = asyncHandler(async (req, resp) => {
     city,
     address,
     pinCode,
-    selectedSuperDistributor,
+
+    wareHouseName,
+    district,
+    mobileNo,
   } = req.body;
-  if (password !== confirmPassword) {
-    resp.status(400);
-    throw new Error("password and confirmPassword are not matched !");
-  }
-  if (!validatePassword(password)) {
-    resp.status(400);
-    throw new Error("Password must be between 8 and 20 characters long.");
-  }
+
+  // Validate required fields
   if (
+    !cnf ||
+    !superstockist ||
     !username ||
     !email ||
     !password ||
     !confirmPassword ||
     !country ||
     !state ||
-    !city
+    !city ||
+    !address ||
+    !pinCode ||
+    !district ||
+    !mobileNo
   ) {
     resp.status(400);
-    throw new Error("All fields are mandatory !");
+    throw new Error("All fields are mandatory!");
   }
 
-  const executiveUserAvailable = await Executives.findOne({ email });
-  if (executiveUserAvailable) {
+  // Check password match
+  if (password !== confirmPassword) {
     resp.status(400);
-    throw new Error("User already registered !");
+    throw new Error("Password and Confirm Password do not match!");
   }
 
-  //Hash password;
+  // Validate password strength
+  if (!validatePassword(password)) {
+    resp.status(400);
+    throw new Error("Password must be between 8 and 20 characters long.");
+  }
+
+  // Check if user already exists
+  const distributorUserAvailable = await Distributor.findOne({ email });
+  if (distributorUserAvailable) {
+    resp.status(400);
+    throw new Error("User already registered!");
+  }
+
+  // Hash the password
   const hashedPassword = await bcrypt.hash(password, 10);
-  console.log("Hashed Password", hashedPassword);
 
-  //Hash confirmPassword;
-
-  const hashedCpassword = await bcrypt.hash(confirmPassword, 10);
-  console.log("Hashed CPassword", hashedCpassword);
-
-  const executive = await Executives.create({
+  // Create new distributor
+  const distributor = await Distributor.create({
+    cnf,
+    superstockist,
     username,
     email,
     password: hashedPassword,
-    confirmPassword: hashedCpassword,
     country,
     state,
     city,
     address,
     pinCode,
-    superDistributor: selectedSuperDistributor,
+    wareHouseName,
+    mobileNo,
+    district,
   });
-  console.log(`Executive User created ${executive}`);
-  if (executive) {
-    resp.status(201).json({ _id: executive.id, email: executive.email });
+
+  // Response for successful creation
+  if (distributor) {
+    resp.status(201).json({
+      message: "distributor registered successfully",
+      _id: distributor.id,
+      email: distributor.email,
+    });
   } else {
     resp.status(400);
-    throw new Error("Executive data us not valid");
+    throw new Error("Failed to register the distributor. Please try again.");
   }
-
-  resp.status(200).json({ message: " Register the executive" });
 });
 
 // @desc Login a user
@@ -99,18 +118,18 @@ const loginUser = asyncHandler(async (req, resp) => {
 
   const normalizedEmail = email.toLowerCase(); // Convert email to lowercase
 
-  const executive = await Executives.findOne({
+  const distributor = await Distributor.findOne({
     email: { $regex: new RegExp(`^${normalizedEmail}$`, "i") },
   });
 
   // Compare password with hashed password
-  if (executive && (await bcrypt.compare(password, executive.password))) {
+  if (distributor && (await bcrypt.compare(password, distributor.password))) {
     const accessToken = jwt.sign(
       {
-        userExecutive: {
-          username: executive.username,
-          email: executive.email,
-          id: executive._id,
+        userdistributor: {
+          username: distributor.username,
+          email: distributor.email,
+          id: distributor._id,
         },
       },
       process.env.ACCESS_TOKEN_SECRET,
@@ -122,7 +141,7 @@ const loginUser = asyncHandler(async (req, resp) => {
     // Respond with accessToken and userId
     resp.status(200).json({
       accessToken,
-      userId: executive._id,
+      userId: distributor._id,
     });
   } else {
     resp.status(401);
@@ -135,16 +154,16 @@ const loginUser = asyncHandler(async (req, resp) => {
 //@access private
 
 const currentUser = asyncHandler(async (req, resp) => {
-  resp.json({ message: "Executive current user information" });
+  resp.json({ message: "distributor current user information" });
 });
 
 const getStateCity = asyncHandler(async (req, resp) => {
-  const executive = await Executives.findOne({ email: req.params.email });
-  if (!executive) {
+  const distributor = await Distributor.findOne({ email: req.params.email });
+  if (!distributor) {
     resp.status(404);
-    throw new Error("Executive not found");
+    throw new Error("distributor not found");
   }
-  resp.status(200).json({ state: executive.state, city: executive.city });
+  resp.status(200).json({ state: distributor.state, city: distributor.city });
 });
 
 const getUserDetailsByEmail = async (req, res) => {
@@ -156,7 +175,9 @@ const getUserDetailsByEmail = async (req, res) => {
 
   try {
     // Query the database for the user by email and populate the necessary fields
-    const user = await Executives.findOne({ email }).populate("superDistributor"); // Make sure 'superDistributor' is the correct field to populate
+    const user = await Distributor.findOne({ email }).populate(
+      "superDistributor"
+    ); // Make sure 'superDistributor' is the correct field to populate
 
     if (!user) {
       return res.status(404).json({ message: "User not found" });
@@ -171,7 +192,7 @@ const getUserDetailsByEmail = async (req, res) => {
 };
 
 const GetAllUser = asyncHandler(async (req, resp) => {
-  const getAllUser = await Executives.find();
+  const getAllUser = await Distributor.find();
   resp.status(200).json(getAllUser);
 });
 
@@ -186,15 +207,15 @@ const getDistributorBySuperByID = asyncHandler(async (req, res) => {
     }
 
     // Fetch Distributors based on superDistributorId
-    const Distributors = await Executives.find({
+    const Distributors = await Distributor.find({
       superDistributor: new ObjectId(superDistributorId),
     });
 
     // Check if Distributors exist for the given ID
     if (!Distributors || Distributors.length === 0) {
-      return res
-        .status(404)
-        .json({ message: "No Distributors found for the given superDistributorId." });
+      return res.status(404).json({
+        message: "No Distributors found for the given superDistributorId.",
+      });
     }
 
     // Send the found Distributors as a response
@@ -207,7 +228,7 @@ const getDistributorBySuperByID = asyncHandler(async (req, res) => {
   }
 });
 
-// @desc Update an executive's details
+// @desc Update an distributor's details
 // @route PUT /api/users/update/:id
 // @access private
 
@@ -231,59 +252,60 @@ const updateUser = asyncHandler(async (req, resp) => {
     throw new Error("Password must be between 8 and 20 characters long.");
   }
 
-  // Find the executive by id
-  const executive = await Executives.findById(id);
-  if (!executive) {
+  // Find the distributor by id
+  const distributor = await Distributor.findById(id);
+  if (!distributor) {
     resp.status(404);
-    throw new Error("Executive not found.");
+    throw new Error("distributor not found.");
   }
 
   // Update fields if provided
-  if (username) executive.username = username;
-  if (email) executive.email = email;
-  if (password) executive.password = await bcrypt.hash(password, 10); // Hash password if it's being updated
-  if (country) executive.country = country;
-  if (state) executive.state = state;
-  if (city) executive.city = city;
-  if (address) executive.address = address;
-  if (pinCode) executive.pinCode = pinCode;
-  if (selectedSuperDistributor) executive.superDistributorId = selectedSuperDistributor;
+  if (username) distributor.username = username;
+  if (email) distributor.email = email;
+  if (password) distributor.password = await bcrypt.hash(password, 10); // Hash password if it's being updated
+  if (country) distributor.country = country;
+  if (state) distributor.state = state;
+  if (city) distributor.city = city;
+  if (address) distributor.address = address;
+  if (pinCode) distributor.pinCode = pinCode;
+  if (selectedSuperDistributor)
+    distributor.superDistributorId = selectedSuperDistributor;
 
-  // Save the updated executive data
-  const updatedExecutive = await executive.save();
+  // Save the updated distributor data
+  const updateddistributor = await distributor.save();
 
   resp.status(200).json({
-    message: "Executive updated successfully",
-    updatedExecutive: {
-      _id: updatedExecutive.id,
-      username: updatedExecutive.username,
-      email: updatedExecutive.email,
+    message: "distributor updated successfully",
+    updateddistributor: {
+      _id: updateddistributor.id,
+      username: updateddistributor.username,
+      email: updateddistributor.email,
     },
   });
 });
 
-// @desc Delete an executive's record
+// @desc Delete an distributor's record
 // @route DELETE /api/users/delete/:id
 // @access private
 
 const deleteUser = asyncHandler(async (req, resp) => {
   const { id } = req.params;
 
-  // Find the executive by id
-  const executive = await Executives.findById(id);
-  if (!executive) {
-    resp.status(404).json({ message: "Executive not found." }); // Send response on not found
+  // Find the distributor by id
+  const distributor = await Distributor.findById(id);
+  if (!distributor) {
+    resp.status(404).json({ message: "distributor not found." }); // Send response on not found
     return; // Exit early after sending the response
   }
 
-  // Delete the executive
-  await executive.deleteOne(); // or executive.remove() if using Mongoose 4.x
+  // Delete the distributor
+  await distributor.deleteOne(); // or distributor.remove() if using Mongoose 4.x
 
-  resp.status(200).json({ message: "Executive deleted successfully" });
+  resp.status(200).json({ message: "distributor deleted successfully" });
 });
 
 module.exports = {
-  registerDistributor,
+  registerUser,
   loginUser,
   currentUser,
   getStateCity,

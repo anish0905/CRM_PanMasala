@@ -30,10 +30,10 @@ const superStockistDeliveryBoyRoutes = require("./src/routes/superStockist/Super
 const superStockistProductDetailsRoutes = require("./src/routes/superStockist/superStockistProductDetails.Routes");
 const superStockistInventoryRoutes = require("./src/routes/superStockist/SuperStockistInvertory.Routes");
 
-
 //Distributor variables
-const DistributorOrderRoutes = require("./src/routes/Distributor/Distributor.Routes");
-const DistributorInventoryRoute = require("./src/routes/Distributor/DistributorInventory.Routes");
+// const DistributorOrderRoutes = require("./src/routes/Distributor/Router.Routes");
+// const DistributorInventoryRoute = require("./src/routes/Distributor/DistributorInventory.Routes");
+const DistributorRoutes = require("./src/routes/Distributor/Distributor.Routes");
 
 const panShopOrderRoutes = require("./src/routes/panshop/panShopOrderRoutes");
 const panShopOwnerRoutes = require("./src/routes/panshop/panShopOwnerRoutes");
@@ -79,8 +79,9 @@ app.use("/api/e-commerce", productEcommRoutes);
 app.use("/api/cnfAgent", cnfAgentRoutes);
 
 // Distributor Routes
-app.use("/api/Distributor/order", DistributorOrderRoutes);
-app.use("/api/Distributorinventory", DistributorInventoryRoute);
+// app.use("/api/Distributor/order", DistributorOrderRoutes);
+// app.use("/api/Distributorinventory", DistributorInventoryRoute);
+app.use("/api/distributor", DistributorRoutes);
 
 
 // Pan Shop Routes

@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import Img from "../../../assets/avataaars.png";
-import Sidebar from "../../SubAdmin/sidebar/Sidebar";
-import SidebarModal from "../sidebar/SidebarModel";
+import DistributorSidebar from "../sidebar/DistributorSidebar";
+import DistributorBarModal from "../sidebar/DistributorBarModal";
 
 const Dashboard = () => {
   const BASE_URL = import.meta.env.VITE_API_URL;
@@ -10,7 +10,7 @@ const Dashboard = () => {
   return (
     <div className="flex gap-6 bg-blue-100 w-full">
       <div className="h-screen hidden md:block lg:block">
-        <Sidebar />
+        <DistributorSidebar />
       </div>
       <div className="lg:ml-80 md:ml-40 font-serif w-full lg:p-10 md:p-5">
         <div className="flex items-center flex-wrap justify-center lg:justify-end gap-5 h-20  bg-blue-300 rounded-xl">
@@ -19,7 +19,7 @@ const Dashboard = () => {
             {localStorage.getItem("email")}
           </p>
           <div className="lg:hidden md:hidden block">
-            <SidebarModal />
+            <DistributorBarModal />
           </div>
         </div>
       </div>
