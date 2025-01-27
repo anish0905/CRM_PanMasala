@@ -139,6 +139,8 @@ const loginUser = asyncHandler(async (req, resp) => {
     resp.status(200).json({
       accessToken,
       userId: superStockistRegistered.id, // Add the userId to the response
+      cnf: superStockistRegistered.cnf,
+
       message: "Login successful!",
     });
   } else {

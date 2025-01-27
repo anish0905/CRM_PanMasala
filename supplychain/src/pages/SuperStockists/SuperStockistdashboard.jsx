@@ -98,7 +98,7 @@ const SuperStockistdashboard = () => {
   return (
     <div className="flex gap-6 bg-blue-100 w-full">
       <div className="h-screen hidden md:block lg:block">
-        <AdminSidebar />
+        <SuperStockistSidebar />
       </div>
       <div className="lg:ml-80 md:ml-40 font-serif w-full lg:p-10 md:p-5">
         <div className="flex items-center flex-wrap justify-center lg:justify-end gap-5 h-44 bg-blue-300 rounded-xl">
