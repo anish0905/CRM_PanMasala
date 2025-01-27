@@ -27,7 +27,6 @@ const registerUser = asyncHandler(async (req, resp) => {
     address,
     pinCode,
 
-    wareHouseName,
     district,
     mobileNo,
   } = req.body;
@@ -81,12 +80,12 @@ const registerUser = asyncHandler(async (req, resp) => {
     username,
     email,
     password: hashedPassword,
+
     country,
     state,
     city,
     address,
     pinCode,
-    wareHouseName,
     mobileNo,
     district,
   });
@@ -288,20 +287,35 @@ const updateUser = asyncHandler(async (req, resp) => {
 // @route DELETE /api/users/delete/:id
 // @access private
 
+// @desc Delete a distributor's record
+// @route DELETE /api/users/delete/:id
+// @access private
+
 const deleteUser = asyncHandler(async (req, resp) => {
   const { id } = req.params;
 
-  // Find the distributor by id
+  // Validate if the provided ID is valid
+  if (!mongoose.Types.ObjectId.isValid(id)) {
+    resp.status(400);
+    throw new Error("Invalid distributor ID");
+  }
+
+  // Find the distributor by ID
   const distributor = await Distributor.findById(id);
+
+  // Check if the distributor exists
   if (!distributor) {
-    resp.status(404).json({ message: "distributor not found." }); // Send response on not found
-    return; // Exit early after sending the response
+    resp.status(404);
+    throw new Error("Distributor not found");
   }
 
   // Delete the distributor
-  await distributor.deleteOne(); // or distributor.remove() if using Mongoose 4.x
+  await distributor.remove();
 
-  resp.status(200).json({ message: "distributor deleted successfully" });
+  resp.status(200).json({
+    message: "Distributor deleted successfully",
+    distributorId: id,
+  });
 });
 
 module.exports = {

@@ -14,6 +14,7 @@ import VendorNotInterested from "./pages/Admin/Vendor/VendorNotIntrested";
 import FEADetails from "./pages/Admin/FEA/FEADetails";
 import { ContentHistory } from "./pages/Admin/Vendor/ContentHistory";
 import AttendanceRecordDashboard from "./pages/Admin/Attendance/AttendanceRecordDashboard";
+import DistributorDetails from "./pages/Admin/Distributor/DistributorDetails";
 function App() {
   const navigate = useNavigate();
   const email = localStorage.getItem("email");
@@ -64,6 +65,10 @@ function App() {
       <Route
         path="/Attendance-Dashboard"
         element={<AttendanceRecordDashboard />}
+      />
+      <Route
+        path="/manage/Distributor/:name/:role"
+        element={<DistributorDetails />}
       />
 
     </Routes>

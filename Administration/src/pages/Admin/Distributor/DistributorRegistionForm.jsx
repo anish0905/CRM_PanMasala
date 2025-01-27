@@ -5,8 +5,7 @@ import "react-toastify/dist/ReactToastify.css";
 import { IoMdClose } from "react-icons/io";
 import stateData from "../../../statesData"; // Import stateData
 
-const CNFRegistionForm = ({ onClose, selectedCNF, fetchCNFs }) => {
-  const [subAdmins, setSubAdmins] = useState([]);
+const DistributorRegistionForm = ({ onClose, selectedDistributor ,fetchDistributors}) => {
   const [formData, setFormData] = useState({
     username: "",
     email: "",
@@ -18,10 +17,8 @@ const CNFRegistionForm = ({ onClose, selectedCNF, fetchCNFs }) => {
     city: "",
     address: "",
     pinCode: "",
-    selectedsubAdmin: "",
-    district: "",
-    subAdmin: "", // This will store subAdmin selection
-    region: "", // Added region to the form data
+    selectedSuperStockist: "",
+    district: "", // To handle district selection
   });
 
   const URI = import.meta.env.VITE_API_URL;
@@ -37,14 +34,10 @@ const CNFRegistionForm = ({ onClose, selectedCNF, fetchCNFs }) => {
     setFormData({ ...formData, state: selectedState, district: "" }); // Reset district on state change
   };
 
-  // Handle subAdmin change
-  const handlesubAdminChange = (e) => {
-    setFormData({ ...formData, subAdmin: e.target.value });
-  };
-
   // Handle form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
+    
 
     // Check if passwords match
     if (formData.password !== formData.confirmPassword) {
@@ -54,25 +47,25 @@ const CNFRegistionForm = ({ onClose, selectedCNF, fetchCNFs }) => {
 
     const requestData = {
       ...formData,
-      selectedsubAdmin: formData.subAdmin, // Added subAdmin selection to the request
+      selectedSuperStockist: formData.selectedSuperStockist,
     };
 
     try {
       let response;
-      if (selectedCNF) {
+      if (selectedDistributor) {
         response = await axios.put(
-          `${URI}/api/cnfAgent/update/${selectedCNF._id}`,
+          `${URI}/api/Distributor/update/${selectedDistributor._id}`,
           requestData
         );
         toast.success("User updated successfully!");
       } else {
         response = await axios.post(
-          `${URI}/api/cnfAgent/register`,
+          `${URI}/api/Distributor/register`,
           requestData
         );
         toast.success("User registered successfully!");
       }
-      fetchCNFs();
+      fetchDistributors();
 
       // Reset form after submission
       setFormData({
@@ -86,9 +79,8 @@ const CNFRegistionForm = ({ onClose, selectedCNF, fetchCNFs }) => {
         address: "",
         mobileNo: "",
         pinCode: "",
-        subAdmin: "",
+        selectedSuperStockist: "",
         district: "", // Reset district on form submission
-        region: "", // Reset region on form submission
       });
       onClose();
     } catch (error) {
@@ -97,36 +89,22 @@ const CNFRegistionForm = ({ onClose, selectedCNF, fetchCNFs }) => {
     }
   };
 
-  useEffect(() => {
-    fetchSubAdmin();
-  }, []);
-
-  const fetchSubAdmin = async () => {
-    try {
-      const respo = await axios.get(`${URI}/api/subAdmin/getAlluser`);
-      setSubAdmins(respo.data);
-    } catch (error) {
-      console.error("Error fetching sub-admins:", error);
-    }
-  };
-
   // Effect to pre-fill data when editing an existing sub-admin
   useEffect(() => {
-    if (selectedCNF) {
+    if (selectedDistributor) {
       setFormData({
-        username: selectedCNF.username,
-        email: selectedCNF.email,
-        address: selectedCNF.address,
-        city: selectedCNF.city,
-        pinCode: selectedCNF.pinCode,
-        state: selectedCNF.state,
-        district: selectedCNF.district || "", // Pre-fill district if available
-        mobileNo: selectedCNF.mobileNo || "",
-        subAdmin: selectedCNF.subAdmin || "", // Pre-select sub-admin if available
-        region: selectedCNF.region || "", // Pre-fill region if available
+        username: selectedDistributor.username,
+        email: selectedDistributor.email,
+        address: selectedDistributor.address,
+        city: selectedDistributor.city,
+        pinCode: selectedDistributor.pinCode,
+        state: selectedDistributor.state,
+        district: selectedDistributor.district || "", // Pre-fill district if available
+        mobileNo: selectedDistributor.mobileNo || "",
+        
       });
     }
-  }, [selectedCNF]);
+  }, [selectedDistributor]);
 
   // Get districts based on selected state
   const getDistricts = (stateName) => {
@@ -140,7 +118,7 @@ const CNFRegistionForm = ({ onClose, selectedCNF, fetchCNFs }) => {
       <div className="bg-white p-6 rounded-lg shadow-md w-full max-w-2xl">
         <div className="flex justify-between items-center mb-4">
           <h4 className="text-xl font-bold text-blue-700">
-            {selectedCNF ? "Update Delivery Boy" : "Registration"}
+            {selectedDistributor ? "Update Delivery Boy" : "Registration"}
           </h4>
           <IoMdClose
             onClick={onClose}
@@ -148,17 +126,14 @@ const CNFRegistionForm = ({ onClose, selectedCNF, fetchCNFs }) => {
           />
         </div>
 
-        <form className="space-y-4 overflow-hidden"
-          style={{
+        <form className="space-y-4" onSubmit={handleSubmit} style={{
             maxHeight: '800px',
             overflow: 'scroll',
             scrollbarWidth: 'none', // Firefox
             msOverflowStyle: 'none', // Internet Explorer / Edge
             WebkitOverflowScrolling: 'touch', // Enable smooth scrolling for iOS Safari
             WebkitScrollbar: 'none' // Chrome/Safari
-          }}
-
-          onSubmit={handleSubmit}>
+          }}>
           {/* Username */}
           <div>
             <label htmlFor="username" className="block text-sm font-medium text-gray-700">Username</label>
@@ -307,44 +282,13 @@ const CNFRegistionForm = ({ onClose, selectedCNF, fetchCNFs }) => {
             />
           </div>
 
-          {/* Region */}
-          <div>
-            <label htmlFor="region" className="block text-sm font-medium text-gray-700">Region</label>
-            <input
-              type="text"
-              id="region"
-              name="region"
-              value={formData.region}
-              onChange={handleChange}
-              className="w-full px-4 py-2 mt-1 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-600"
-              placeholder="Region"
-            />
-          </div>
-
-          {/* Sub-Admin */}
-          <div>
-            <label htmlFor="subAdmin" className="block text-sm font-medium text-gray-700">Sub-Admin</label>
-            <select
-              id="subAdmin"
-              name="subAdmin"
-              value={formData.subAdmin}
-              onChange={handlesubAdminChange}
-              className="w-full px-4 py-2 mt-1 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-600"
-            >
-              <option value="">Select Sub-Admin</option>
-              {subAdmins.map((user, index) => (
-                <option key={index} value={user._id}>{user.username} ({user.state} {user.district})</option>
-              ))}
-            </select>
-          </div>
-
           {/* Submit Button */}
           <div className="mt-4">
             <button
               type="submit"
               className="w-full cursor-pointer px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 focus:outline-none"
             >
-              {selectedCNF ? "Update" : "Register"}
+              {selectedDistributor ? "Update" : "Register"}
             </button>
           </div>
         </form>
@@ -353,4 +297,4 @@ const CNFRegistionForm = ({ onClose, selectedCNF, fetchCNFs }) => {
   );
 };
 
-export default CNFRegistionForm;
+export default DistributorRegistionForm;

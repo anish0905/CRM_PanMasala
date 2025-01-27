@@ -5,10 +5,16 @@ import "react-toastify/dist/ReactToastify.css";
 import { IoMdClose } from "react-icons/io";
 import stateData from "../../../statesData"; // Import stateData
 
-const DistributorRegister = ({ onClose, selectedsubAdmin, fetchsubAdmins }) => {
+const DistributorRegister = ({
+  onClose,
+  selectedsubAdmin,
+  fetchSuperStockists,
+}) => {
   const superstockistId = localStorage.getItem("userId");
+  const cnfId = localStorage.getItem("cnfId");
   const [formData, setFormData] = useState({
     superstockist: superstockistId,
+    cnf: cnfId,
     username: "",
     email: "",
     mobileNo: "",
@@ -19,7 +25,6 @@ const DistributorRegister = ({ onClose, selectedsubAdmin, fetchsubAdmins }) => {
     city: "",
     address: "",
     pinCode: "",
-    selectedSuperStockist: "",
     district: "", // To handle district selection
   });
 
@@ -56,18 +61,18 @@ const DistributorRegister = ({ onClose, selectedsubAdmin, fetchsubAdmins }) => {
       let response;
       if (selectedsubAdmin) {
         response = await axios.put(
-          `${URI}/api/superstockist/${selectedsubAdmin._id}`,
+          `${URI}/api/distributor/${selectedsubAdmin._id}`,
           requestData
         );
         toast.success("Super stockist updated successfully!");
       } else {
         response = await axios.post(
-          `${URI}/api/superstockist/register`,
+          `${URI}/api/distributor/register`,
           requestData
         );
-        toast.success("Super stockist registered successfully!");
+        toast.success("Distributor registered successfully!");
       }
-      fetchsubAdmins();
+      fetchSuperStockists();
 
       // Reset form after submission
       setFormData({
@@ -81,7 +86,8 @@ const DistributorRegister = ({ onClose, selectedsubAdmin, fetchsubAdmins }) => {
         address: "",
         mobileNo: "",
         pinCode: "",
-        selectedSuperStockist: "",
+        cnf: "",
+        superstockist: "",
         district: "",
       });
       onClose();
@@ -347,7 +353,7 @@ const DistributorRegister = ({ onClose, selectedsubAdmin, fetchsubAdmins }) => {
           <div className="flex justify-end">
             <button
               type="submit"
-              className="px-6 py-2 text-white bg-blue-600 rounded-lg hover:bg-blue-700 focus:outline-none"
+              className="px-6 py-2 text-white bg-blue-600 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-600"
             >
               {selectedsubAdmin ? "Update" : "Register"}
             </button>

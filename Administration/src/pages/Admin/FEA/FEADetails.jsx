@@ -16,7 +16,7 @@ const FEADetails = () => {
   const [sortField, setSortField] = useState("name"); // Default sort by name
   const [sortDirection, setSortDirection] = useState("asc");
 
-  const itemsPerPage = 10;
+  const itemsPerPage = 8;
   const email = localStorage.getItem("email");
   const navigate = useNavigate();
   const { name, route,work } = useParams();
@@ -168,7 +168,7 @@ const FEADetails = () => {
         <div className="container mx-auto py-8">
           <div className="bg-[#1e40af] text-black rounded-xl p-4">
             <h2 className="2xl:text-2xl xl:text-xl md:text-lg text-sm text-white font-bold p-1 mt-1">
-            {name==="Admin"?"Field Executive Approval":" Field Executive"} List
+            {name==="Admin"?"Field Executive Approval":" Field Executive"} List ({filedManagers.length||"0"})
             </h2>
             <div className="grid lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-4 my-4 text-white">
               <input

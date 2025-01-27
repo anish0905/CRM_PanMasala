@@ -35,6 +35,9 @@ const superStockistInventoryRoutes = require("./src/routes/superStockist/SuperSt
 // const DistributorInventoryRoute = require("./src/routes/Distributor/DistributorInventory.Routes");
 const DistributorRoutes = require("./src/routes/Distributor/Distributor.Routes");
 
+const panShopOrderRoutes = require("./src/routes/panshop/panShopOrderRoutes");
+const panShopOwnerRoutes = require("./src/routes/panshop/panShopOwnerRoutes");
+
 // Connect to Database
 connectDb();
 
@@ -79,6 +82,11 @@ app.use("/api/cnfAgent", cnfAgentRoutes);
 // app.use("/api/Distributor/order", DistributorOrderRoutes);
 // app.use("/api/Distributorinventory", DistributorInventoryRoute);
 app.use("/api/distributor", DistributorRoutes);
+
+
+// Pan Shop Routes
+app.use("/api/panshop/order", panShopOrderRoutes);
+app.use("/api/panShop", panShopOwnerRoutes);
 
 // Fallback Route for Undefined Endpoints
 app.use((req, res, next) => {
