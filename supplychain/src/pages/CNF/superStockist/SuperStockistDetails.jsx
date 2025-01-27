@@ -7,13 +7,13 @@ import SuperstockistRegister from "../../CNF/superStockist/SuperstockistRegister
 import CNFSidebar from "../../CNF/CNFSidebar";
 import CNFSideBarModal from "../../CNF/CNFSideBarModal";
 
-const SubAdminDetails = () => {
-  const [subAdmins, setsubAdmins] = useState([]);
+const SuperStockistDetails = () => {
+  const [SuperStockists, setSuperStockists] = useState([]);
   const [showModal, setShowModal] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
   const [sortField, setSortField] = useState("username");
   const [sortDirection, setSortDirection] = useState("asc");
-  const [selectedsubAdmin, setSelectedsubAdmin] = useState();
+  const [selectedSuperStockist, setSelectedSuperStockist] = useState();
   const email = localStorage.getItem("email");
   const currentUserId = localStorage.getItem("currentUserId");
   const { name, role } = useParams();
@@ -33,20 +33,21 @@ const SubAdminDetails = () => {
   const fetchSuperStockists = async () => {
     try {
       const response =
-        location.pathname === "/manage/superstockist/Registration/CNF"
+        location.pathname === "/manage/superstockist/Registration/CNF" ||
+        location.pathname === "/manage/superstockist/Super-Stockist/CNF"
           ? await fetch(`${BASE_URL}/api/superstockist/getAlluser`)
           : await fetch(
               `${BASE_URL}/api/superstockist/getAlluser/${currentUserId}`
             );
 
       if (!response.ok) {
-        throw new Error("Failed to fetch subAdmins");
+        throw new Error("Failed to fetch SuperStockists");
       }
 
       const data = await response.json();
-      setsubAdmins(data);
+      setSuperStockists(data);
     } catch (error) {
-      console.error("Error fetching subAdmins:", error);
+      console.error("Error fetching SuperStockists:", error);
     }
   };
 
@@ -58,37 +59,35 @@ const SubAdminDetails = () => {
     setShowModal(false);
   };
 
-  const filteredAndSortedsubAdmins = () => {
-    return subAdmins
-      .filter((subAdmin) => {
-        const term = searchTerm.toLowerCase();
-        return (
-          subAdmin.username.toLowerCase().includes(term) ||
-          subAdmin.state.toLowerCase().includes(term) ||
-          subAdmin.email.toLowerCase().includes(term)
-        );
-      })
-      .sort((a, b) => {
-        const aValue = a[sortField].toLowerCase();
-        const bValue = b[sortField].toLowerCase();
-        if (sortDirection === "asc") {
-          return aValue < bValue ? -1 : 1;
-        }
-        return aValue > bValue ? -1 : 1;
-      });
+  const filteredAndSortedSuperStockists = () => {
+    return SuperStockists.filter((SuperStockist) => {
+      const term = searchTerm.toLowerCase();
+      return (
+        SuperStockist.username.toLowerCase().includes(term) ||
+        SuperStockist.state.toLowerCase().includes(term) ||
+        SuperStockist.email.toLowerCase().includes(term)
+      );
+    }).sort((a, b) => {
+      const aValue = a[sortField].toLowerCase();
+      const bValue = b[sortField].toLowerCase();
+      if (sortDirection === "asc") {
+        return aValue < bValue ? -1 : 1;
+      }
+      return aValue > bValue ? -1 : 1;
+    });
   };
 
   // Pagination logic
-  const paginatedsubAdmins = () => {
-    const filteredsubAdmins = filteredAndSortedsubAdmins();
+  const paginatedSuperStockists = () => {
+    const filteredSuperStockists = filteredAndSortedSuperStockists();
     const startIndex = (currentPage - 1) * itemsPerPage;
     const endIndex = startIndex + itemsPerPage;
-    return filteredsubAdmins.slice(startIndex, endIndex);
+    return filteredSuperStockists.slice(startIndex, endIndex);
   };
 
   // Calculate total pages
   const totalPages = Math.ceil(
-    filteredAndSortedsubAdmins().length / itemsPerPage
+    filteredAndSortedSuperStockists().length / itemsPerPage
   );
 
   const handleDeleteClick = async (id) => {
@@ -120,12 +119,12 @@ const SubAdminDetails = () => {
   };
 
   const handleUpdate = (deliveryBoy) => {
-    setSelectedsubAdmin(deliveryBoy);
+    setSelectedSuperStockist(deliveryBoy);
     setShowModal(true);
   };
 
   const handleInventory = (user) => {
-    navigate(`/manage/Inventory/${user._id}/${role}/subAdmin`, {
+    navigate(`/manage/Inventory/${user._id}/${role}/SuperStockist`, {
       state: {
         user: user,
       },
@@ -145,6 +144,8 @@ const SubAdminDetails = () => {
           <h1 className="flex-grow text-start text-xs sm:text-sm md:text-lg lg:text-xl font-bold text-gray-800">
             {name === "Registration"
               ? "Manage Super Stockist"
+              : name === "Super-Stockist"
+              ? "Super Stockist List"
               : name === "stock"
               ? "Super Stockist Inventory"
               : "Super Stockist Registration"}
@@ -177,8 +178,8 @@ const SubAdminDetails = () => {
             <div className="z-50   w-full ">
               <SuperstockistRegister
                 onClose={handleCloseModal}
-                selectedsubAdmin={selectedsubAdmin}
-                fetchsubAdmins={fetchSuperStockists}
+                selectedSuperStockist={selectedSuperStockist}
+                fetchSuperStockists={fetchSuperStockists}
               />
             </div>
           </div>
@@ -229,65 +230,70 @@ const SubAdminDetails = () => {
                     <th className="px-2 py-4 md:text-lg text-xs   border-r-2 border-white">
                       PinCode
                     </th>
-                    <th className="px-2 py-4 md:text-lg text-xs ">Actions</th>
+                    {name !== "stock" && name !== "Super-Stockist" && (
+                      <th className="px-2 py-4 md:text-lg text-xs">Actions</th>
+                    )}
                   </tr>
                 </thead>
                 <tbody>
-                  {paginatedsubAdmins().map((subAdmin) => (
+                  {paginatedSuperStockists().map((SuperStockist) => (
                     <tr
-                      key={subAdmin._id}
+                      key={SuperStockist._id}
                       className="bg-gray-200 border-b-2 border-blue-200"
                     >
                       <td className="px-2 py-4 md:text-lg text-xs  whitespace-nowrap overflow-hidden overflow-ellipsis border-r-2 border-white">
-                        {subAdmin.username}
+                        {SuperStockist.username}
                       </td>
                       <td className="px-2 py-4 md:text-lg text-xs  whitespace-nowrap overflow-hidden overflow-ellipsis border-r-2 border-white">
-                        {subAdmin.email}
+                        {SuperStockist.email}
                       </td>
                       <td className="px-2 py-4 md:text-lg text-xs  whitespace-nowrap overflow-hidden overflow-ellipsis border-r-2 border-white">
-                        {subAdmin.mobileNo}
+                        {SuperStockist.mobileNo}
                       </td>
                       <td className="px-2 py-4 md:text-lg text-xs  whitespace-nowrap overflow-hidden overflow-ellipsis border-r-2 border-white">
-                        {subAdmin.state}
+                        {SuperStockist.state}
                       </td>
                       <td className="px-2 py-4 md:text-lg text-xs  whitespace-nowrap overflow-hidden overflow-ellipsis border-r-2 border-white">
-                        {subAdmin.district}
+                        {SuperStockist.district}
                       </td>
                       <td className="px-2 py-4 md:text-lg text-xs  whitespace-nowrap overflow-hidden overflow-ellipsis border-r-2 border-white">
-                        {subAdmin.city}
+                        {SuperStockist.city}
                       </td>
                       <td className="px-2 py-4 md:text-lg text-xs  whitespace-nowrap overflow-hidden overflow-ellipsis border-r-2 border-white">
-                        {subAdmin.address}
+                        {SuperStockist.address}
                       </td>
                       <td className="px-2 py-4 md:text-lg text-xs  whitespace-nowrap overflow-hidden overflow-ellipsis  border-r-2 border-white">
-                        {subAdmin.pinCode}
+                        {SuperStockist.pinCode}
                       </td>
-                      <td className="px-2 py-4 md:text-lg text-xs  whitespace-nowrap overflow-hidden overflow-ellipsis border-r-2 border-white">
-                        {name != "stock" && (
+                      {name != "stock" && name != "Super-Stockist" && (
+                        <td className="px-2 py-4 md:text-lg text-xs  whitespace-nowrap overflow-hidden overflow-ellipsis ">
                           <>
                             <button
-                              onClick={() => handleUpdate(subAdmin)}
+                              onClick={() => handleUpdate(SuperStockist)}
                               className="bg-blue-500 text-white p-2 rounded cursor-pointer"
                             >
                               Update
                             </button>
                             <button
-                              onClick={() => handleDeleteClick(subAdmin._id)}
+                              onClick={() =>
+                                handleDeleteClick(SuperStockist._id)
+                              }
                               className="bg-red-500 text-white p-2 rounded ml-2 cursor-pointer"
                             >
                               Delete
                             </button>
                           </>
-                        )}
-                        {name === "stock" && (
-                          <button
-                            onClick={() => handleInventory(subAdmin)}
-                            className="bg-yellow-500 text-white p-2 rounded ml-2 cursor-pointer"
-                          >
-                            <TbHomeStats />
-                          </button>
-                        )}
-                      </td>
+
+                          {name === "stock" && (
+                            <button
+                              onClick={() => handleInventory(SuperStockist)}
+                              className="bg-yellow-500 text-white p-2 rounded ml-2 cursor-pointer"
+                            >
+                              <TbHomeStats />
+                            </button>
+                          )}
+                        </td>
+                      )}
                     </tr>
                   ))}
                 </tbody>
@@ -322,4 +328,4 @@ const SubAdminDetails = () => {
   );
 };
 
-export default SubAdminDetails;
+export default SuperStockistDetails;
