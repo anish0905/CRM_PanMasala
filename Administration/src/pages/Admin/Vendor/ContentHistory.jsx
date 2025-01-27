@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import ManagementSidebar from '../ManagementSidebar';
+
 import { useLocation, useNavigate } from 'react-router-dom';
-import ManagementSideBarModal from '../ManagementChart/ManagementSideBarModal';
+
 import axios from 'axios';
-import { BASE_URL } from '../../../constants';
+import AdminSidebar from '../AdminSidebar';
+import AdminSideBarModal from '../AdminSideBarModal';
+
 
 export const ContentHistory = () => {
     const location = useLocation();
@@ -11,7 +13,7 @@ export const ContentHistory = () => {
     const shop = location.state;
     const userDetails = localStorage.getItem('email');
     const [history, setHistory] = useState();
-
+    const BASE_URL = import.meta.env.VITE_API_URL;
 
     useEffect(() => {
         fetchHistoty();
@@ -30,15 +32,15 @@ export const ContentHistory = () => {
 
     return (
         <div className="min-h-screen  flex w-full">
-            <div className="hidden lg:block">
-                <ManagementSidebar />
+            <div className="min-h-screen  lg:block hidden">
+            <AdminSidebar />
             </div>
 
             <div className="flex-1  lg:ml-80  font-serif w-full lg:p-10 md:p-5 ">
                 <header className="flex  items-center justify-between h-auto py-4 bg-[#93c5fd] rounded-xl px-4 lg:px-10 md:px-8">
                     {/* Back Button */}
                     <div className="flex items-center gap-2">
-                        <button className="text-xs sm:text-sm lg:text-lg font-bold text-white border-2 sm:border-4 border-blue-900 px-3 sm:px-4 py-1 sm:py-2 rounded-lg bg-blue-700 hover:bg-blue-800 transition duration-300 ease-in-out"
+                        <button className="text-xs sm:text-sm lg:text-lg font-bold text-white border-2 sm:border-4 border-blue-900 px-3 sm:px-4 py-1 sm:py-2 rounded-lg bg-blue-700 hover:bg-blue-800 transition duration-300 ease-in-out cursor-pointer"
                             onClick={() => navigate(-1)}>
                             Back
                         </button>
@@ -59,8 +61,8 @@ export const ContentHistory = () => {
                         </div>
 
                         {/* For smaller screens, show sidebar modal */}
-                        <div className="lg:hidden">
-                            <ManagementSideBarModal />
+                        <div className="lg:hidden block">
+                            <AdminSideBarModal />
                         </div>
                     </div>
                 </header>
@@ -139,7 +141,7 @@ export const ContentHistory = () => {
 
 
                 {/* Change History Section */}
-                <section className="bg-white rounded-lg shadow-lg p-5">
+                <section className="bg-gray-100 rounded-lg shadow-lg p-5">
                     <h2 className="text-lg font-bold text-gray-700 mb-4">Change History</h2>
                     {history && history.length > 0 ? (
                         <div className="space-y-6">

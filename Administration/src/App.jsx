@@ -12,6 +12,8 @@ import AddProduct from "./pages/Admin/Product/AddProduct";
 import VendorRegisterIntrsted from "./pages/Admin/Vendor/VendorRegisterIntrsted";
 import VendorNotInterested from "./pages/Admin/Vendor/VendorNotIntrested";
 import FEADetails from "./pages/Admin/FEA/FEADetails";
+import { ContentHistory } from "./pages/Admin/Vendor/ContentHistory";
+import AttendanceRecordDashboard from "./pages/Admin/Attendance/AttendanceRecordDashboard";
 function App() {
   const navigate = useNavigate();
   const email = localStorage.getItem("email");
@@ -54,6 +56,15 @@ function App() {
         element={<FEADetails />}
       />
 
+      <Route
+        path="/manage/vendor/history/"
+        element={<ContentHistory />}
+      />
+
+      <Route
+        path="/Attendance-Dashboard"
+        element={<AttendanceRecordDashboard />}
+      />
 
     </Routes>
   );
