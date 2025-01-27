@@ -81,7 +81,7 @@ const Login = () => {
       const endpointMap = {
         CNF: "/api/cnfAgent/login",
         "Super Stockist": "/api/superstockist/login",
-        Distributer: "/api/DistributorRoutes/loginexDistributor",
+        Distributer: "/api/Distributor/loginexDistributor",
       };
 
       const url = `${URI}${endpointMap[role]}`;

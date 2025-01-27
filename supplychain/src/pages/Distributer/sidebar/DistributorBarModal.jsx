@@ -7,10 +7,10 @@ import useMediaQuery from '@mui/material/useMediaQuery';
 import { useTheme } from '@mui/material/styles';
 import { FaBars } from "react-icons/fa";
 
-import AdminSidebar from './SuperStockistSidebar';
+import DistributorSidebar from './DistributorSidebar';
 
 
-export default function AdminSideBarModal() {
+export default function DistributorBarModal() {
   const [open, setOpen] = React.useState(false);
   const theme = useTheme();
   const fullScreen = useMediaQuery(theme.breakpoints.down('md'));
@@ -35,7 +35,7 @@ export default function AdminSideBarModal() {
         fullScreen={fullScreen}
       >
         <DialogContent className='w-full'>
-          <AdminSidebar  onClose={handleClose} />
+          <DistributorSidebar  onClose={handleClose} />
         </DialogContent>
         <DialogActions>
         </DialogActions>
