@@ -1,11 +1,11 @@
-const express = require ("express");
+const express = require('express');
 const router = express.Router();
 const {registerUser,loginUser,currentUser, getStateCity,GetAllUser,getUserDetailsByEmail, getDistributorBySuperByID,updateUser,deleteUser}= require("../../controllers/Distributor/Distributor.Controller");
 const executiveValidateToken = require("../../middleware/executiveValidateTokenHandler");
 
 
 //Register
-router.post("/registerDistributor",registerUser);
+// router.post("/registerDistributor",registerUser);
 
 //Login
 

@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom"; // Import useNavigate
-import "./Sidebar.css";
+import "./SuperStockistSidebar.css";
 // import "../../Styles/Styles.css";
 import logo from "../../../assets/logo.png";
 import { FaShoppingCart, FaUserPlus, FaSignOutAlt } from "react-icons/fa";
@@ -14,12 +14,13 @@ import {
 import { GiShop } from "react-icons/gi";
 import { TbReport } from "react-icons/tb";
 
-const Sidebar = ({ onClose }) => {
+const SuperStockistSidebar = ({ onClose }) => {
   const [showDropdown, setShowDropdown] = useState(false);
   const [manageDropdown, setManageDropdown] = useState(false);
   const [vendorDropdown, setVendorDropdown] = useState(false);
   const [shopDropdown, setShopDropdown] = useState(false);
   const [trackerDropdown, setTrackerDropdown] = useState(false);
+  const [AttendanceDropdown, setAttendanceDropdown] = useState(false);
   const [nearByDropdown, setNearByDropdown] = useState(false);
   const [manageInventory, setManageInventory] = useState(false);
   const dropdownRef = useRef(null);
@@ -30,6 +31,8 @@ const Sidebar = ({ onClose }) => {
   const toggleVendorDropdown = () => setVendorDropdown(!vendorDropdown);
   const toggleShopDropdown = () => setShopDropdown(!shopDropdown);
   const toggleTrackerDropdown = () => setTrackerDropdown(!trackerDropdown);
+  const toggleAttendanceDropdown = () =>
+    setAttendanceDropdown(!AttendanceDropdown);
   const toggleNearByDropdown = () => setNearByDropdown(!nearByDropdown);
   const togglemanageInventoryDropdown = () =>
     setManageInventory(!manageInventory);
@@ -60,22 +63,24 @@ const Sidebar = ({ onClose }) => {
   };
 
   return (
-    <div className="sidebar flex flex-col h-full w-64 bg-gray-800 text-black shadow-lg">
-      <div className="sidebar-header p-4 flex items-center justify-center bg-gray-900">
+    <div className="sidebar flex flex-col h-full w-80 bg-gray-800 text-black shadow-lg">
+      <div className="sidebar-header p-4 flex items-center justify-center bg-gray-900 sm:mb-1.5">
         <img src={logo} alt="Logo" className="w-full h-full" />
       </div>
-      <ul className="sidebar-menu mx-4 flex flex-col flex-grow mt-6 ">
+      <ul className="sidebar-menu mx-4 my-1 flex flex-col flex-grow mt-6 ">
         <NavItem
           icon={<RxDashboard style={{ color: "#eab308", fontSize: "2rem" }} />}
           text="Dashboard"
-          onClick={() => handleItemClick("/SubadminDashBoard")}
+          onClick={() => handleItemClick("")}     // add dashboard
         />
         <NavItem
           icon={
             <FaShoppingCart style={{ color: "#047857", fontSize: "2rem" }} />
           }
           text="Orders"
-          onClick={() => handleItemClick("/orderHistory")}
+          onClick={() => handleItemClick(
+            // "/order"
+          )}   
         />
         <div className="relative">
           <span
@@ -93,57 +98,14 @@ const Sidebar = ({ onClose }) => {
               />
 
               <DropdownItem
-                text="Super Stockist Inventory"
+                text="Distributor Inventory"
                 onClick={() =>
                   handleItemClick("/manage/superStockit/Inventory")
                 }
               />
-              <DropdownItem
-                text="Stockist Inventory"
-                onClick={() =>
-                  handleItemClick("/manage/stockist/stock/management")
-                }
-              />
             </div>
           )}
         </div>
-        <div className="relative" ref={dropdownRef}>
-          <span
-            className="nav-item nav-item-dropdown flex items-center gap-4 cursor-pointer p-4 transition duration-300 ease-in-out transform rounded-full mb-2"
-            onClick={toggleDropdown}
-          >
-            <FaUserPlus style={{ color: "violet", fontSize: "2rem" }} />
-            <span className="text-lg font-semibold">Registrations</span>
-          </span>
-          {showDropdown && (
-            <div className="flex justify-start ml-10 flex-col font-semibold text-xl text-black">
-              <DropdownItem
-                text="CNF"
-                onClick={() => handleItemClick("/superstockistDetails")}
-              />
-              <DropdownItem
-                text="Super Stockist"
-                onClick={() => handleItemClick("/superstockistDetails")}
-              />
-              <DropdownItem
-                text="Stockist"
-                onClick={() =>
-                  handleItemClick("/manage/stockist/Registration/management")
-                }
-              />
-              <DropdownItem
-                text="Delivery Boy"
-                onClick={() => handleItemClick("/deliveryboyDetails")}
-              />
-
-              <DropdownItem
-                text="Field Executive Approval"
-                onClick={() => handleItemClick("/Field-Executive-Approval")}
-              />
-            </div>
-          )}
-        </div>
-
         <div className="relative">
           <span
             className="nav-item nav-item-dropdown flex items-center gap-4 cursor-pointer p-4 transition duration-300 ease-in-out transform rounded-full mb-2"
@@ -152,38 +114,19 @@ const Sidebar = ({ onClose }) => {
             <MdOutlineManageAccounts
               style={{ color: "#047857", fontSize: "2rem" }}
             />
-            <span className="text-lg font-semibold">Super Stockist</span>
+            <span className="text-lg font-semibold">Manage Distributor </span>
           </span>
           {manageDropdown && (
             <div className="flex justify-start ml-10 flex-col font-semibold text-xl text-black">
               <DropdownItem
-                text="Super Stockist Details"
-                onClick={() =>
-                  handleItemClick(
-                    "/manage/superstockist/Registration/Sub-Admin"
-                  )
-                }
+                text="Add-Distributor "
+                onClick={() => handleItemClick("")}
               />
               <DropdownItem
-                text="Stockist"
-                onClick={() => handleItemClick("SuperStockistDetails")}
+                text="Distributor"
+                onClick={() => handleItemClick("")}
               />
-              <DropdownItem
-                text="Field Executive"
-                onClick={() =>
-                  handleItemClick(
-                    "/mange/Field-Executive-Approval/FieldManager/ManageUsers"
-                  )
-                }
-              />
-              <DropdownItem
-                text="Field Executive Approval"
-                onClick={() =>
-                  handleItemClick(
-                    "/mange/Field-Executive-Approval/Admin/ManageUsers"
-                  )
-                }
-              />
+              <DropdownItem text="Report" onClick={() => handleItemClick("")} />
             </div>
           )}
         </div>
@@ -201,24 +144,8 @@ const Sidebar = ({ onClose }) => {
           {vendorDropdown && (
             <div className="flex justify-start ml-10 flex-col font-semibold text-xl text-black">
               <DropdownItem
-                text="Pending Vendor"
+                text=" Vendor Lists"
                 onClick={() => handleItemClick("/mange/vendor/pending")}
-              />
-              <DropdownItem
-                text="Re-verification vendor"
-                onClick={() => handleItemClick("/mange/vendor/re-verify")}
-              />
-              <DropdownItem
-                text="Approved Vendor"
-                onClick={() => handleItemClick("/mange/vendor/approved")}
-              />
-              <DropdownItem
-                text="Rejected Vendor"
-                onClick={() => handleItemClick("/mange/vendor/rejected")}
-              />
-              <DropdownItem
-                text="Vendor Not Intrested"
-                onClick={() => handleItemClick("/mange/vendor/Not-intrested")}
               />
             </div>
           )}
@@ -229,15 +156,23 @@ const Sidebar = ({ onClose }) => {
         <div className="relative">
           <span
             className="nav-item nav-item-dropdown flex items-center gap-4 cursor-pointer p-4 transition duration-300 ease-in-out transform rounded-full mb-2"
-            onClick={toggleTrackerDropdown}
+            onClick={toggleAttendanceDropdown}
           >
             <MdOutlineEventAvailable
               style={{ color: "blue", fontSize: "2rem" }}
             />
             <span className="text-lg font-semibold">Manage Attendance</span>
           </span>
-          {trackerDropdown && (
+          {AttendanceDropdown && (
             <div className="flex justify-start ml-10 flex-col font-semibold text-xl text-black">
+              <DropdownItem
+                text={<>Distributor</>}
+                onClick={() =>
+                  handleItemClick(
+                    "/mange/Field-Executive-Approval/FieldManager/Attendance"
+                  )
+                }
+              />
               <DropdownItem
                 text={<>Field Executive</>}
                 onClick={() =>
@@ -258,27 +193,6 @@ const Sidebar = ({ onClose }) => {
           )}
         </div>
 
-        <div className="relative">
-          <span
-            className="nav-item nav-item-dropdown flex items-center gap-4 cursor-pointer p-4 transition duration-300 ease-in-out transform rounded-full mb-2"
-            onClick={toggleShopDropdown}
-          >
-            <GiShop style={{ color: "#047857", fontSize: "2rem" }} />
-            <span className="text-lg font-semibold">Shop Details</span>
-          </span>
-          {shopDropdown && (
-            <div className="flex justify-start ml-10 flex-col font-semibold text-xl text-black">
-              <DropdownItem
-                text="Pan Shop Details"
-                onClick={() => handleItemClick("/panshowDetails")}
-              />
-              {/* <DropdownItem
-                text="Inspection Shop"
-                onClick={() => handleItemClick("/management/inspection/shop")}
-              /> */}
-            </div>
-          )}
-        </div>
 
         <div className="relative">
           <span
@@ -296,12 +210,9 @@ const Sidebar = ({ onClose }) => {
                 text="Delivery Tracker"
                 onClick={() => handleItemClick("/deliveryBoyTracker")}
               />
-              {/* <DropdownItem
-                text="Area Seal Manager"
-                onClick={() => handleItemClick("/areaManagerTracker")}
-              /> */}
+
               <DropdownItem
-                text="Field Executive"
+                text="Distributor"
                 onClick={() => handleItemClick("/field-executive/details")}
               />
             </div>
@@ -321,36 +232,12 @@ const Sidebar = ({ onClose }) => {
           {nearByDropdown && (
             <div className="flex justify-start ml-10 flex-col font-semibold text-xl text-black">
               <DropdownItem
-                text="Super Stockist"
-                onClick={() => handleItemClick("/manage/nearby/superStockit")}
+                text="Distributor"
+                onClick={() => handleItemClick("")}    // use the path to filter
               />
             </div>
           )}
         </div>
-
-        {/* <NavItem
-          icon={<TbReport style={{ color: "red", fontSize: "2rem" }} />}
-          text="ShowCase"
-          onClick={() => handleItemClick("/showCase")}
-        /> */}
-
-        {/* <NavItem
-          icon={<MdSos style={{ color: "red", fontSize: "2rem" }} />}
-          text="SOS"
-          onClick={() => handleItemClick("/sos-homepage")}
-        /> */}
-
-        {/* <NavItem
-          icon={<GiShop style={{ color: "green", fontSize: "2rem" }} />}
-          text="Pan Shop Details"
-          onClick={() => handleItemClick("/panshowDetails")}
-        /> */}
-        <NavItem
-          icon={<FaUserPlus style={{ color: "green", fontSize: "2rem" }} />}
-          text="Create Product"
-          onClick={() => handleItemClick("/productadded")}
-        />
-
         <LogoutItem
           icon={<FaSignOutAlt style={{ color: "gray", fontSize: "2rem" }} />}
           text="Logout"
@@ -363,7 +250,7 @@ const Sidebar = ({ onClose }) => {
 
 const NavItem = ({ icon, text, onClick }) => (
   <div
-    className="nav-item flex items-center p-4 transition duration-300 ease-in-out transform hover:-translate-y-1 hover:scale-110 hover:text-white rounded-full mb-2 cursor-pointer"
+    className="nav-item flex items-center p-4 transition duration-300 ease-in-out transform hover:-translate-y-0.5 hover:scale-95 hover:text-white rounded-full mb-2 cursor-pointer"
     onClick={onClick}
   >
     <span className="flex items-center">
@@ -375,7 +262,7 @@ const NavItem = ({ icon, text, onClick }) => (
 
 const DropdownItem = ({ text, onClick }) => (
   <div
-    className="block px-4 py-2 text-sm text-gray-800 hover:bg-gray-200 cursor-pointer rounded-full"
+    className=" nav-item-dropdown block px-6 py-3 text-sm text-gray-800 hover:bg-gray-200 cursor-pointer rounded-full"
     onClick={onClick}
   >
     {text}
@@ -384,7 +271,7 @@ const DropdownItem = ({ text, onClick }) => (
 
 const LogoutItem = ({ icon, text, onClick }) => (
   <div
-    className="nav-item flex items-center p-4 transition duration-300 ease-in-out transform hover:-translate-y-1 hover:scale-110 hover:text-white rounded-full mb-2 cursor-pointer"
+    className="nav-item flex items-center p-4 transition duration-300 ease-in-out transform hover:-translate-y-0.5 hover:scale-95 hover:text-white rounded-full mb-2 cursor-pointer"
     onClick={onClick}
   >
     <span className="flex items-center">
@@ -394,4 +281,4 @@ const LogoutItem = ({ icon, text, onClick }) => (
   </div>
 );
 
-export default Sidebar;
+export default SuperStockistSidebar;
