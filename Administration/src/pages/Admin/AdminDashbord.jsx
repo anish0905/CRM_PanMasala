@@ -3,7 +3,6 @@ import axios from "axios";
 import { FaProductHunt, FaRunning } from "react-icons/fa";
 import { MdIncompleteCircle } from "react-icons/md";
 import { TbTruckDelivery } from "react-icons/tb";
-import { Avatar } from "@material-tailwind/react";
 import { Link } from "react-router-dom";
 
 import OrderStateWise from "./OrderStateWise";
@@ -27,30 +26,31 @@ const AdminDashbord = () => {
   const [fieldManagerAdmin, setFieldManagerAdmin] = useState([]);
 
   const URI = import.meta.env.VITE_API_URL;
+  const email = localStorage.getItem("email");
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         const [
           superStockistRes,
-          stockistRes,
+          // stockistRes,
           orderRes,
-          deliveryBoyRes,
+          // deliveryBoyRes,
           panShopDetailsRes,
           fieldManager
         ] = await Promise.all([
-          axios.get(`${URI }/api/superstockist/getAllUser`),
-          axios.get(`${URI }/api/executives/getAlluser/`),
-          axios.get(`${URI }/api/panshop/order/`),
-          axios.get(`${URI }/api/qrGeneraterBoy/allDetailsDeliverBoy`),
-          axios.get(`${URI }/api/panShopOwner/`),
-          axios.get(`${URI }/api/fieldManager/getFieldManager`)
+          axios.get(`${URI}/api/superstockist/getAllUser`),
+          // axios.get(`${URI }/api/executives/getAlluser/`),
+          axios.get(`${URI}/api/panshop/order/`),
+          // axios.get(`${URI }/api/qrGeneraterBoy/allDetailsDeliverBoy`),
+          axios.get(`${URI}/api/panShop/`),
+          axios.get(`${URI}/api/fieldManager/getFieldManager`)
         ]);
 
         setSuperStockist(superStockistRes.data);
-        setStockist(stockistRes.data);
+        // setStockist(stockistRes.data);
         setOrders(orderRes.data);
-        setDeliveryBoy(deliveryBoyRes.data);
+        // setDeliveryBoy(deliveryBoyRes.data);
         setPanShopDetails(panShopDetailsRes.data.data);
         const FieldManagers = fieldManager.data.filter((manager) => manager.role === "FieldManager");
         const FieldManagersAdmin = fieldManager.data.filter((manager) => manager.role === "Admin");
@@ -94,16 +94,18 @@ const AdminDashbord = () => {
 
   return (
     <div className="flex gap-6 bg-blue-100 w-full">
-      <div className="h-screen hidden md:block lg:block">
+      <div className="min-h-screen  lg:block hidden">
         <AdminSidebar />
       </div>
       <div className="lg:ml-80 md:ml-40 font-serif w-full lg:p-10 md:p-5">
-        <div className="flex items-center flex-wrap justify-center lg:justify-end gap-5 h-44 bg-blue-300 rounded-xl">
-          <Avatar alt="User Avatar" src={Img} />
-          <p className="lg:text-2xl md:text-xl text-sm font-bold border-4 border-blue-400 p-2 rounded-lg bg-blue-100">
-            {localStorage.getItem("email")}
-          </p>
-          <div className="lg:hidden md:hidden block">
+        <div className="flex items-center flex-wrap justify-between gap-5 p-10 bg-blue-300 rounded-xl">
+          <h1 className="flex-grow text-start text-xs sm:text-sm md:text-lg lg:text-xl font-bold text-gray-800">
+            Admin Dashboard
+          </h1>
+          <div className="hidden sm:flex items-center lg:text-2xl md:text-xl text-sm font-bold text-white border-4 border-[#1e40af] p-2 rounded-lg bg-[rgb(42,108,194)] hover:bg-blue-800 transition-colors duration-300 ease-in-out">
+            {email}
+          </div>
+          <div className="lg:hidden  block">
             <AdminSideBarModal />
           </div>
         </div>
@@ -143,15 +145,15 @@ const AdminDashbord = () => {
               <Link
                 key={idx}
                 to={link}
-                className="flex justify-between items-center p-3 hover:bg-blue-300 rounded-lg"
+                className="flex justify-between items-center p-2 px-4  hover:bg-blue-300 rounded-lg"
               >
-                <span>{name}</span>
-                <span>{count}</span>
+                <span className="text-sm">{name}</span>
+                <span className="text-sm">{count}</span>
               </Link>
             ))}
           </div>
 
-          <div className="bg-blue-800 text-white p-5 rounded-lg w-full">
+          <div className="bg-blue-800 text-white p-5 rounded-lg w-full my-4">
             <h1 className="text-2xl bg-blue-300 p-3 rounded-lg">Top Products</h1>
             {top5Products.map((product, idx) => (
               <div key={idx} className="flex justify-between p-2">
@@ -168,7 +170,7 @@ const AdminDashbord = () => {
 
         <OrderStateWise />
         <div className="w-full my-8">
-        <OrderDetailsCityTaluka />
+          <OrderDetailsCityTaluka />
         </div>
       </div>
     </div>

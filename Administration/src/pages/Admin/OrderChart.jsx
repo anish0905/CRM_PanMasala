@@ -1,12 +1,27 @@
-import {
-  Card,
-  CardBody,
-  CardHeader,
-  Typography,
-} from "@material-tailwind/react";
+import React, { useEffect, useState } from "react";
 import Chart from "react-apexcharts";
 import { Square3Stack3DIcon } from "@heroicons/react/24/outline";
-import { useEffect, useState } from "react";
+
+// Simple Card component without Material Tailwind
+const Card = ({ children, className }) => (
+  <div className={`p-4 rounded-lg shadow-md ${className}`}>
+    {children}
+  </div>
+);
+
+const CardHeader = ({ children, className }) => (
+  <div className={`flex items-center justify-between ${className}`}>
+    {children}
+  </div>
+);
+
+const CardBody = ({ children }) => (
+  <div className="pt-4">{children}</div>
+);
+
+const Typography = ({ variant = "h6", className, children }) => {
+  return React.createElement(variant, { className }, children);
+};
 
 export default function OrderChart({ product }) {
   const [totalOrder, setTotalOrder] = useState(Array(12).fill(0)); // Initialize the state for total orders
@@ -109,12 +124,7 @@ export default function OrderChart({ product }) {
 
   return (
     <Card className="bg-blue-800">
-      <CardHeader
-        floated={false}
-        shadow={false}
-        color="transparent"
-        className="flex flex-col gap-4 rounded-none md:flex-row md:items-center"
-      >
+      <CardHeader className="flex flex-col gap-4 rounded-none md:flex-row md:items-center">
         <div className="w-max rounded-lg bg-blue-400 p-5 text-white">
           <Square3Stack3DIcon className="h-6 w-6" />
         </div>
@@ -131,7 +141,7 @@ export default function OrderChart({ product }) {
           </Typography>
         </div>
       </CardHeader>
-      <CardBody className="px-2 pb-0">
+      <CardBody>
         <Chart {...chartConfig} />
       </CardBody>
     </Card>

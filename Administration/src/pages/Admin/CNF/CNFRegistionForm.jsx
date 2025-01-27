@@ -61,13 +61,13 @@ const CNFRegistionForm = ({ onClose, selectedCNF, fetchCNFs }) => {
       let response;
       if (selectedCNF) {
         response = await axios.put(
-          `${URI}/api/CNF_Agent/update/${selectedCNF._id}`,
+          `${URI}/api/cnfAgent/update/${selectedCNF._id}`,
           requestData
         );
         toast.success("User updated successfully!");
       } else {
         response = await axios.post(
-          `${URI}/api/CNF_Agent/register`,
+          `${URI}/api/cnfAgent/register`,
           requestData
         );
         toast.success("User registered successfully!");

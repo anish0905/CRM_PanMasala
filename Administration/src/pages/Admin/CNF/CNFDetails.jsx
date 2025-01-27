@@ -37,8 +37,8 @@ const CNFDetails = () => {
     try {
       const response =
         location.pathname === "/manage/CNF/Registration/Admin"|| location.pathname === "/manage/CNF/user/Admin" 
-          ? await fetch(`${URI}/api/CNF_Agent/users`)
-          : await fetch(`${URI}/api/CNF_Agent/getAlluser/${currentUserId}`)
+          ? await fetch(`${URI}/api/cnfAgent/users`)
+          : await fetch(`${URI}/api/cnfAgent/getAlluser/${currentUserId}`)
   
       if (!response.ok) {
         throw new Error("Failed to fetch CNFs");
