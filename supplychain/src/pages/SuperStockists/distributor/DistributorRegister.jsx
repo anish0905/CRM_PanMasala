@@ -7,8 +7,8 @@ import stateData from "../../../statesData"; // Import stateData
 
 const DistributorRegister = ({
   onClose,
-  selectedsubAdmin,
-  fetchSuperStockists,
+  selectedDistributor,
+  fetchDistributors,
 }) => {
   const superstockistId = localStorage.getItem("userId");
   const cnfId = localStorage.getItem("cnfId");
@@ -59,9 +59,9 @@ const DistributorRegister = ({
 
     try {
       let response;
-      if (selectedsubAdmin) {
+      if (selectedDistributor) {
         response = await axios.put(
-          `${URI}/api/distributor/${selectedsubAdmin._id}`,
+          `${URI}/api/distributor/update/${selectedDistributor._id}`,
           requestData
         );
         toast.success("Super stockist updated successfully!");
@@ -72,7 +72,7 @@ const DistributorRegister = ({
         );
         toast.success("Distributor registered successfully!");
       }
-      fetchSuperStockists();
+      fetchDistributors();
 
       // Reset form after submission
       setFormData({
@@ -102,19 +102,19 @@ const DistributorRegister = ({
 
   // Effect to pre-fill data when editing an existing sub-admin
   useEffect(() => {
-    if (selectedsubAdmin) {
+    if (selectedDistributor) {
       setFormData({
-        username: selectedsubAdmin.username,
-        email: selectedsubAdmin.email,
-        address: selectedsubAdmin.address,
-        city: selectedsubAdmin.city,
-        pinCode: selectedsubAdmin.pinCode,
-        state: selectedsubAdmin.state,
-        district: selectedsubAdmin.district || "",
-        mobileNo: selectedsubAdmin.mobileNo || "",
+        username: selectedDistributor.username,
+        email: selectedDistributor.email,
+        address: selectedDistributor.address,
+        city: selectedDistributor.city,
+        pinCode: selectedDistributor.pinCode,
+        state: selectedDistributor.state,
+        district: selectedDistributor.district || "",
+        mobileNo: selectedDistributor.mobileNo || "",
       });
     }
-  }, [selectedsubAdmin]);
+  }, [selectedDistributor]);
 
   // Get districts based on selected state
   const getDistricts = (stateName) => {
@@ -128,7 +128,7 @@ const DistributorRegister = ({
       <div className="bg-white p-6 rounded-lg shadow-md w-full max-w-2xl">
         <div className="flex justify-between items-center mb-4">
           <h4 className="text-xl font-bold text-blue-700">
-            {selectedsubAdmin ? "Update Super Stockist" : "Registration"}
+            {selectedDistributor ? "Update Super Stockist" : "Registration"}
           </h4>
           <IoMdClose
             onClick={onClose}
@@ -355,7 +355,7 @@ const DistributorRegister = ({
               type="submit"
               className="px-6 py-2 text-white bg-blue-600 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-600"
             >
-              {selectedsubAdmin ? "Update" : "Register"}
+              {selectedDistributor ? "Update" : "Register"}
             </button>
           </div>
         </form>

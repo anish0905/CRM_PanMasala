@@ -8,47 +8,46 @@ import SuperStockistSidebar from "../SSsidebar/SuperStockistSidebar";
 import SuperStockistBarModal from "../SSsidebar/SuperStockistBarModal";
 
 const DistributorDetails = () => {
-  const [SuperStockists, setSuperStockists] = useState([]);
+  const [Distributors, setDistributors] = useState([]);
   const [showModal, setShowModal] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
   const [sortField, setSortField] = useState("username");
   const [sortDirection, setSortDirection] = useState("asc");
-  const [selectedSuperStockist, setSelectedSuperStockist] = useState();
+  const [selectedDistributor, setSelectedDistributor] = useState();
   const email = localStorage.getItem("email");
   const currentUserId = localStorage.getItem("currentUserId");
   const { name, role } = useParams();
   const navigate = useNavigate();
   const location = useLocation();
 
-  const BASE_URL = import.meta.env.VITE_API_URL;
+  const URI = import.meta.env.VITE_API_URL;
+  const token = localStorage.getItem("token");
 
   // Pagination state
   const [currentPage, setCurrentPage] = useState(1);
-  const [itemsPerPage] = useState(10); // Change this for different pagination sizes
+  const [itemsPerPage] = useState(6); // Change this for different pagination sizes
 
   useEffect(() => {
-    fetchSuperStockists();
+    fetchDistributors();
   }, []);
 
-  const fetchSuperStockists = async () => {
+  const fetchDistributors = async () => {
     try {
       const response =
         location.pathname ===
-          "/manage/superstockist/Registration/superStockist" ||
-        location.pathname === "/manage/superstockist/Super-Stockist/CNF"
-          ? await fetch(`${BASE_URL}/api/superstockist/getAlluser`)
-          : await fetch(
-              `${BASE_URL}/api/superstockist/getAlluser/${currentUserId}`
-            );
+          "/manage/distributor/Registration/superStockist" ||
+        location.pathname === "/manage/Distributor/user/Admin"
+          ? await fetch(`${URI}/api/Distributor/getAlluser`)
+          : await fetch(`${URI}/api/Distributor/getAlluser/${currentUserId}`);
 
       if (!response.ok) {
-        throw new Error("Failed to fetch SuperStockists");
+        throw new Error("Failed to fetch Distributors");
       }
 
       const data = await response.json();
-      setSuperStockists(data);
+      setDistributors(data);
     } catch (error) {
-      console.error("Error fetching SuperStockists:", error);
+      console.error("Error fetching Distributors:", error);
     }
   };
 
@@ -60,13 +59,13 @@ const DistributorDetails = () => {
     setShowModal(false);
   };
 
-  const filteredAndSortedSuperStockists = () => {
-    return SuperStockists.filter((SuperStockist) => {
+  const filteredAndSortedDistributors = () => {
+    return Distributors.filter((Distributor) => {
       const term = searchTerm.toLowerCase();
       return (
-        SuperStockist.username.toLowerCase().includes(term) ||
-        SuperStockist.state.toLowerCase().includes(term) ||
-        SuperStockist.email.toLowerCase().includes(term)
+        Distributor.username.toLowerCase().includes(term) ||
+        Distributor.state.toLowerCase().includes(term) ||
+        Distributor.email.toLowerCase().includes(term)
       );
     }).sort((a, b) => {
       const aValue = a[sortField].toLowerCase();
@@ -79,16 +78,16 @@ const DistributorDetails = () => {
   };
 
   // Pagination logic
-  const paginatedSuperStockists = () => {
-    const filteredSuperStockists = filteredAndSortedSuperStockists();
+  const paginatedDistributors = () => {
+    const filteredDistributors = filteredAndSortedDistributors();
     const startIndex = (currentPage - 1) * itemsPerPage;
     const endIndex = startIndex + itemsPerPage;
-    return filteredSuperStockists.slice(startIndex, endIndex);
+    return filteredDistributors.slice(startIndex, endIndex);
   };
 
   // Calculate total pages
   const totalPages = Math.ceil(
-    filteredAndSortedSuperStockists().length / itemsPerPage
+    filteredAndSortedDistributors().length / itemsPerPage
   );
 
   const handleDeleteClick = async (id) => {
@@ -108,55 +107,79 @@ const DistributorDetails = () => {
 
     if (confirmResult.isConfirmed) {
       try {
-        const response = await fetch(`${BASE_URL}/api/superstockist/${id}`, {
-          method: "DELETE",
-        });
+        const response = await fetch(
+          `${URI}/api/admin/Distributor/delete/${id}`,
+          {
+            method: "DELETE",
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+
+        Swal.fire("sucess", "sub-Admin delete sucessfully", "error");
+        fetchDistributors();
       } catch (error) {
-        console.error("Error Super Stockist:", error);
-        Swal.fire("Error", "Could not delete Super Stockist", "error");
+        console.error("Error Distributor:", error);
+        Swal.fire("Error", "Could not delete Distributor", "error");
       }
     }
-    fetchSuperStockists();
   };
 
-  const handleUpdate = (deliveryBoy) => {
-    setSelectedSuperStockist(deliveryBoy);
+  const handleUpdate = (user) => {
+    setSelectedDistributor(user);
     setShowModal(true);
   };
 
   const handleInventory = (user) => {
-    navigate(`/manage/Inventory/${user._id}/${role}/SuperStockist`, {
+    navigate(`/manage/Inventory/${user._id}/${role}/Distributor`, {
       state: {
         user: user,
       },
     });
   };
 
+  // Pagination handlers
+  const handleNextPage = () => {
+    if (currentPage < totalPages) {
+      setCurrentPage((prevPage) => prevPage + 1);
+    }
+  };
+
+  const handlePrevPage = () => {
+    if (currentPage > 1) {
+      setCurrentPage((prevPage) => prevPage - 1);
+    }
+  };
+
   return (
-    <div className="flex gap-6  min-h-sreen w-full">
+    <div className="flex gap-6 min-h-sreen w-full">
       {role === "superStockist" && (
-        <div className="min-h-screen  lg:block hidden">
+        <div className="min-h-screen lg:block hidden">
           <SuperStockistSidebar />
         </div>
       )}
+      {role === "superStockist" && (
+        <div className="lg:p-5 xl:p-5 ml-0 p-0 h-screen">
+          {/* <SuperDistributorSideBar /> */}
+        </div>
+      )}
 
-      <div className="lg:ml-80 font-serif w-full  md:p-5 p-4">
-        <div className=" bg-[#93c5fd] rounded-md shadow p-4 flex gap-4 items-center justify-between">
+      <div className="lg:ml-80 font-serif w-full md:p-5 p-4">
+        <div className="bg-[#93c5fd] rounded-md shadow p-4 flex gap-4 items-center justify-between">
           <h1 className="flex-grow text-start text-xs sm:text-sm md:text-lg lg:text-xl font-bold text-gray-800">
-            {name === "Registration"
+            {name === "user"
               ? "Manage Distributor"
-              : name === "Super-Stockist"
-              ? "Super Stockist List"
               : name === "stock"
-              ? "Super Stockist Inventory"
-              : "Super Stockist Registration"}
+              ? "Distributor Inventory"
+              : "Distributor Registration"}
           </h1>
 
           {name === "Registration" && (
             <button
               color="blue"
               onClick={handleRegisterButtonClick}
-              className="lg:mr-12 lg:-ml-2 md:mr-8 mr-2 lg:text-md md:text-md  p-3 bg-[#1e40af] rounded-md text-white text-lg  font-semibold cursor-pointer"
+              className="lg:mr-12 lg:-ml-2 md:mr-8 mr-2 lg:text-md md:text-md p-3 bg-[#1e40af] rounded-md text-white text-lg font-semibold cursor-pointer"
             >
               Register
             </button>
@@ -176,22 +199,22 @@ const DistributorDetails = () => {
         {showModal && (
           <div className="fixed inset-0 z-50 flex items-center justify-center w-full">
             <div className="absolute inset-0 bg-black opacity-50"></div>
-            <div className="z-50   w-full ">
+            <div className="z-50 w-full ">
               <DistributorRegister
                 onClose={handleCloseModal}
-                selectedSuperStockist={selectedSuperStockist}
-                fetchSuperStockists={fetchSuperStockists}
+                selectedDistributor={selectedDistributor}
+                fetchDistributors={fetchDistributors}
               />
             </div>
           </div>
         )}
 
-        <div className=" py-8">
-          <div className="bg-[#1e40af]  rounded-xl p-4">
+        <div className="py-8">
+          <div className="bg-[#1e40af] rounded-xl p-4">
             <h2 className="2xl:text-2xl xl:text-xl md:text-lg text-sm text-white font-bold p-1 mt-1">
-              Super Stockist List
+              Distributor List ({Distributors.length})
             </h2>
-            <div className=" grid lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-4 my-4 text-white ">
+            <div className="grid lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-4 my-4 text-white">
               <input
                 type="text"
                 placeholder="Search by Username, State, or Email"
@@ -200,109 +223,101 @@ const DistributorDetails = () => {
                 className="p-2 border rounded"
               />
             </div>
-            <div
-              className="overflow-x-auto overflow-y-auto"
-              style={{ maxHeight: "600px" }}
-            >
-              <table className="min-w-full text-center ">
+            <div className="overflow-x-auto overflow-y-auto">
+              <table className="min-w-full text-center h-full">
                 <thead>
                   <tr className="bg-[#93c5fd] text-black sm:text-sm">
-                    <th className="px-2 py-4 md:text-lg text-xs  border-r-2 border-white">
+                    <th className="px-2 py-4 md:text-lg text-xs border-r-2 border-white">
                       Name
                     </th>
-                    <th className="px-2 py-4 md:text-lg text-xs  border-r-2 border-white">
+                    <th className="px-2 py-4 md:text-lg text-xs border-r-2 border-white">
                       Email
                     </th>
-                    <th className="px-2 py-4 md:text-lg text-xs  border-r-2 border-white">
+                    <th className="px-2 py-4 md:text-lg text-xs border-r-2 border-white">
                       Phone No
                     </th>
-                    <th className="px-2 py-4 md:text-lg text-xs  border-r-2 border-white">
+                    <th className="px-2 py-4 md:text-lg text-xs border-r-2 border-white">
                       State
                     </th>
-                    <th className="px-2 py-4 md:text-lg text-xs  border-r-2 border-white">
-                      district
+                    <th className="px-2 py-4 md:text-lg text-xs border-r-2 border-white">
+                      District
                     </th>
-                    <th className="px-2 py-4 md:text-lg text-xs  border-r-2 border-white">
-                      State
+                    <th className="px-2 py-4 md:text-lg text-xs border-r-2 border-white">
+                      City
                     </th>
-                    <th className="px-2 py-4 md:text-lg text-xs  border-r-2 border-white">
+                    <th className="px-2 py-4 md:text-lg text-xs border-r-2 border-white">
                       Address
                     </th>
-                    <th className="px-2 py-4 md:text-lg text-xs   border-r-2 border-white">
+                    <th className="px-2 py-4 md:text-lg text-xs border-r-2 border-white">
                       PinCode
                     </th>
-                    {name !== "stock" && name !== "Super-Stockist" && (
-                      <th className="px-2 py-4 md:text-lg text-xs">Actions</th>
-                    )}
+                    <th className="px-2 py-4 md:text-lg text-xs">Actions</th>
                   </tr>
                 </thead>
                 <tbody>
-                  {paginatedSuperStockists().map((SuperStockist) => (
+                  {paginatedDistributors().map((Distributor) => (
                     <tr
-                      key={SuperStockist._id}
+                      key={Distributor._id}
                       className="bg-gray-200 border-b-2 border-blue-200"
                     >
-                      <td className="px-2 py-4 md:text-lg text-xs  whitespace-nowrap overflow-hidden overflow-ellipsis border-r-2 border-white">
-                        {SuperStockist.username}
+                      <td className="px-2 py-4 md:text-lg text-xs whitespace-nowrap overflow-hidden overflow-ellipsis border-r-2 border-white">
+                        {Distributor.username}
                       </td>
-                      <td className="px-2 py-4 md:text-lg text-xs  whitespace-nowrap overflow-hidden overflow-ellipsis border-r-2 border-white">
-                        {SuperStockist.email}
+                      <td className="px-2 py-4 md:text-lg text-xs whitespace-nowrap overflow-hidden overflow-ellipsis border-r-2 border-white">
+                        {Distributor.email}
                       </td>
-                      <td className="px-2 py-4 md:text-lg text-xs  whitespace-nowrap overflow-hidden overflow-ellipsis border-r-2 border-white">
-                        {SuperStockist.mobileNo}
+                      <td className="px-2 py-4 md:text-lg text-xs whitespace-nowrap overflow-hidden overflow-ellipsis border-r-2 border-white">
+                        {Distributor.mobileNo}
                       </td>
-                      <td className="px-2 py-4 md:text-lg text-xs  whitespace-nowrap overflow-hidden overflow-ellipsis border-r-2 border-white">
-                        {SuperStockist.state}
+                      <td className="px-2 py-4 md:text-lg text-xs whitespace-nowrap overflow-hidden overflow-ellipsis border-r-2 border-white">
+                        {Distributor.state}
                       </td>
-                      <td className="px-2 py-4 md:text-lg text-xs  whitespace-nowrap overflow-hidden overflow-ellipsis border-r-2 border-white">
-                        {SuperStockist.district}
+                      <td className="px-2 py-4 md:text-lg text-xs whitespace-nowrap overflow-hidden overflow-ellipsis border-r-2 border-white">
+                        {Distributor.district}
                       </td>
-                      <td className="px-2 py-4 md:text-lg text-xs  whitespace-nowrap overflow-hidden overflow-ellipsis border-r-2 border-white">
-                        {SuperStockist.city}
+                      <td className="px-2 py-4 md:text-lg text-xs whitespace-nowrap overflow-hidden overflow-ellipsis border-r-2 border-white">
+                        {Distributor.city}
                       </td>
-                      <td className="px-2 py-4 md:text-lg text-xs  whitespace-nowrap overflow-hidden overflow-ellipsis border-r-2 border-white">
-                        {SuperStockist.address}
+                      <td className="px-2 py-4 md:text-lg text-xs whitespace-nowrap overflow-hidden overflow-ellipsis border-r-2 border-white">
+                        {Distributor.address}
                       </td>
-                      <td className="px-2 py-4 md:text-lg text-xs  whitespace-nowrap overflow-hidden overflow-ellipsis  border-r-2 border-white">
-                        {SuperStockist.pinCode}
+                      <td className="px-2 py-4 md:text-lg text-xs whitespace-nowrap overflow-hidden overflow-ellipsis  border-r-2 border-white">
+                        {Distributor.pinCode}
                       </td>
-                      {name != "stock" && name != "Super-Stockist" && (
-                        <td className="px-2 py-4 md:text-lg text-xs  whitespace-nowrap overflow-hidden overflow-ellipsis ">
+                      <td className="px-2 py-4 md:text-lg text-xs whitespace-nowrap overflow-hidden overflow-ellipsis border-r-2 border-white">
+                        {name !== "stock" && (
                           <>
                             <button
-                              onClick={() => handleUpdate(SuperStockist)}
+                              onClick={() => handleUpdate(Distributor)}
                               className="bg-blue-500 text-white p-2 rounded cursor-pointer"
                             >
                               Update
                             </button>
                             <button
-                              onClick={() =>
-                                handleDeleteClick(SuperStockist._id)
-                              }
+                              onClick={() => handleDeleteClick(Distributor._id)}
                               className="bg-red-500 text-white p-2 rounded ml-2 cursor-pointer"
                             >
                               Delete
                             </button>
                           </>
-
-                          {name === "stock" && (
-                            <button
-                              onClick={() => handleInventory(SuperStockist)}
-                              className="bg-yellow-500 text-white p-2 rounded ml-2 cursor-pointer"
-                            >
-                              <TbHomeStats />
-                            </button>
-                          )}
-                        </td>
-                      )}
+                        )}
+                        {name === "stock" && (
+                          <button
+                            onClick={() => handleInventory(Distributor)}
+                            className="bg-yellow-500 text-white p-2 rounded ml-2 cursor-pointer"
+                          >
+                            <TbHomeStats />
+                          </button>
+                        )}
+                      </td>
                     </tr>
                   ))}
                 </tbody>
               </table>
             </div>
-            {/* Pagination Controls */}
           </div>
         </div>
+        {/* Pagination Controls */}
         <div className="flex justify-between mt-4">
           {currentPage > 1 && (
             <button
