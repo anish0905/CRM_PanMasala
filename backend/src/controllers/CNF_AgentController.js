@@ -197,6 +197,9 @@ const deleteUser = asyncHandler(async (req, res) => {
 
 
 
+
+
+
 module.exports = {
   registerUser,
   loginUser,
@@ -204,4 +207,5 @@ module.exports = {
   updateUserDetails,
   getAllUsers,
   deleteUser,
+ 
 };

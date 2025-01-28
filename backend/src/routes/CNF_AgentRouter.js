@@ -7,6 +7,7 @@ const {
     updateUserDetails,
     getAllUsers,
     deleteUser,
+    
 } = require("../controllers/CNF_AgentController");
 const validateToken = require("../middleware/validateTokenHandler");
 
@@ -29,5 +30,11 @@ router.get("/current", validateToken, currentUser);
 //delete user
 
 router.delete("/:id", validateToken, deleteUser);
+
+
+
+
+
+// Previous Code
 
 module.exports = router;

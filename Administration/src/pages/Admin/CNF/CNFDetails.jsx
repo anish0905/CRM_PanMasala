@@ -6,6 +6,9 @@ import CNFRegistionForm from './CNFRegistionForm';
 import AdminSideBarModal from '../AdminSideBarModal'
 import AdminSidebar from '../AdminSideBar';
 import RightSideDrawer from '../../../components/RightSideDrawer';
+import Sidebar from '../../SubAdmin/sidebar/Sidebar';
+import SidebarModel from '../../SubAdmin/sidebar/SidebarModel';
+import axios from 'axios';
 
 
 
@@ -17,7 +20,7 @@ const CNFDetails = () => {
   const [sortDirection, setSortDirection] = useState('asc');
   const [selectedCNF, setSelectedCNF] = useState();
   const email = localStorage.getItem("email");
-  const currentUserId = localStorage.getItem("currentUserId");
+  const currentUserId = localStorage.getItem("userId");
   const { name,role } = useParams();
   const navigate = useNavigate();
   const location = useLocation();
@@ -39,7 +42,7 @@ const CNFDetails = () => {
       const response =
         location.pathname === "/manage/CNF/Registration/Admin"|| location.pathname === "/manage/CNF/user/Admin" 
           ? await fetch(`${URI}/api/cnfAgent/users`)
-          : await fetch(`${URI}/api/cnfAgent/getAlluser/${currentUserId}`)
+          : await fetch(`${URI}/api/cnfAgent/${currentUserId}`)
   
       if (!response.ok) {
         throw new Error("Failed to fetch CNFs");
@@ -145,9 +148,9 @@ const CNFDetails = () => {
      { role ==="Admin" && ( <div className="min-h-screen  lg:block hidden">
         <AdminSidebar />
       </div>)}
-       {role === "superCNF" && (
-              <div className="lg:p-5 xl:p-5 ml-0 p-0 h-screen">
-                {/* <SuperCNFSideBar /> */}
+       {role === "sub-Admin" && (
+              <div className="min-h-screen  lg:block hidden">
+                <Sidebar />
               </div>
             )}
 
@@ -176,6 +179,9 @@ const CNFDetails = () => {
           )}
           { role ==="Admin" && (<div className="lg:hidden  block">
             <AdminSideBarModal />
+          </div>)}
+          { role ==="sub-Admin" && (<div className="lg:hidden  block">
+            <SidebarModel />
           </div>)}
         </div>
 
