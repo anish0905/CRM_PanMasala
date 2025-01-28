@@ -1,13 +1,16 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate, useParams } from "react-router-dom";
-import AdminSideBarModal from "../AdminSideBarModal";
-import AdminSidebar from "../AdminSidebar";
+import DistributorSidebar from "../sidebar/DistributorSidebar";
+import DistributorBarModal from "../sidebar/DistributorBarModal";
+import "../sidebar/DistributorSidebar.css";
 import { FaRegEdit } from "react-icons/fa";
 import { MdAutoDelete, MdOutlineAssignment } from "react-icons/md";
-import FEARegistaionForm from "./FEARegistaionForm";
-import RightSideDrawer from "../../../components/RightSideDrawer";
+import Swal from "sweetalert2";
+import FEARegistaionForm from "./FEA_Register_Form";
+// import RegisterOrEditFieldManagerAdmin from "./registerd/RegisterOrEditFieldManagerAdmin";
+import { useNavigate, useParams } from "react-router-dom";
+import SMSDrawer from "../../../Component/SMS_Drawer";
 
-const FEADetails = () => {
+const FEA = () => {
   const [filedManagers, setFiledManagers] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedState, setSelectedState] = useState("");
@@ -20,21 +23,25 @@ const FEADetails = () => {
   const itemsPerPage = 8;
   const email = localStorage.getItem("email");
   const navigate = useNavigate();
-  const { name, route,work } = useParams();
+  const { name, route, work } = useParams();
   const BASE_URL = import.meta.env.VITE_API_URL;
 
   useEffect(() => {
-    fetchFieldManagers();
+    fetchFEA();
   }, [name]);
 
-  const fetchFieldManagers = async () => {
+  const fetchFEA = async () => {
     try {
-      const response = await fetch(`${BASE_URL}/api/fieldManager/getFieldManager`);
+      const response = await fetch(
+        `${BASE_URL}/api/fieldManager/getFieldManager`
+      );
       if (!response.ok) {
         throw new Error("Failed to fetch fieldManagers");
       }
       const data = await response.json();
-      const adminFieldManagers = data.filter((manager) => manager.role === name);
+      const adminFieldManagers = data.filter(
+        (manager) => manager.role === name
+      );
       setFiledManagers(adminFieldManagers);
     } catch (error) {
       console.error("Error fetching fieldManagers:", error);
@@ -72,15 +79,25 @@ const FEADetails = () => {
         );
 
         if (response.ok) {
-          Swal.fire({ icon: "success", title: "Delete Successful!" }).then(() => {
-            fetchFieldManagers();
-          });
+          Swal.fire({ icon: "success", title: "Delete Successful!" }).then(
+            () => {
+              fetchFEA();
+            }
+          );
         } else {
-          Swal.fire({ icon: "error", title: "Delete Failed", text: "Something went wrong." });
+          Swal.fire({
+            icon: "error",
+            title: "Delete Failed",
+            text: "Something went wrong.",
+          });
         }
       }
     } catch (error) {
-      Swal.fire({ icon: "error", title: "An error occurred", text: "Please try again later." });
+      Swal.fire({
+        icon: "error",
+        title: "An error occurred",
+        text: "Please try again later.",
+      });
     }
   };
 
@@ -91,7 +108,9 @@ const FEADetails = () => {
         filedManager.name.toLowerCase().includes(term) ||
         filedManager.address.toLowerCase().includes(term) ||
         filedManager.email.toLowerCase().includes(term);
-      const matchesState = selectedState ? filedManager.state === selectedState : true;
+      const matchesState = selectedState
+        ? filedManager.state === selectedState
+        : true;
       return matchesSearchTerm && matchesState;
     });
   };
@@ -128,42 +147,48 @@ const FEADetails = () => {
       state: { user },
     });
   };
-
   return (
-    <div className="flex gap-6 w-full">
+    <div className="flex gap-6  w-full">
       {/* Sidebar */}
-      <div className="hidden lg:block">
-        <AdminSidebar />
+      <div className="h-screen md:hidden lg:block hidden">
+        <DistributorSidebar />
       </div>
 
-      {/* Main Content */}
+      {/* main contents */}
       <div className="w-full lg:ml-80 font-serif lg:p-5 md:p-5 p-4 justify-center">
         <div className="bg-[#93c5fd] rounded-md shadow p-4 flex gap-4 items-center justify-between">
           <h1 className="flex-grow text-start text-xs sm:text-sm md:text-lg lg:text-xl font-bold text-gray-800">
-            {name==="Admin"?"Field Executive Approval":" Field Executive"}
+            Field Executive Approval
           </h1>
-          <RightSideDrawer/>
-          {work==="Registration" &&(<button
-            onClick={handleRegisterButtonClick}
-          className="lg:mr-12 lg:-ml-2 md:mr-8 mr-2 lg:text-xl md:text-lg  lg:p-3 bg-[#1e40af] rounded-md text-white p-2 text-xs  font-semibold cursor-pointer"
-          >
-            Register
-          </button>)}
-        
+          <SMSDrawer />
+          {work === "Registration" && (
+            <button
+              onClick={handleRegisterButtonClick}
+              aria-label="Register a new Field Executive"
+              className="lg:mr-12 lg:-ml-2 md:mr-8 mr-2 lg:text-xl md:text-lg lg:p-3 bg-[#1e40af] hover:bg-[#1d4ed8] focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 rounded-md text-white p-2 text-xs font-semibold transition-all duration-300 ease-in-out shadow-md"
+            >
+              Register
+            </button>
+          )}
+
           {email && (
             <div className="hidden sm:flex items-center lg:text-2xl md:text-xl text-sm font-bold text-white border-4 border-[#1e40af] p-2 rounded-lg bg-[rgb(42,108,194)] hover:bg-blue-800 transition-colors duration-300 ease-in-out">
               {email}
             </div>
           )}
           <div className="lg:hidden block">
-            <AdminSideBarModal />
+            <DistributorBarModal />
           </div>
         </div>
 
         {showModal && (
           <div className="fixed inset-0 z-50 flex items-center justify-center w-full bg-opacity-50">
             <div className="z-50 w-full sm:w-[90%] md:w-[75%] lg:w-[60%] xl:w-[50%] rounded-lg p-6 max-h-[90vh] overflow-auto">
-              <FEARegistaionForm onClose={handleCloseModal} fetchFiledManagers={fetchFieldManagers} selectedFEA={selectedFEA} />
+              <FEARegistaionForm
+                onClose={handleCloseModal}
+                fetchFiledManagers={fetchFEA}
+                selectedFEA={selectedFEA}
+              />
             </div>
           </div>
         )}
@@ -171,7 +196,10 @@ const FEADetails = () => {
         <div className="container mx-auto py-8">
           <div className="bg-[#1e40af] text-black rounded-xl p-4">
             <h2 className="2xl:text-2xl xl:text-xl md:text-lg text-sm text-white font-bold p-1 mt-1">
-            {name==="Admin"?"Field Executive Approval":" Field Executive"} List ({filedManagers.length||"0"})
+              {name === "Admin"
+                ? "Field Executive Approval"
+                : " Field Executive"}{" "}
+              List ({filedManagers.length || "0"})
             </h2>
             <div className="grid lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-4 my-4 text-white">
               <input
@@ -222,38 +250,78 @@ const FEADetails = () => {
                 <option value="West Bengal">West Bengal</option>
               </select>
             </div>
-            <div className="overflow-x-auto overflow-y-auto" style={{ maxHeight: "600px" }}>
+            <div
+              className="overflow-x-auto overflow-y-auto"
+              style={{ maxHeight: "600px" }}
+            >
               <table className="w-full">
                 <thead>
                   <tr className="bg-[#93c5fd] text-black sm:text-sm">
-                    <th className="px-2 py-4 md:text-lg text-xs text-left border-r-2 border-white">Name</th>
-                    <th className="px-2 py-4 md:text-lg text-xs text-left border-r-2 border-white">Email</th>
-                    <th className="px-2 py-4 md:text-lg text-xs text-left border-r-2 border-white">Mobile Number</th>
-                    <th className="px-2 py-4 md:text-lg text-xs text-left border-r-2 border-white">Address</th>
-                    <th className="px-2 py-4 md:text-lg text-xs text-left border-r-2 border-white">State</th>
-                    <th className="px-2 py-4 md:text-lg text-xs text-left border-r-2 border-white">Action</th>
+                    <th className="px-2 py-4 md:text-lg text-xs text-left border-r-2 border-white">
+                      Name
+                    </th>
+                    <th className="px-2 py-4 md:text-lg text-xs text-left border-r-2 border-white">
+                      Email
+                    </th>
+                    <th className="px-2 py-4 md:text-lg text-xs text-left border-r-2 border-white">
+                      Mobile Number
+                    </th>
+                    <th className="px-2 py-4 md:text-lg text-xs text-left border-r-2 border-white">
+                      Address
+                    </th>
+                    <th className="px-2 py-4 md:text-lg text-xs text-left border-r-2 border-white">
+                      State
+                    </th>
+                    <th className="px-2 py-4 md:text-lg text-xs text-left border-r-2 border-white">
+                      Action
+                    </th>
                   </tr>
                 </thead>
                 <tbody>
                   {paginatedFiledManagers().map((filedManager) => (
-                    <tr key={filedManager._id} className="bg-gray-200 border-b-2 border-blue-200">
-                      <td className="px-2 py-4 md:text-lg text-xs text-left">{filedManager.name}</td>
-                      <td className="px-2 py-4 md:text-lg text-xs text-left">{filedManager.email}</td>
-                      <td className="px-2 py-4 md:text-lg text-xs text-left">{filedManager.phoneNo}</td>
-                      <td className="px-2 py-4 md:text-lg text-xs text-left">{filedManager.address}</td>
-                      <td className="px-2 py-4 md:text-lg text-xs text-left">{filedManager.state}</td>
+                    <tr
+                      key={filedManager._id}
+                      className="bg-gray-200 border-b-2 border-blue-200"
+                    >
+                      <td className="px-2 py-4 md:text-lg text-xs text-left">
+                        {filedManager.name}
+                      </td>
+                      <td className="px-2 py-4 md:text-lg text-xs text-left">
+                        {filedManager.email}
+                      </td>
+                      <td className="px-2 py-4 md:text-lg text-xs text-left">
+                        {filedManager.phoneNo}
+                      </td>
+                      <td className="px-2 py-4 md:text-lg text-xs text-left">
+                        {filedManager.address}
+                      </td>
+                      <td className="px-2 py-4 md:text-lg text-xs text-left">
+                        {filedManager.state}
+                      </td>
                       <td className="px-2 py-4 md:text-lg text-xs text-left flex gap-2 justify-center items-center">
                         {work === "Attendance" ? (
                           <span className="lg:text-3xl text-blue-600 cursor-pointer">
-                            <MdOutlineAssignment onClick={() => NavigateToAttendanceRecord(filedManager)} />
+                            <MdOutlineAssignment
+                              onClick={() =>
+                                NavigateToAttendanceRecord(filedManager)
+                              }
+                            />
                           </span>
                         ) : (
                           <>
                             <span className="lg:text-3xl text-green-600 cursor-pointer">
-                              <FaRegEdit onClick={() => handleEditButtonClick(filedManager)} />
+                              <FaRegEdit
+                                onClick={() =>
+                                  handleEditButtonClick(filedManager)
+                                }
+                              />
                             </span>
                             <span className="lg:text-3xl text-red-600 cursor-pointer">
-                              <MdAutoDelete onClick={() => handleDeleteButtonClick(filedManager._id)} />
+                              <MdAutoDelete
+                                onClick={() =>
+                                  handleDeleteButtonClick(filedManager._id)
+                                }
+                              />
                             </span>
                           </>
                         )}
@@ -266,19 +334,30 @@ const FEADetails = () => {
           </div>
 
           {/* Pagination */}
-          <div className="flex justify-between items-center gap-10 my-4">
+          <div className="flex justify-center items-center my-4 gap-4">
+            {/* Conditionally render the Previous button */}
             {currentPage > 1 && (
-              <button onClick={handlePrevPage} className="p-2 border rounded bg-black text-white">
+              <button
+                onClick={() => setCurrentPage(Math.max(1, currentPage - 1))}
+                className="px-4 py-2 bg-blue-500 text-white rounded-md"
+              >
                 Previous
               </button>
             )}
 
-            <span className="font-bold">
-              {currentPage} / {totalPages}
+            {/* Display the page number in the center */}
+            <span className="font-bold text-lg">
+              Page {currentPage} of {totalPages}
             </span>
 
+            {/* Conditionally render the Next button */}
             {currentPage < totalPages && (
-              <button onClick={handleNextPage} className="p-2 border rounded bg-black text-white">
+              <button
+                onClick={() =>
+                  setCurrentPage(Math.min(totalPages, currentPage + 1))
+                }
+                className="px-4 py-2 bg-blue-500 text-white rounded-md"
+              >
                 Next
               </button>
             )}
@@ -289,4 +368,4 @@ const FEADetails = () => {
   );
 };
 
-export default FEADetails;
+export default FEA;

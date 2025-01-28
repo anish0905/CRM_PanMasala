@@ -3,6 +3,7 @@ import axios from "axios";
 import Swal from "sweetalert2";
 import AdminSideBarModal from "../AdminSideBarModal";
 import AdminSidebar from "../AdminSidebar";
+import RightSideDrawer from "../../../components/RightSideDrawer";
 
 
 const VendorNotInterested = () => {
@@ -101,20 +102,23 @@ const VendorNotInterested = () => {
       <div className=" hidden lg:block">
         <AdminSidebar />
       </div>
-      <div className="flex-1  px-12 lg:ml-72 my-4">
+      <div className="flex-1  lg:px-12 lg:ml-72 my-4">
         <header className="flex items-center content-center justify-between   h-auto py-4 bg-[#93c5fd] rounded-xl px-5 ">
           <h1 className="md:text-lg text-xs lg:text-xl font-bold text-gray-800 ">
            NotInterested Vendor
           </h1>
-          <div className="lg:flex items-center gap-2 md:flex hidden  ">
-            <div className="text-sm lg:text-lg font-bold text-white border-4 border-blue-900 px-4 py-2 rounded-lg bg-blue-700 hover:bg-blue-800 transition duration-300 ease-in-out">
-              {userDetails || "Guest"}
-            </div>
-
-          </div>
-          <div className="lg:hidden block">
-            <AdminSideBarModal />
-          </div>
+          
+          <div className="flex gap-2 ">
+                <RightSideDrawer />
+                <div className="lg:flex items-center gap-2 md:flex hidden  ">
+                  <div className="text-sm lg:text-lg font-bold text-white border-4 border-blue-900 px-4 py-2 rounded-lg bg-blue-700 hover:bg-blue-800 transition duration-300 ease-in-out">
+                    {userDetails || "Guest"}
+                  </div>
+                </div>
+                <div className="lg:hidden block">
+                <AdminSideBarModal />
+              </div>
+              </div>
         </header>
         <div className="overflow-x-auto bg-[#1E40AF] my-8 p-6 rounded-md shadow-md">
           <input

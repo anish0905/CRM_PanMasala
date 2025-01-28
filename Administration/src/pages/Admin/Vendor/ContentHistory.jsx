@@ -5,6 +5,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import AdminSidebar from '../AdminSidebar';
 import AdminSideBarModal from '../AdminSideBarModal';
+import RightSideDrawer from '../../../components/RightSideDrawer';
 
 
 export const ContentHistory = () => {
@@ -50,7 +51,7 @@ export const ContentHistory = () => {
                     <h1 className="text-sm md:text-lg lg:text-xl font-bold text-gray-800 text-center w-full sm:w-auto pl-0 sm:pl-12 mt-2 sm:mt-0">
                         Content History
                     </h1>
-
+                    <RightSideDrawer/>
                     {/* User Details or Sidebar */}
                     <div className="flex items-center gap-2">
                         {/* For larger screens, show user details */}

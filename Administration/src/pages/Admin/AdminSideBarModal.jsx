@@ -13,7 +13,7 @@ import AdminSidebar from './AdminSidebar';
 export default function AdminSideBarModal() {
   const [open, setOpen] = React.useState(false);
   const theme = useTheme();
-  const fullScreen = useMediaQuery(theme.breakpoints.down('md'));
+  const fullScreen = useMediaQuery(theme.breakpoints.down('xs'));
 
   const handleClickOpen = () => {
     setOpen(true);
