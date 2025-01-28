@@ -276,9 +276,7 @@ module.exports = {
   updateUserDetails,
   getAllUsers,
   deleteUser,
-<<<<<<< HEAD
- 
-=======
+
   DistributorDetailsBySuperstockist,
->>>>>>> a9ed4d477897e8f8dda5476b65552e7b22e1c70a
+
 };
