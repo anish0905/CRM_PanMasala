@@ -10,6 +10,9 @@ import SuperStockistdashboard from "./pages/SuperStockists/SuperStockistdashboar
 import DistributorDetails from "./pages/SuperStockists/distributor/DistributorDetails";
 import DistributerDashBoard from "./pages/Distributer/dashboard/DistributerDashBoard";
 import DistributorProductReport from "./pages/Distributer/Dashboard/DistributorProductReport";
+import FEA from "./pages/Distributer/FEA&FE/FEA.Details";
+import FE from "./pages/Distributer/FEA&FE/FE.Details";
+import FEARegistaionForm from "./pages/Distributer/FEA&FE/FEA_Register_Form";
 
 function App() {
   const navigate = useNavigate();
@@ -34,6 +37,18 @@ function App() {
       <Route
         path="/DistributorProductReport"
         element={<DistributorProductReport />}
+      />
+      <Route
+        path="/FEA"
+        element={<FEA />}
+      />
+      <Route
+        path="/FEARegistaionForm"
+        element={<FEARegistaionForm />}
+      />
+      <Route
+        path="/FE"
+        element={<FE />}
       />
 
       <Route
