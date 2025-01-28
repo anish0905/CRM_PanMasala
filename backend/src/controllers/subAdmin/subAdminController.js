@@ -3,23 +3,24 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const SubAdmin = require("../../models/subAdmin/subAdminModels");
 const mongoose = require("mongoose");
+const cnfagents = require("../../models/CNF_Agent.Model");
 
 // @desc Register a subAdmin
 //@route POST /api/users/register
 //@access public
 const registersubAdmin = expressAsyncHandler(async (req, resp) => {
-  const { 
-    username, 
-    email, 
-    password, 
-    confirmPassword, 
-    mobileNo, 
-    address, 
-    city, 
+  const {
+    username,
+    email,
+    password,
+    confirmPassword,
+    mobileNo,
+    address,
+    city,
     pinCode,
-    location ,// Added location here (could be text or coordinates)
+    location, // Added location here (could be text or coordinates)
     district,
-    state
+    state,
   } = req.body;
 
   // Validate password match
@@ -29,7 +30,16 @@ const registersubAdmin = expressAsyncHandler(async (req, resp) => {
   }
 
   // Validate required fields
-  if (!username || !email || !password || !confirmPassword || !mobileNo || !address || !city || !pinCode ) {
+  if (
+    !username ||
+    !email ||
+    !password ||
+    !confirmPassword ||
+    !mobileNo ||
+    !address ||
+    !city ||
+    !pinCode
+  ) {
     resp.status(400);
     throw new Error("All fields are mandatory!");
   }
@@ -63,7 +73,7 @@ const registersubAdmin = expressAsyncHandler(async (req, resp) => {
     pinCode,
     location,
     district,
-    state
+    state,
   });
 
   if (newSubAdmin) {
@@ -77,14 +87,13 @@ const registersubAdmin = expressAsyncHandler(async (req, resp) => {
       pinCode: newSubAdmin.pinCode,
       location: newSubAdmin.location,
       district: newSubAdmin.district,
-      state: newSubAdmin.state
+      state: newSubAdmin.state,
     });
   } else {
     resp.status(400);
     throw new Error("SubAdmin data is not valid");
   }
 });
-
 
 // @desc Login a subAdmin
 //@route POST /api/users/login
@@ -134,7 +143,6 @@ const loginsubAdmin = expressAsyncHandler(async (req, resp) => {
 //@route PUT /api/users/update/:id
 //@access private
 
-
 const updatesubAdmin = expressAsyncHandler(async (req, res) => {
   const { id } = req.params;
   const {
@@ -178,13 +186,17 @@ const updatesubAdmin = expressAsyncHandler(async (req, res) => {
     // Check and update password if new password and confirmation password are provided
     if (newPassword && confirmNewPassword) {
       if (newPassword !== confirmNewPassword) {
-        res.status(400).json({ message: "New password and confirmation do not match!" });
+        res
+          .status(400)
+          .json({ message: "New password and confirmation do not match!" });
         return;
       }
 
       // Check password length (optional, but recommended for security)
       if (newPassword.length < 6) {
-        res.status(400).json({ message: "Password must be at least 6 characters long." });
+        res
+          .status(400)
+          .json({ message: "Password must be at least 6 characters long." });
         return;
       }
 
@@ -247,7 +259,36 @@ const deleteSubAdmin = expressAsyncHandler(async (req, res) => {
   }
 });
 
+const cnfDetailsBySubAdmin = async (req, res) => {
+  try {
+    const { cnfId } = req.params;
+    console.log(`CNF ID: ${cnfId}`);
+
+    // Find distributors filtered by CNF ID
+    const distributors = await cnfagents.find({
+      superstockist: cnfId,
+    });
+
+    if (!distributors || distributors.length === 0) {
+      return res.status(404).json({
+        message: "No distributors found for this CNF ID",
+      });
+    }
+
+    res.status(200).json({
+      message: "Distributors fetched successfully",
+      data: distributors,
+    });
+  } catch (error) {
+    res.status(500).json({
+      message: "An error occurred while fetching distributors",
+      error: error.message,
+    });
+  }
+};
+
 module.exports = {
+  cnfDetailsBySubAdmin,
   registersubAdmin,
   loginsubAdmin,
   currentUser,

@@ -3,13 +3,28 @@ const asyncHandler = require("express-async-handler");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const mongoose = require("mongoose");
+const Distributor = require("../models/Distributor/Distributor.Model");
 
 // @desc Register a user
 // @route POST /api/users/register
 // @access public
 const registerUser = asyncHandler(async (req, resp) => {
-  const { username, email, password, confirmPassword, mobileNo, address, city, pinCode, district, state, region, location,subAdmin } = req.body;
-  
+  const {
+    username,
+    email,
+    password,
+    confirmPassword,
+    mobileNo,
+    address,
+    city,
+    pinCode,
+    district,
+    state,
+    region,
+    location,
+    subAdmin,
+  } = req.body;
+
   // Check if passwords match
   if (password !== confirmPassword) {
     resp.status(400);
@@ -17,7 +32,19 @@ const registerUser = asyncHandler(async (req, resp) => {
   }
 
   // Check if required fields are provided
-  if (!username || !email || !password || !confirmPassword || !mobileNo || !address || !city || !pinCode || !district || !state || !region ) {
+  if (
+    !username ||
+    !email ||
+    !password ||
+    !confirmPassword ||
+    !mobileNo ||
+    !address ||
+    !city ||
+    !pinCode ||
+    !district ||
+    !state ||
+    !region
+  ) {
     resp.status(400);
     throw new Error("All fields are mandatory!");
   }
@@ -45,7 +72,7 @@ const registerUser = asyncHandler(async (req, resp) => {
     state,
     region, // Added region here
     location,
-    subAdmin
+    subAdmin,
   });
 
   if (newUser) {
@@ -103,7 +130,21 @@ const loginUser = asyncHandler(async (req, resp) => {
 // @access Private
 const updateUserDetails = asyncHandler(async (req, res) => {
   const { id } = req.params;
-  const { username, email, newPassword, confirmNewPassword, mobileNo, address, city, pinCode, district, state, region, location ,subAdmin} = req.body;
+  const {
+    username,
+    email,
+    newPassword,
+    confirmNewPassword,
+    mobileNo,
+    address,
+    city,
+    pinCode,
+    district,
+    state,
+    region,
+    location,
+    subAdmin,
+  } = req.body;
 
   // Validate user ID
   if (!mongoose.Types.ObjectId.isValid(id)) {
@@ -134,7 +175,9 @@ const updateUserDetails = asyncHandler(async (req, res) => {
   // If both new password and confirm new password are provided, check and update password
   if (newPassword && confirmNewPassword) {
     if (newPassword !== confirmNewPassword) {
-      res.status(400).json({ message: "New password and confirmation do not match!" });
+      res
+        .status(400)
+        .json({ message: "New password and confirmation do not match!" });
       return;
     }
     // Hash the new password
@@ -195,7 +238,33 @@ const deleteUser = asyncHandler(async (req, res) => {
   }
 });
 
+const DistributorDetailsBySuperstockist = async (req, res) => {
+  try {
+    const { superstockistId } = req.params;
+    console.log(`Superstockist': ${superstockistId}`);
 
+    // Find distributors filtered by superstockist ID
+    const distributors = await Distributor.find({
+      superstockist: superstockistId,
+    });
+
+    if (!distributors || distributors.length === 0) {
+      return res
+        .status(404)
+        .json({ message: "No distributors found for this superstockist" });
+    }
+
+    res.status(200).json({
+      message: "Distributors fetched successfully",
+      data: distributors,
+    });
+  } catch (error) {
+    res.status(500).json({
+      message: "An error occurred while fetching distributors",
+      error: error.message,
+    });
+  }
+};
 
 
 
@@ -207,5 +276,9 @@ module.exports = {
   updateUserDetails,
   getAllUsers,
   deleteUser,
+<<<<<<< HEAD
  
+=======
+  DistributorDetailsBySuperstockist,
+>>>>>>> a9ed4d477897e8f8dda5476b65552e7b22e1c70a
 };
