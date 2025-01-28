@@ -13,6 +13,7 @@ import axios from "axios";
 import { useParams, useNavigate } from "react-router-dom";
 import AdminSidebar from "../AdminSidebar";
 import AdminSideBarModal from "../AdminSideBarModal";
+import RightSideDrawer from "../../../components/RightSideDrawer";
 
 const VendorRegisterIntrsted = () => {
   const [shops, setShops] = useState([]);
@@ -110,14 +111,14 @@ const VendorRegisterIntrsted = () => {
   const filteredAndSortedShops = () => {
     // If no date is selected, show all data
     const currentDate = selectedDate || "";
-  
+
     const filteredByDate = currentDate
       ? shops.filter((shop) => {
-          const shopDate = new Date(shop.createdAt).toISOString().split("T")[0]; // Extract date part only
-          return shopDate === currentDate; // Filter by the selected date
-        })
+        const shopDate = new Date(shop.createdAt).toISOString().split("T")[0]; // Extract date part only
+        return shopDate === currentDate; // Filter by the selected date
+      })
       : shops; // Show all shops if no date is selected
-  
+
     return filteredByDate
       .filter((shop) => {
         const term = searchTerm.toLowerCase();
@@ -128,7 +129,7 @@ const VendorRegisterIntrsted = () => {
         const matchesStatus = selectedStatus
           ? shop.status === selectedStatus
           : true;
-  
+
         return matchesSearchTerm && matchesStatus;
       })
       .sort((a, b) => {
@@ -140,8 +141,8 @@ const VendorRegisterIntrsted = () => {
         return aValue > bValue ? -1 : 1;
       });
   };
-  
-  
+
+
 
   const paginatedShops = () => {
     const filteredShops = filteredAndSortedShops();
@@ -203,25 +204,29 @@ const VendorRegisterIntrsted = () => {
           )}
 
           <div className="flex flex-col h-full lg:px-5 my-4">
-            <header className="flex items-center content-center justify-between   h-auto py-4 bg-[#93c5fd] rounded-xl lg:px-10  md:px-10 ">
+            <header className="flex items-center content-center justify-between   h-auto py-4 bg-[#93c5fd] rounded-xl lg:px-10 px-5 md:px-10 ">
               <h1 className="md:text-lg text-xs lg:text-xl font-bold text-gray-800 ">
-              {capitalized_name} Vendor  
+                {capitalized_name} Vendor
               </h1>
-              <div className="lg:flex items-center gap-2 md:flex hidden  ">
-                <div className="text-sm lg:text-lg font-bold text-white border-4 border-blue-900 px-4 py-2 rounded-lg bg-blue-700 hover:bg-blue-800 transition duration-300 ease-in-out">
-                  {userDetails || "Guest"}
+              <div className="flex gap-2 ">
+                <RightSideDrawer />
+                <div className="lg:flex items-center gap-2 md:flex hidden  ">
+                  <div className="text-sm lg:text-lg font-bold text-white border-4 border-blue-900 px-4 py-2 rounded-lg bg-blue-700 hover:bg-blue-800 transition duration-300 ease-in-out">
+                    {userDetails || "Guest"}
+                  </div>
                 </div>
-
-              </div>
-              <div className="lg:hidden block">
+                <div className="lg:hidden block">
                 <AdminSideBarModal />
               </div>
+
+              </div>
+
             </header>
 
             <div className="bg-[#1e40af] min-w-full text-black rounded-xl p-4 my-8">
-            <h1 className="2xl:text-2xl xl:text-xl md:text-lg text-sm text-white font-bold p-1 mt-1">
-                  {capitalized_name} Vendor ({shops.length||"0"})
-                  </h1>
+              <h1 className="2xl:text-2xl xl:text-xl md:text-lg text-sm text-white font-bold p-1 mt-1">
+                {capitalized_name} Vendor ({shops.length || "0"})
+              </h1>
               <div className="grid lg:grid-cols-4 md:grid-cols-2 grid-cols-1 gap-4 w-full my-4 text-white">
                 <input
                   type="text"
@@ -230,8 +235,8 @@ const VendorRegisterIntrsted = () => {
                   onChange={(e) => setSearchTerm(e.target.value)}
                   className="p-2 border rounded "
                 />
-                
-                
+
+
                 <input
                   type="date"
                   value={selectedDate}
@@ -241,9 +246,9 @@ const VendorRegisterIntrsted = () => {
               </div>
 
               <div className="overflow-auto">
-             
+
                 <table className="w-full text-center border-collapse">
-                  
+
                   <thead>
                     <tr className="bg-[#93c5fd] text-black sm:text-sm">
                       <th className="px-2 py-4 md:text-lg text-xs border-r-2 border-white">

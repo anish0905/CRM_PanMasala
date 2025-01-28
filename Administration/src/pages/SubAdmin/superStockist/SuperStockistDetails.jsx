@@ -8,6 +8,7 @@ import Sidebar from "../sidebar/Sidebar";
 import SuperstockistRegister from "./SuperstockistRegister";
 import AdminSidebar from "../../Admin/AdminSidebar";
 import AdminSideBarModal from "../../Admin/AdminSideBarModal";
+import RightSideDrawer from "../../../components/RightSideDrawer";
 
 const superstockistDetails = () => {
   const [superstockists, setsuperstockists] = useState([]);
@@ -154,7 +155,7 @@ const superstockistDetails = () => {
               ? "Super Stockist Inventory"
               : "Super Stockist Registration"}
           </h1>
-
+          <RightSideDrawer/>
           {name === "Registration" && (
             <button
               color="blue"

@@ -133,7 +133,7 @@ const AddProduct = () => {
           <h1 className="flex-grow text-start text-xs sm:text-sm md:text-lg lg:text-xl font-bold text-gray-800">
             My Product
           </h1>
-
+          <RightSideDrawer />
           <button
             onClick={handleToggleModal}
             className="text-xs font-bold border-2 border-blue-600 text-blue-600 py-1 px-3 rounded cursor-pointer 
@@ -141,7 +141,7 @@ const AddProduct = () => {
           >
             Add Product
           </button>
-          <RightSideDrawer />
+         
 
           {email && (
             <div className="hidden sm:flex items-center lg:text-2xl md:text-xl text-sm font-bold text-white border-4 border-[#1e40af] p-2 rounded-lg bg-[rgb(42,108,194)] hover:bg-blue-800 transition-colors duration-300 ease-in-out">

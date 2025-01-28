@@ -158,7 +158,7 @@ const SubAdminDetails = () => {
                 ? "Sub Admin Inventory"
                 : "Sub Admin Registration"}
           </h1>
-
+          <RightSideDrawer/>
           {name === "Registration" && (<button
             color="blue"
             onClick={handleRegisterButtonClick}
@@ -166,7 +166,7 @@ const SubAdminDetails = () => {
           >
             Register
           </button>)}
-          <RightSideDrawer/>
+         
           {email && (
             <div className="hidden sm:flex items-center lg:text-2xl md:text-xl text-sm font-bold text-white border-4 border-[#1e40af] p-2 rounded-lg bg-[rgb(42,108,194)] hover:bg-blue-800 transition-colors duration-300 ease-in-out">
               {email}
