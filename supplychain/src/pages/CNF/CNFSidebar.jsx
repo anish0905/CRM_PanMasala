@@ -15,7 +15,7 @@ import { TbReport } from "react-icons/tb";
 
 const CNFSidebar = ({ onClose }) => {
   const [showDropdown, setShowDropdown] = useState(false);
-  const [manageDropdown, setManageDropdown] = useState(false);
+  const [distributorDropdown, setDistributorDropdown] = useState(false);
   const [vendorDropdown, setVendorDropdown] = useState(false);
   const [shopDropdown, setShopDropdown] = useState(false);
   const [trackerDropdown, setTrackerDropdown] = useState(false);
@@ -25,7 +25,8 @@ const CNFSidebar = ({ onClose }) => {
   const navigate = useNavigate();
 
   const toggleDropdown = () => setShowDropdown(!showDropdown);
-  const togglemanageDropdown = () => setManageDropdown(!manageDropdown);
+  const toggledistributorDropdown = () =>
+    setDistributorDropdown(!distributorDropdown);
   const toggleVendorDropdown = () => setVendorDropdown(!vendorDropdown);
   const toggleShopDropdown = () => setShopDropdown(!shopDropdown);
   const toggleTrackerDropdown = () => setTrackerDropdown(!trackerDropdown);
@@ -128,10 +129,28 @@ const CNFSidebar = ({ onClose }) => {
                   handleItemClick("/manage/superstockist/Super-Stockist/CNF")
                 }
               />
+            </div>
+          )}
+        </div>
+
+        <div className="relative">
+          <span
+            className="nav-item nav-item-dropdown flex items-center gap-4 cursor-pointer p-4 transition duration-300 ease-in-out transform rounded-full mb-2"
+            onClick={toggledistributorDropdown}
+          >
+            <MdOutlineManageAccounts
+              style={{ color: "#047857", fontSize: "2rem" }}
+            />
+            <span className="text-lg font-semibold">Distributor</span>
+          </span>
+          {distributorDropdown && (
+            <div className="flex justify-start ml-10 flex-col font-semibold text-xl text-black">
               <DropdownItem
                 text="Distributor"
                 onClick={() =>
-                  handleItemClick("/manage/CNF/Registration/Admin")
+                  handleItemClick(
+                    "/manage/cnf/distributor/supertockist-distributor/CNF"
+                  )
                 }
               />
             </div>
@@ -139,48 +158,6 @@ const CNFSidebar = ({ onClose }) => {
         </div>
 
         {/* <div className="relative">
-          <span
-            className="nav-item nav-item-dropdown flex items-center gap-4 cursor-pointer p-4 transition duration-300 ease-in-out transform rounded-full mb-2"
-            onClick={togglemanageDropdown}
-          >
-            <MdOutlineManageAccounts
-              style={{ color: "#047857", fontSize: "2rem" }}
-            />
-            <span className="text-lg font-semibold">Manage Users</span>
-          </span>
-          {manageDropdown && (
-            <div className="flex justify-start ml-10 flex-col font-semibold text-xl text-black">
-              <DropdownItem
-                text="Sub-Admin"
-                onClick={() => handleItemClick("/superstockistDetails")}
-              />
-              <DropdownItem
-                text="CNF"
-                onClick={() => handleItemClick("/superstockistDetails")}
-              />
-              <DropdownItem
-                text="Super Stockist"
-                onClick={() => handleItemClick("/superstockistDetails")}
-              />
-              <DropdownItem
-                text="Distributor"
-                onClick={() =>
-                  handleItemClick("/manage/stockist/Registration/management")
-                }
-              />
-              <DropdownItem
-                text="Field Executive Approval"
-                onClick={() => handleItemClick("/Field-Executive-Approval")}
-              />
-              <DropdownItem
-                text="Delivery Boy"
-                onClick={() => handleItemClick("/deliveryboyDetails")}
-              />
-            </div>
-          )}
-        </div>
-
-        <div className="relative">
           <span
             className="nav-item nav-item-dropdown flex items-center gap-4 cursor-pointer p-4 transition duration-300 ease-in-out transform rounded-full mb-2"
             onClick={toggleVendorDropdown}

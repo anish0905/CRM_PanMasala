@@ -10,6 +10,7 @@ import SuperStockistdashboard from "./pages/SuperStockists/SuperStockistdashboar
 import DistributorDetails from "./pages/SuperStockists/distributor/DistributorDetails";
 import DistributerDashBoard from "./pages/Distributer/dashboard/DistributerDashBoard";
 import DistributorProductReport from "./pages/Distributer/Dashboard/DistributorProductReport";
+import Distributors from "./pages/CNF/distributors/Distributors";
 
 function App() {
   const navigate = useNavigate();
@@ -25,17 +26,12 @@ function App() {
         path="/SuperStockistDashBoard"
         element={<SuperStockistdashboard />}
       />
-
-      // Distributer 
-      <Route
-        path="/DistributerDashBoard"
-        element={<DistributerDashBoard />}
-      />
+      // Distributer
+      <Route path="/DistributerDashBoard" element={<DistributerDashBoard />} />
       <Route
         path="/DistributorProductReport"
         element={<DistributorProductReport />}
       />
-
       <Route
         path="/manage/superstockist/:name/:role"
         element={<SuperStockistDetails />}
@@ -43,6 +39,10 @@ function App() {
       <Route
         path="/manage/distributor/:name/:role"
         element={<DistributorDetails />}
+      />
+      <Route
+        path="/manage/cnf/distributor/:name/:role"
+        element={<Distributors />}
       />
     </Routes>
   );
