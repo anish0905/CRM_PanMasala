@@ -6,6 +6,7 @@ import logo from "../../../assets/logo.png";
 import { FaShoppingCart, FaUserPlus, FaSignOutAlt } from "react-icons/fa";
 import { RiUserLocationFill } from "react-icons/ri";
 import { RxDashboard } from "react-icons/rx";
+import { GiGlassBall } from "react-icons/gi";
 import {
   MdOutlineDeliveryDining,
   MdOutlineManageAccounts,
@@ -74,13 +75,19 @@ const SuperStockistSidebar = ({ onClose }) => {
           text="Dashboard"
           onClick={() => handleItemClick("/SuperStockistDashBoard")}
         />
+
+        <NavItem
+          icon={<GiGlassBall style={{ color: "#eab308", fontSize: "2rem" }} />}
+          text="Show-Case "
+          onClick={() => handleItemClick("/ShowcaseProduct")}
+        />
         <NavItem
           icon={
             <FaShoppingCart style={{ color: "#047857", fontSize: "2rem" }} />
           }
           text="Orders"
-          onClick={() =>
-            handleItemClick()
+          onClick={
+            () => handleItemClick()
             // "/order"
           }
         />

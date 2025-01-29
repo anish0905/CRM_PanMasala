@@ -23,11 +23,7 @@ const ShowcaseProductReport = () => {
     }
   };
   const renderStars = (rating) => {
-    const maxRating = 10;
-    const filledStarsCount = Math.floor(rating); // Full stars
-    const fractionalPart = rating % 1; // Fractional part for partial fill
-    const emptyStarsCount =
-      maxRating - filledStarsCount - (fractionalPart > 0 ? 1 : 0); // Remaining empty stars
+    
 
     // Create a function to apply styles dynamically for the fractional star
     const starStyle = (percentage) => ({
@@ -39,37 +35,6 @@ const ShowcaseProductReport = () => {
       WebkitBackgroundClip: "text",
       color: "transparent",
     });
-
-    const filledStars = Array.from({ length: filledStarsCount }, (_, i) => (
-      <span
-        key={`filled-${i}`}
-        className="text-yellow-500"
-        title={`Rating: ${rating.toFixed(1)}`} // Tooltip for filled stars
-      >
-        ★
-      </span>
-    ));
-
-    const halfStar = fractionalPart > 0 && (
-      <span
-        key="half"
-        style={starStyle(fractionalPart * 100)}
-        className="text-gray-400 text-2xl"
-        title={`Rating: ${rating.toFixed(1)}`} // Tooltip for half star
-      >
-        ★
-      </span>
-    );
-
-    const emptyStars = Array.from({ length: emptyStarsCount }, (_, i) => (
-      <span
-        key={`empty-${i}`}
-        className="text-gray-400"
-        title={`Rating: ${rating.toFixed(1)}`} // Tooltip for empty stars
-      >
-        ☆
-      </span>
-    ));
 
     return (
       <span className="text-2xl cursor-pointer">
