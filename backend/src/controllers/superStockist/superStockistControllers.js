@@ -205,15 +205,33 @@ const updatePassword = expressAsyncHandler(async (req, res) => {
 //@access private
 
 const currentUser = asyncHandler(async (req, res) => {
-  // Check if userExecutive exists on the request object
-  if (req.userExecutive) {
+  try {
+    // Ensure userExecutive exists and has an ID
+    if (!req.userExecutive?.id) {
+      res.status(401);
+      throw new Error("Not authorized, token failed");
+    }
+
+    // Fetch complete user details from database
+    const user = await SuperStockistRegistered.findById(req.userExecutive.id)
+      .select("-password -resetToken -resetTokenExpiration") // Exclude sensitive fields
+      .lean();
+
+    if (!user) {
+      res.status(404);
+      throw new Error("User not found");
+    }
+
     res.json({
-      message: "superStockistRegistered current user information",
-      user: req.userExecutive, // Send the userExecutive data
+      message: "Super Stockist current user information",
+      data: user // Return complete user data
     });
-  } else {
-    res.status(400);
-    throw new Error("User information not found");
+
+  } catch (error) {
+    console.error("Error in currentUser controller:", error);
+    res.status(res.statusCode >= 400 ? res.statusCode : 500).json({
+      message: error.message || "Failed to fetch user details"
+    });
   }
 });
 

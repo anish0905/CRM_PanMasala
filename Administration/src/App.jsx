@@ -15,6 +15,7 @@ import FEADetails from "./pages/Admin/FEA/FEADetails";
 import { ContentHistory } from "./pages/Admin/Vendor/ContentHistory";
 import AttendanceRecordDashboard from "./pages/Admin/Attendance/AttendanceRecordDashboard";
 import DistributorDetails from "./pages/Admin/Distributor/DistributorDetails";
+import ShowCase from "./pages/SubAdmin/showCase/ShowCase";
 function App() {
   const navigate = useNavigate();
   const email = localStorage.getItem("email");
@@ -27,6 +28,7 @@ function App() {
       <Route path="/AdminDashBoard" element={<AdminDashbord />} />
 
       <Route path="/SubadminDashBoard" element={<SubAdminDashboard />} />
+      <Route path="/showCase" element={<ShowCase />} />
       <Route
         path="/manage/Sub-Admin/:name/:role"
         element={<SubAdminDetails />}
@@ -37,15 +39,9 @@ function App() {
         path="/manage/superstockist/:name/:role"
         element={<SuperStockistDetails />}
       />
-      <Route
-        path="/Add-product"
-        element={<AddProduct />}
-      />
+      <Route path="/Add-product" element={<AddProduct />} />
 
-      <Route
-        path="/mange/vendor/:name"
-        element={<VendorRegisterIntrsted />}
-      />
+      <Route path="/mange/vendor/:name" element={<VendorRegisterIntrsted />} />
 
       <Route
         path="/mange/vendor/Not-intrested"
@@ -57,10 +53,7 @@ function App() {
         element={<FEADetails />}
       />
 
-      <Route
-        path="/manage/vendor/history/"
-        element={<ContentHistory />}
-      />
+      <Route path="/manage/vendor/history/" element={<ContentHistory />} />
 
       <Route
         path="/Attendance-Dashboard"
@@ -70,7 +63,6 @@ function App() {
         path="/manage/Distributor/:name/:role"
         element={<DistributorDetails />}
       />
-
     </Routes>
   );
 }

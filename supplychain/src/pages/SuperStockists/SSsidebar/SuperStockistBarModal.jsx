@@ -10,7 +10,7 @@ import { FaBars } from "react-icons/fa";
 import AdminSidebar from './SuperStockistSidebar';
 
 
-export default function AdminSideBarModal() {
+export default function SuperStockistBarModal() {
   const [open, setOpen] = React.useState(false);
   const theme = useTheme();
   const fullScreen = useMediaQuery(theme.breakpoints.down('md'));

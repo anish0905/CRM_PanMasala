@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from "react";
-import AdminSideBarModal from "../AdminSideBarModal";
-import AdminSidebar from "../AdminSidebar";
+import AdminSideBarModal from "../sidebar/SidebarModel";
+import AdminSidebar from "../sidebar/Sidebar";
 import axios from "axios";
 import RightSideDrawer from "../../../components/RightSideDrawer";
 
-const AddProduct = () => {
+const ShowCase = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [productName, setProductName] = useState("");
   const [productDescription, setProductDescription] = useState("");
@@ -76,36 +76,9 @@ const AddProduct = () => {
     }
   };
 
-  const handleEdit = (id) => {
-    const productToEdit = products.find((product) => product._id === id);
-    if (productToEdit) {
-      setProductName(productToEdit.title);
-      setProductDescription(productToEdit.description);
-      setPrice(productToEdit.price);
-      setImage(null); // Reset image, user can choose to upload new
-      setUpdateProductId(productToEdit._id); // Set the ID of the product to update
-      setIsModalOpen(true); // Open the modal with prefilled data
-      console.log("Editing product:", productToEdit); // Log the product being edited
-    }
-  };
-
-  const handleDelete = async (id) => {
-    const confirmDelete = window.confirm(
-      "Are you sure you want to delete this product"
-    );
-
-    if (confirmDelete) {
-      try {
-        await axios.delete(`${URI}/api/e-commerce/${id}`);
-        console.log("Product deleted successfully");
-      } catch (error) {
-        console.error("Error deleting product:", error);
-      }
-    }
-  };
   useEffect(() => {
     fetchProducts();
-  }, [handleDelete, handleEdit, handleSubmit]);
+  }, [handleSubmit]);
 
   // Filter products based on search query
   const filteredProducts = products.filter(
@@ -126,12 +99,6 @@ const AddProduct = () => {
             My Product
           </h1>
           <RightSideDrawer />
-          <button
-            onClick={handleToggleModal}
-            className="text-xs font-bold border-2 border-blue-600 text-blue-600 py-1 px-3 rounded cursor-pointer sm:text-sm sm:px-2 sm:py-1 md:text-base md:px-3 md:py-2 lg:text-xl lg:px-4 lg:py-3"
-          >
-            Add Product
-          </button>
 
           {email && (
             <div className="hidden sm:flex items-center lg:text-2xl md:text-xl text-sm font-bold text-white border-4 border-[#1e40af] p-2 rounded-lg bg-[rgb(42,108,194)] hover:bg-blue-800 transition-colors duration-300 ease-in-out">
@@ -229,22 +196,6 @@ const AddProduct = () => {
                     className="w-full text-gray-700 border border-gray-300 rounded py-2 px-3 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                   />
                 </div>
-
-                <div className="flex items-center justify-between">
-                  <button
-                    type="submit"
-                    className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline cursor-pointer"
-                  >
-                    {updateProductId ? "Update Product" : "Add Product"}
-                  </button>
-                  <button
-                    type="button"
-                    onClick={handleToggleModal}
-                    className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline cursor-pointer"
-                  >
-                    Close
-                  </button>
-                </div>
               </form>
             </div>
           </div>
@@ -271,21 +222,6 @@ const AddProduct = () => {
                 <p className="text-blue-500 font-semibold mt-2">
                   ₹ {product.price}
                 </p>
-
-                <div className="mt-4 flex space-x-2">
-                  <button
-                    className="bg-yellow-500 text-white py-1 px-3 rounded hover:bg-yellow-600 transition-all duration-300 cursor-pointer"
-                    onClick={() => handleEdit(product._id)}
-                  >
-                    Edit
-                  </button>
-                  <button
-                    className="bg-red-500 text-white py-1 px-3 rounded hover:bg-red-600 transition-all duration-300 cursor-pointer"
-                    onClick={() => handleDelete(product._id)}
-                  >
-                    Delete
-                  </button>
-                </div>
               </div>
             ))}
           </div>
@@ -295,4 +231,4 @@ const AddProduct = () => {
   );
 };
 
-export default AddProduct;
+export default ShowCase;

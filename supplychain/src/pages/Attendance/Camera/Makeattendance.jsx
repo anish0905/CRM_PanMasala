@@ -6,16 +6,15 @@ import Swal from "sweetalert2";
 
 const MakeAttendance = () => {
   const navigate = useNavigate();
-  const { role, work } = useParams(); // 'work' will determine if it's 'Attendance'
+  const { role, work } = useParams();
   const [attendance, setAttendance] = useState([]);
   const [error, setError] = useState(null);
 
   const BASE_URL = import.meta.env.VITE_API_URL;
   const userId = localStorage.getItem("userId");
 
-  const isLogin = attendance.length === 0; // Determine if this is a login or logout action
+  const isLogin = work === 'Attendance'; // Determine action based on 'work'
 
-  // Fetch attendance data
   const fetchAttendanceDetails = async () => {
     try {
       const response = await axios.get(
@@ -28,7 +27,6 @@ const MakeAttendance = () => {
     }
   };
 
-  // Redirect based on role
   const handleRedirection = () => {
     if (role === "CNF") {
       navigate("/CNFDashBoard");
@@ -44,10 +42,10 @@ const MakeAttendance = () => {
   }, []);
 
   useEffect(() => {
-    if (attendance.length > 0) {
-      handleRedirection();
+    if (isLogin && attendance.length > 0) {
+      handleRedirection(); // Redirect only for login if attendance exists
     }
-  }, [attendance]);
+  }, [attendance, isLogin]);
 
   const handleCapture = async (capturedData) => {
     try {
@@ -56,12 +54,15 @@ const MakeAttendance = () => {
         return;
       }
 
-      // Determine API endpoint based on action
       const apiEndpoint = isLogin
         ? `${BASE_URL}/api/attendance/login`
         : `${BASE_URL}/api/attendance/logout/${attendance[0]?._id}`;
 
-      // Prepare payload
+      if (!isLogin && (!attendance[0] || !attendance[0]._id)) {
+        setError("No attendance record found. Cannot perform logout.");
+        return;
+      }
+
       const payload = {
         user_id: userId,
         [`${isLogin ? "login" : "logout"}Img`]: capturedData.image,
@@ -71,7 +72,6 @@ const MakeAttendance = () => {
         },
       };
 
-      // API call
       const response = await (isLogin ? axios.post : axios.put)(
         apiEndpoint,
         payload
@@ -80,29 +80,22 @@ const MakeAttendance = () => {
       Swal.fire({
         icon: "success",
         title: isLogin ? "Login Successful" : "Logout Successful",
-        text: `You have successfully completed the ${
-          isLogin ? "login" : "logout"
-        } process.`,
+        text: `You have successfully ${isLogin ? "logged in" : "logged out"}.`,
         timer: 2000,
         showConfirmButton: false,
       });
 
       if (isLogin) {
-        // Redirect after login
-        setTimeout(handleRedirection, 3000);
+        setTimeout(handleRedirection, 1000);
       } else {
-        // Clear local storage and redirect after logout
         setTimeout(() => {
           localStorage.clear();
           navigate("/");
         }, 3000);
       }
     } catch (error) {
-      console.error(
-        `Error during ${isLogin ? "login" : "logout"} process:`,
-        error
-      );
-      setError(`Failed to complete ${isLogin ? "login" : "logout"} process.`);
+      console.error("Error:", error);
+      setError(`Failed to ${isLogin ? "login" : "logout"}.`);
     }
   };
 
