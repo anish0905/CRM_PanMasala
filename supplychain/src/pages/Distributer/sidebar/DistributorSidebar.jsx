@@ -183,10 +183,7 @@ const DistributorSidebar = ({ onClose }) => {
           </span>
           {manageFEADropdown && (
             <div className="flex justify-start ml-10 flex-col font-semibold text-xl text-black">
-              <DropdownItem
-                text="Add-FEA"
-                onClick={() => handleItemClick("/FEARegistaionForm")}
-              />
+             
               <DropdownItem
                 text="FEA Details"
                 onClick={() => handleItemClick("/FEA/Registration")}
