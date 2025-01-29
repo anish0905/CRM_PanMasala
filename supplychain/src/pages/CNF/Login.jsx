@@ -40,7 +40,7 @@ const Login = () => {
         if (result.isConfirmed) {
           selectedRole = "CNF";
         } else if (result.isDenied) {
-          selectedRole = "Super Stockist";
+          selectedRole = "SuperStockist";
         } else if (
           result.isDismissed &&
           result.dismiss === Swal.DismissReason.cancel
@@ -80,7 +80,7 @@ const Login = () => {
     try {
       const endpointMap = {
         CNF: "/api/cnfAgent/login",
-        "Super Stockist": "/api/superstockist/login",
+        SuperStockist: "/api/superstockist/login",
         Distributer: "/api/Distributor/loginexDistributor",
       };
 
@@ -98,7 +98,7 @@ const Login = () => {
         localStorage.setItem("email", email);
         localStorage.setItem("token", accessToken);
         localStorage.setItem("userId", userId);
-        if (role === "Super Stockist") {
+        if (role === "SuperStockist") {
           localStorage.setItem("cnfId", cnf);
         }
 
@@ -108,7 +108,7 @@ const Login = () => {
           theme: "colored",
         });
 
-        navigate(`/${role.replace(" ", "")}DashBoard`);
+        navigate(`/Attendance/${role}/Attendance`);
       } else {
         toast.error("Invalid email or password.", {
           position: "top-center",
@@ -164,7 +164,7 @@ const Login = () => {
             <h1 className="text-3xl lg:text-5xl md:text-4xl font-bold text-blue-950 text-center mb-8">
               {role === "CNF"
                 ? "CNF Login"
-                : role === "Super Stockist"
+                : role === "SuperStockist"
                 ? "Super Stockist Login"
                 : "Select Role and Login"}
             </h1>
@@ -173,8 +173,8 @@ const Login = () => {
               Enter your Email and Password to sign in
             </h3>
 
-            <div className="lg:w-full md:full w-[90%] max-w-sm mx-auto">
-              <form className="flex flex-col">
+            <div className="lg:w-full md:w-full w-[90%] max-w-sm mx-auto">
+              <form className="flex flex-col" onSubmit={handleLogin}>
                 <input
                   type="text"
                   placeholder="Email"
@@ -189,18 +189,21 @@ const Login = () => {
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                 />
+
+                <button
+                  type="submit"
+                  value="Sign In"
+                  disabled={!role}
+                  className={`w-full py-3 rounded-lg font-bold text-lg shadow-lg mt-4 ${
+                    role
+                      ? "bg-blue-600 text-white hover:bg-white hover:text-blue-600 hover:border hover:border-blue-600 hover:shadow-xl"
+                      : "bg-gray-400 text-gray-700 cursor-not-allowed"
+                  }`}
+                >
+                  Sign In
+                </button>
               </form>
-              <button
-                onClick={handleLogin}
-                disabled={!role}
-                className={`w-full py-3 rounded-lg font-bold text-lg shadow-lg mt-4 ${
-                  role
-                    ? "bg-blue-600 text-white hover:bg-white hover:text-blue-600 hover:border hover:border-blue-600 hover:shadow-xl"
-                    : "bg-gray-400 text-gray-700 cursor-not-allowed"
-                }`}
-              >
-                Sign In
-              </button>
+
               <button
                 onClick={handleBack}
                 className="w-full py-3 mt-4 mb-20 rounded-lg font-bold text-lg shadow-lg bg-gray-200 text-blue-600 hover:bg-gray-300 hover:shadow-xl"
