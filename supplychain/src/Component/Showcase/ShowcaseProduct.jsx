@@ -92,15 +92,15 @@ const ShowcaseProduct = () => {
         <DistributorSidebar />
       </div>
 
-      <div className="lg:ml-80  font-serif w-full lg:p-10 md:p-5 ">
+      <div className="lg:ml-72  font-serif w-full lg:p-10 md:p-5 ">
         <div className=" bg-[#93c5fd] rounded-md shadow p-4 flex gap-4 items-center justify-between">
           <h1 className="flex-grow text-start text-xs sm:text-sm md:text-lg lg:text-xl font-bold text-gray-800">
-            My Product
+            Our Product
           </h1>
         
 
           {email && (
-            <div className="hidden sm:flex items-center lg:text-2xl md:text-xl text-sm font-bold text-white border-4 border-[#1e40af] p-2 rounded-lg bg-[rgb(42,108,194)] hover:bg-blue-800 transition-colors duration-300 ease-in-out">
+            <div className="hidden sm:flex items-center lg:text-2xl md:text-xl text-sm font-bold text-white border-2 border-[#1e40af] p-2 rounded-lg bg-[rgb(42,108,194)] hover:bg-blue-800 transition-colors duration-300 ease-in-out">
               {email}
             </div>
           )}
