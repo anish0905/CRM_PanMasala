@@ -9,14 +9,17 @@ import SuperStockistDetails from "./pages/CNF/superStockist/SuperStockistDetails
 import SuperStockistdashboard from "./pages/SuperStockists/SuperStockistdashboard";
 import DistributorDetails from "./pages/SuperStockists/distributor/DistributorDetails";
 import DistributerDashBoard from "./pages/Distributer/dashboard/DistributerDashBoard";
-import DistributorProductReport from "./pages/Distributer/Dashboard/DistributorProductReport";
+import DistributorProductReport from "./Component/Showcase/ShowcaseProductReport";
 import FEA from "./pages/Distributer/FEA&FE/FEA.Details";
 import FE from "./pages/Distributer/FEA&FE/FE.Details";
 import FEARegistaionForm from "./pages/Distributer/FEA&FE/FEA_Register_Form";
 import Distributors from "./pages/CNF/distributors/Distributors";
 import DistributorsDetails from "./pages/CNF/distributors/DistributorsDetails";
 import MakeAttendance from "./pages/Attendance/Camera/Makeattendance";
+import ShowcaseProduct from "./Component/Showcase/ShowcaseProduct";
+import ShowcaseProductReport from "./Component/Showcase/ShowcaseProductReport";
 import AttendanceRecord from "./pages/Attendance/attendanceRecord/AttendanceRecord";
+import UserProfile from "./pages/UserProfile/userProfile";
 
 function App() {
   const navigate = useNavigate();
@@ -33,6 +36,17 @@ function App() {
         path="/SuperStockistDashBoard"
         element={<SuperStockistdashboard />}
       />
+
+      // showcase
+      <Route
+        path="/ShowcaseProductReport"
+        element={<ShowcaseProductReport/>}
+      />
+      <Route
+        path="/ShowcaseProduct"
+        element={<ShowcaseProduct />}
+      />
+
       // Distributer
       <Route path="/DistributorDashBoard" element={<DistributerDashBoard />} />
       <Route
@@ -40,6 +54,8 @@ function App() {
         element={<DistributorProductReport />}
       />
       <Route path="/FEA" element={<FEA />} />
+      <Route path="/DistributerDashBoard" element={<DistributerDashBoard />} />
+      <Route path="/FEA/:work" element={<FEA />} />
       <Route path="/FEARegistaionForm" element={<FEARegistaionForm />} />
       <Route path="/FE" element={<FE />} />
       <Route
@@ -60,8 +76,8 @@ function App() {
       />
 
       <Route
-        path="/manage/Attendance/:role"
-        element={<AttendanceRecord />}
+        path="/manage/userProfile/:role"
+        element={<UserProfile />}
       />
 
     </Routes>

@@ -4,6 +4,7 @@ import "./SuperStockistSidebar.css";
 // import "../../Styles/Styles.css";
 import logo from "../../../assets/logo.png";
 import { FaShoppingCart, FaUserPlus, FaSignOutAlt } from "react-icons/fa";
+import { RiUserLocationFill } from "react-icons/ri";
 import { RxDashboard } from "react-icons/rx";
 import {
   MdOutlineDeliveryDining,
@@ -11,8 +12,8 @@ import {
   MdOutlineEventAvailable,
   MdInventory,
 } from "react-icons/md";
-import { GiShop } from "react-icons/gi";
-import { TbReport } from "react-icons/tb";
+import { CgProfile } from "react-icons/cg";
+import Swal from 'sweetalert2';
 
 const SuperStockistSidebar = ({ onClose }) => {
   const [showDropdown, setShowDropdown] = useState(false);
@@ -57,10 +58,26 @@ const SuperStockistSidebar = ({ onClose }) => {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-  const handleLogout = () => {
-    localStorage.clear();
-    navigate("/");
-  };
+   const handleLogout = () => {
+     Swal.fire({
+       title: 'Are you sure?',
+       text: 'Do you want to log out? Make sure to finish your tasks before logging out.',
+       icon: 'warning',
+       showCancelButton: true,
+       confirmButtonColor: '#3085d6',
+       cancelButtonColor: '#d33',
+       confirmButtonText: 'Yes, log out!',
+       cancelButtonText: 'Causal logout!',
+     }).then((result) => {
+       if (result.isConfirmed) {
+         
+         navigate('/Attendance/superStockist/logout'); // Navigate to logout route
+       } else if (result.isDismissed) {
+         localStorage.clear(); 
+         navigate('/'); // Navigate to home page
+       }
+     });
+   };
 
   return (
     <div className="sidebar flex flex-col h-full w-80 bg-gray-800 text-black shadow-lg">
@@ -228,8 +245,8 @@ const SuperStockistSidebar = ({ onClose }) => {
             className="nav-item nav-item-dropdown flex items-center gap-4 cursor-pointer p-4 transition duration-300 ease-in-out transform rounded-full mb-2"
             onClick={toggleNearByDropdown}
           >
-            <MdOutlineManageAccounts
-              style={{ color: "#047857", fontSize: "2rem" }}
+            <RiUserLocationFill
+              style={{ color: "#ed9940", fontSize: "2rem" }}
             />
             <span className="text-lg font-semibold">Search NearBy</span>
           </span>
@@ -242,6 +259,17 @@ const SuperStockistSidebar = ({ onClose }) => {
             </div>
           )}
         </div>
+        <NavItem
+          icon={
+            <CgProfile style={{ color: "#047857", fontSize: "2rem" }} />
+           
+          }
+          text="My Profile"
+          onClick={() =>
+            handleItemClick("/manage/userProfile/superstockist")
+           
+          }
+        />
         <LogoutItem
           icon={<FaSignOutAlt style={{ color: "gray", fontSize: "2rem" }} />}
           text="Logout"

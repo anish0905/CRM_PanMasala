@@ -7,10 +7,6 @@ function NewCamera({ cameraType, onCapture, onClose, role }) {
   const videoRef = useRef(null);
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
-  const userId = localStorage.getItem("userId");
-  const BASE_URL = import.meta.env.VITE_API_URL;
-  const navigate = useNavigate();
-
   const [currentLocation, setCurrentLocation] = useState({
     latitude: "",
     longitude: "",
@@ -107,45 +103,22 @@ function NewCamera({ cameraType, onCapture, onClose, role }) {
 
       setLoading(true);
 
-      const messageData = {
-        user_id: userId,
-        role : role.toLowerCase(),
-        loginLocation: {
+      const capturedData = {
+        image: imageDataUrl,
+        location: {
           latitude: currentLocation.latitude,
           longitude: currentLocation.longitude,
         },
-        loginImg: imageDataUrl, // The compressed Base64 encoded image
       };
 
+      setLoading(true);
       try {
-        const response = await axios.post(
-          `${BASE_URL}/api/attendance/login`,
-          messageData
-        );
-        console.log("Photo and data sent successfully:", response.data);
-
         if (onCapture) {
-          onCapture(imageDataUrl);
+          await onCapture(capturedData);
         }
-
         stopCamera();
-        if (role === "CNF") {
-          navigate("/CNFDashBoard");
-        } else if (role === "Distributor") {
-          navigate("/DistributorDashBoard");
-        } else if (role === "SuperStockist") {
-          navigate("/SuperStockistDashBoard");
-        }
-
-        if (onClose) {
-          onClose();
-        }
       } catch (error) {
-        if (error.response) {
-          console.error("Error response:", error.response.data);
-        }
-        console.error("Error sending data:", error.message);
-        setError("Failed to send photo and data.");
+        setError("Failed to process capture.");
       } finally {
         setLoading(false);
       }
