@@ -1,240 +1,229 @@
-import React, { useEffect, useState } from "react";
-import axios from "axios"; // Make sure to import axios
-import ShopCaseMap from "./ShowCaseMap";
-import ProductDeteails from "./ProductDetails";
+import React, { useState, useEffect } from "react";
+import DistributorbarModal from "../../pages/Distributer/sidebar/DistributorBarModal";
 import DistributorSidebar from "../../pages/Distributer/sidebar/DistributorSidebar";
-import DistributorBarModal from "../../pages/Distributer/sidebar/DistributorBarModal";
+import axios from "axios";
 
 const ShowcaseProduct = () => {
-  const BASE_URL = import.meta.env.VITE_API_URL; // Base URL for API
-  const [showCases, setShowCase] = useState([]); // Initialize with an empty array
-  const [error, setError] = useState(null); // To handle errors if any
-  const [searchTerm, setSearchTerm] = useState(""); // For search input
-  const [currentPage, setCurrentPage] = useState(1); // For pagination
-  const [itemsPerPage] = useState(5);
-  const [showCaseModalOpen, setShowCaseModalOpen] = useState(false);
-  const [selectLocation, setSelectLocation] = useState();
-  const [showProductModel, setShowProductModel] = useState(false);
-  const [selectProduct, setSelectProduct] = useState(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [productName, setProductName] = useState("");
+  const [productDescription, setProductDescription] = useState("");
+  const [price, setPrice] = useState("");
+  const [image, setImage] = useState(null);
+  const [products, setProducts] = useState([]);
+  const [updateProductId, setUpdateProductId] = useState("");
+  const [searchQuery, setSearchQuery] = useState(""); // State for search query
+  const URI = import.meta.env.VITE_API_URL;
+  const email = localStorage.getItem("email");
+  const handleToggleModal = () => {
+    setIsModalOpen(!isModalOpen);
+    // Reset all states when closing the modal
+    setUpdateProductId("");
+    setProductName("");
+    setProductDescription("");
+    setPrice("");
+    setImage(null);
+  };
+
+  const fetchProducts = async () => {
+    try {
+      const response = await axios.get(`${URI}/api/e-commerce/`);
+      setProducts(response.data.products);
+    } catch (error) {
+      console.error("Error fetching products:", error);
+    }
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    const formData = new FormData();
+    formData.append("title", productName);
+    formData.append("description", productDescription);
+    formData.append("price", price);
+
+    if (image) {
+      formData.append("file", image); // Include file only if selected
+    }
+
+    try {
+      if (updateProductId) {
+        // If updating, send a PUT request
+        const response = await axios.put(
+          `${URI}/api/e-commerce/update/${updateProductId}`,
+          formData,
+          {
+            headers: {
+              "Content-Type": "multipart/form-data",
+            },
+          }
+        );
+        console.log("Update response:", response.data); // Log response
+        console.log("Product updated successfully");
+      } else {
+        // If adding a new product, send a POST request
+        const response = await axios.post(`${URI}/api/e-commerce`, formData, {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        });
+        console.log("Add response:", response.data);
+        console.log("Product added successfully");
+      }
+      handleToggleModal(); // Close the modal after submitting
+      fetchProducts(); // Fetch updated products after adding or updating
+    } catch (error) {
+      console.error("Error saving product:", error);
+    }
+  };
 
   useEffect(() => {
-    fetchShowcaseProduct();
-  }, []);
+    fetchProducts();
+  }, [handleSubmit]);
 
-  const fetchShowcaseProduct = async () => {
-    try {
-      const resp = await axios.get(`${BASE_URL}/api/showCase/showcase`); // Await the response
-
-      setShowCase(resp.data.data); // Set the fetched data
-    } catch (error) {
-      console.error("Error fetching showcase list:", error);
-      setError("Failed to fetch showcase list"); // Set error message
-    }
-  };
-
-  // Handle the search filtering
-  const filteredShowCases = showCases.filter((showCase) =>
-    showCase.productName?.toLowerCase()?.includes(searchTerm.toLowerCase())
+  // Filter products based on search query
+  const filteredProducts = products.filter(
+    (product) =>
+      product.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      product.description.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
-  // Sort by rating in descending order
-  const sortedShowCases = filteredShowCases.sort((a, b) => {
-    const aRating =
-      a.reviews.reduce((sum, review) => sum + review.rating, 0) /
-        a.reviews.length || 0;
-    const bRating =
-      b.reviews.reduce((sum, review) => sum + review.rating, 0) /
-        b.reviews.length || 0;
-    return bRating - aRating; // Sort in descending order
-  });
-
-  // Get the current page items
-  const indexOfLastItem = currentPage * itemsPerPage;
-  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-  const currentItems = sortedShowCases.slice(indexOfFirstItem, indexOfLastItem);
-
-  // Handle page change
-  const paginate = (pageNumber) => setCurrentPage(pageNumber);
-
-  // Function to render stars based on the rating
-  const renderStars = (rating) => {
-    const stars = [];
-    for (let i = 1; i <= 5; i++) {
-      if (i <= rating) {
-        stars.push(
-          <span key={i} className="text-yellow-500">
-            ★
-          </span>
-        ); // Filled star (gold)
-      } else {
-        stars.push(
-          <span key={i} className="text-gray-300">
-            ★
-          </span>
-        ); // Empty star (gray)
-      }
-    }
-    return stars;
-  };
-
-  const handleLocationModal = (location) => {
-    setShowCaseModalOpen(true);
-    setSelectLocation(location);
-  };
-
-  const ShowProduct = async (product) => {
-    setShowProductModel(true);
-    setSelectProduct(product);
-  };
-
-  const onClose = () => {
-    setShowProductModel(false);
-    setSelectProduct(null);
-  };
-
   return (
-    <div className="flex gap-6 bg-[#dbeafe] w-full">
-      <div className="h-screen md:block lg:block hidden">
+    <div className="flex gap-6 bg-blue-100 w-full min-h-screen p-5">
+      <div className=" hidden lg:block">
         <DistributorSidebar />
       </div>
-      <div className="lg:ml-80 md:ml-40 font-serif w-full lg:p-10 md:p-5 p-4">
-        <div className="flex items-center flex-wrap lg:justify-end md:justify-end justify-center lg:gap-10 md:gap-5 gap-1 lg:h-28 h-16 bg-[#93c5fd] rounded-xl lg:my-5 md:my-5 my-2">
-          <div className="lg:hidden md:hidden block">
-            <DistributorBarModal />
+
+      <div className="lg:ml-80  font-serif w-full lg:p-10 md:p-5 ">
+        <div className=" bg-[#93c5fd] rounded-md shadow p-4 flex gap-4 items-center justify-between">
+          <h1 className="flex-grow text-start text-xs sm:text-sm md:text-lg lg:text-xl font-bold text-gray-800">
+            My Product
+          </h1>
+        
+
+          {email && (
+            <div className="hidden sm:flex items-center lg:text-2xl md:text-xl text-sm font-bold text-white border-4 border-[#1e40af] p-2 rounded-lg bg-[rgb(42,108,194)] hover:bg-blue-800 transition-colors duration-300 ease-in-out">
+              {email}
+            </div>
+          )}
+          <div className="lg:hidden block">
+            <DistributorbarModal />
           </div>
-          <p className="lg:text-2xl mr-4 md:text-xl text-xs font-bold border-4 border-[#1e40af] p-2 rounded-lg bg-[#dbeafe]">
-            Show Case
-          </p>
         </div>
-        {error && <p className="text-red-600">{error}</p>}{" "}
-        {/* Display error if any */}
+
         {/* Search bar */}
-        {/* Table to render showcase items */}
-        <div className="overflow-x-auto bg-[#1E40AF] p-4 rounded-md">
-          <div className="my-4">
-            <input
-              type="text"
-              placeholder="Search by product name"
-              className="border p-2 rounded-md w-full"
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-            />
-          </div>
-          <table className="min-w-full table-auto border-collapse border border-gray-300">
-            <thead>
-              <tr className="bg-[#1e87ff] text-white rounded-md p-4">
-                <th className="border border-gray-300 p-2">Product Name</th>
-                <th className="border border-gray-300 p-2">Product Smells</th>
-                <th className="border border-gray-300 p-2">Product Testing</th>
-                <th className="border border-gray-300 p-2">
-                  Product Similarity
-                </th>
-
-                <th className="border border-gray-300 p-2">Reviews</th>
-                <th className="border border-gray-300 p-2">Location</th>
-              </tr>
-            </thead>
-            <tbody>
-              {currentItems.length > 0 ? (
-                currentItems.map((showCase, index) => (
-                  <tr key={index} className="hover:bg-gray-100 bg-white">
-                    <td className="border border-gray-300 p-2">
-                      <p>{showCase.productName}</p>
-                      {/* <button
-                                                onClick={() => ShowProduct(showCase?.productId)}
-                                                className="ml-2 bg-blue-500 p-2 my-2 rounded-md text-white "
-                                            >
-                                                View Product
-                                            </button> */}
-                    </td>
-                    <td className="border border-gray-300 p-2">
-                      {showCase.productSmells}
-                    </td>
-                    <td className="border border-gray-300 p-2">
-                      {showCase.productTesting}
-                    </td>
-                    <td className="border border-gray-300 p-2">
-                      {showCase.productSimilarity}
-                    </td>
-                    <td className="border border-gray-300 p-2">
-                      {showCase.reviews.map((review, revIndex) => (
-                        <div key={revIndex}>
-                          <div className="text-center">
-                            {" "}
-                            {renderStars(review.rating)}
-                          </div>{" "}
-                          {/* Display rating as stars */}
-                          {new Date(review.timestamp).toLocaleString()}
-                        </div>
-                      ))}
-                    </td>
-                    <td className="border border-gray-300 p-2">
-                      {showCase.locations.map((location, locIndex) => (
-                        <div key={locIndex} className="">
-                          <button
-                            onClick={() => handleLocationModal(location)}
-                            className="bg-blue-500 p-2 my-2 rounded-md text-white "
-                          >
-                            View Location
-                          </button>
-                          <br />
-                          {new Date(location.timestamp).toLocaleString()}
-                        </div>
-                      ))}
-                    </td>
-                  </tr>
-                ))
-              ) : (
-                <tr>
-                  <td
-                    colSpan="6"
-                    className="border border-gray-300 p-2 text-center"
-                  >
-                    No showcase items available.
-                  </td>
-                </tr>
-              )}
-            </tbody>
-          </table>
-          {showCaseModalOpen && selectLocation && (
-            <div className="fixed inset-0 z-50 flex items-center justify-center">
-              <div className="absolute inset-0 bg-black opacity-50"></div>
-              <div className="z-50 bg-white w-[80%] p-8 rounded-lg shadow-lg">
-                <ShopCaseMap
-                  selectLocation={selectLocation}
-                  setShowCaseModalOpen={setShowCaseModalOpen}
-                />
-              </div>
-            </div>
-          )}
-
-          {showProductModel && selectProduct && (
-            <div className="fixed inset-0 z-50 flex items-center justify-center">
-              <div className="absolute inset-0 bg-black opacity-50"></div>
-              <div className="z-50 bg-white w-[80%] p-8 rounded-lg shadow-lg">
-                <ProductDeteails product={selectProduct} onClose={onClose} />
-              </div>
-            </div>
-          )}
+        <div className="my-6">
+          <input
+            type="text"
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+            placeholder="Search by product name or description"
+          />
         </div>
-        {/* Pagination */}
-        <div className="flex justify-center gap-2 my-4">
-          {Array.from(
-            { length: Math.ceil(filteredShowCases.length / itemsPerPage) },
-            (_, index) => (
-              <button
-                key={index + 1}
-                onClick={() => paginate(index + 1)}
-                className={`border px-4 py-2 rounded-md ${
-                  currentPage === index + 1
-                    ? "bg-blue-500 text-white"
-                    : "bg-white text-black"
-                }`}
+
+        {isModalOpen && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center ">
+            <div className="bg-white shadow-md rounded-lg p-6 max-w-lg w-full mx-4 sm:mx-0">
+              <h2 className="text-2xl font-bold mb-6">
+                {updateProductId ? "Update Product" : "Add Product"}
+              </h2>
+              <form className=" p-6" onSubmit={handleSubmit}>
+                <div className="mb-4">
+                  <label
+                    className="block text-gray-700 text-sm font-bold mb-2"
+                    htmlFor="productName"
+                  >
+                    Product Name:
+                  </label>
+                  <input
+                    type="text"
+                    id="productName"
+                    value={productName}
+                    className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                    placeholder="Enter product name"
+                    onChange={(e) => setProductName(e.target.value)}
+                    required
+                  />
+                </div>
+
+                <div className="mb-4">
+                  <label
+                    className="block text-gray-700 text-sm font-bold mb-2"
+                    htmlFor="productDescription"
+                  >
+                    Product Description:
+                  </label>
+                  <input
+                    type="text"
+                    id="productDescription"
+                    value={productDescription}
+                    onChange={(e) => setProductDescription(e.target.value)}
+                    className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                    placeholder="Enter product description"
+                    required
+                  />
+                </div>
+
+                <div className="mb-4">
+                  <label
+                    className="block text-gray-700 text-sm font-bold mb-2"
+                    htmlFor="price"
+                  >
+                    Price:
+                  </label>
+                  <input
+                    type="number"
+                    id="price"
+                    value={price}
+                    onChange={(e) => setPrice(e.target.value)}
+                    className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                    placeholder="Enter product price"
+                    required
+                  />
+                </div>
+
+                <div className="mb-6">
+                  <label
+                    className="block text-gray-700 text-sm font-bold mb-2"
+                    htmlFor="image"
+                  >
+                    Product Image Upload:
+                  </label>
+                  <input
+                    type="file"
+                    id="image"
+                    onChange={(e) => setImage(e.target.files[0])}
+                    className="w-full text-gray-700 border border-gray-300 rounded py-2 px-3 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  />
+                </div>
+              </form>
+            </div>
+          </div>
+        )}
+
+        <div className="mt-8">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            {filteredProducts.map((product) => (
+              <div
+                key={product._id}
+                className="border-2 border-blue-500 hover:border-blue-50 p-4 rounded-lg shadow-lg flex flex-col items-center transition-all duration-300 hover:shadow-xl hover:scale-105 hover:bg-gray-50"
               >
-                {index + 1}
-              </button>
-            )
-          )}
+                <img
+                  src={`${URI}/uploads/${product.image}`} // Assuming image URLs are served from '/uploads' directory
+                  alt={product.title}
+                  className="w-full h-60 object-contain mb-4 transition-all duration-300 hover:scale-105"
+                />
+                <h3 className="text-lg font-bold text-center mt-2 transition-all duration-300 hover:text-blue-500">
+                  {product.title}
+                </h3>
+                <p className="text-center text-gray-600 mb-2">
+                  {product.description}
+                </p>
+                <p className="text-blue-500 font-semibold mt-2">
+                  ₹ {product.price}
+                </p>
+              </div>
+            ))}
+          </div>
         </div>
       </div>
     </div>

@@ -128,8 +128,7 @@ const AddProduct = () => {
           <RightSideDrawer />
           <button
             onClick={handleToggleModal}
-            className="text-xs font-bold border-2 border-blue-600 text-blue-600 py-1 px-3 rounded cursor-pointer 
-    sm:text-sm sm:px-2 sm:py-1 md:text-base md:px-3 md:py-2 lg:text-xl lg:px-4 lg:py-3"
+            className="text-xs font-bold border-2 border-blue-600 text-blue-600 py-1 px-3 rounded cursor-pointer sm:text-sm sm:px-2 sm:py-1 md:text-base md:px-3 md:py-2 lg:text-xl lg:px-4 lg:py-3"
           >
             Add Product
           </button>
