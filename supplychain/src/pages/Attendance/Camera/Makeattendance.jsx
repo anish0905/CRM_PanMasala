@@ -32,8 +32,8 @@ const MakeAttendance = () => {
   const handleRedirection = () => {
     if (role === "CNF") {
       navigate("/CNFDashBoard");
-    } else if (role === "Distributer") {
-      navigate("/DistributerDashBoard");
+    } else if (role === "Distributor") {
+      navigate("/DistributorDashBoard");
     } else if (role === "SuperStockist") {
       navigate("/SuperStockistDashBoard");
     }
@@ -42,6 +42,12 @@ const MakeAttendance = () => {
   useEffect(() => {
     fetchAttendanceDetails();
   }, []);
+
+  useEffect(() => {
+    if (attendance.length > 0) {
+      handleRedirection();
+    }
+  }, [attendance]);
 
   const handleCapture = async (capturedData) => {
     try {

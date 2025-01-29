@@ -15,8 +15,8 @@ const Login = () => {
   useEffect(() => {
     const roles = {
       CNF: "Welcome CNF!",
-      "Super Stockist": "Welcome Super Stockist!",
-      Distributer: "Welcome Distributer!",
+      "SuperStockist": "Welcome Super Stockist!",
+      Distributor: "Welcome Distributor!",
     };
 
     const showRoleSelection = async () => {
@@ -32,7 +32,7 @@ const Login = () => {
           showCloseButton: true,
           confirmButtonText: "CNF",
           denyButtonText: "Super Stockist",
-          cancelButtonText: "Distributer",
+          cancelButtonText: "Distributor",
           allowOutsideClick: false,
           allowEscapeKey: false,
         });
@@ -45,7 +45,7 @@ const Login = () => {
           result.isDismissed &&
           result.dismiss === Swal.DismissReason.cancel
         ) {
-          selectedRole = "Distributer";
+          selectedRole = "Distributor";
         }
 
         if (selectedRole) {
@@ -81,7 +81,7 @@ const Login = () => {
       const endpointMap = {
         CNF: "/api/cnfAgent/login",
         SuperStockist: "/api/superstockist/login",
-        Distributer: "/api/Distributor/loginexDistributor",
+        Distributor: "/api/Distributor/loginexDistributor",
       };
 
       const url = `${URI}${endpointMap[role]}`;
@@ -166,7 +166,10 @@ const Login = () => {
                 ? "CNF Login"
                 : role === "SuperStockist"
                 ? "Super Stockist Login"
+                : role === "Distributor"
+                ? "Distributor Login"
                 : "Select Role and Login"}
+                
             </h1>
 
             <h3 className="text-lg text-gray-700 mb-4">

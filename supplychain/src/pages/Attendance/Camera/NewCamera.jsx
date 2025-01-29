@@ -109,7 +109,7 @@ function NewCamera({ cameraType, onCapture, onClose, role }) {
 
       const messageData = {
         user_id: userId,
-        role: role,
+        role : role.toLowerCase(),
         loginLocation: {
           latitude: currentLocation.latitude,
           longitude: currentLocation.longitude,
@@ -131,8 +131,8 @@ function NewCamera({ cameraType, onCapture, onClose, role }) {
         stopCamera();
         if (role === "CNF") {
           navigate("/CNFDashBoard");
-        } else if (role === "Distributer") {
-          navigate("/DistributerDashBoard");
+        } else if (role === "Distributor") {
+          navigate("/DistributorDashBoard");
         } else if (role === "SuperStockist") {
           navigate("/SuperStockistDashBoard");
         }

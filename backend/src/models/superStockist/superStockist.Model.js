@@ -1,5 +1,5 @@
 const mongoose = require("mongoose");
-const bcrypt = require("bcrypt");
+
 
 // Super Stockist Schema for user registration
 const superStockistSchema = new mongoose.Schema(
@@ -20,6 +20,7 @@ const superStockistSchema = new mongoose.Schema(
       unique: [true, "Email address already taken"],
       lowercase: true,
       match: [/.+@.+\..+/, "Please enter a valid email address"],
+      
     },
     password: {
       type: String,
@@ -70,6 +71,14 @@ const superStockistSchema = new mongoose.Schema(
     timestamps: true,
   }
 );
+
+
+superStockistSchema.pre("save", function(next){
+  if(this.email){
+    this.email = this.email.toLowerCase();
+  }
+  next();
+})
 
 // Export the model with a proper name
 module.exports = mongoose.model("SuperStockist", superStockistSchema);

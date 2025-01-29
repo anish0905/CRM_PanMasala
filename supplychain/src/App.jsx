@@ -33,7 +33,7 @@ function App() {
         element={<SuperStockistdashboard />}
       />
       // Distributer
-      <Route path="/DistributerDashBoard" element={<DistributerDashBoard />} />
+      <Route path="/DistributorDashBoard" element={<DistributerDashBoard />} />
       <Route
         path="/DistributorProductReport"
         element={<DistributorProductReport />}
