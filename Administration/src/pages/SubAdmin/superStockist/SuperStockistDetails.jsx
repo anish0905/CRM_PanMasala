@@ -18,7 +18,7 @@ const superstockistDetails = () => {
   const [sortDirection, setSortDirection] = useState("asc");
   const [selectedsuperstockist, setSelectedsuperstockist] = useState();
   const email = localStorage.getItem("email");
-  const currentUserId = localStorage.getItem("currentUserId");
+  const currentUserId = localStorage.getItem("userId");
   const { name, role } = useParams();
   const navigate = useNavigate();
   const location = useLocation();
@@ -229,10 +229,10 @@ const superstockistDetails = () => {
                       State
                     </th>
                     <th className="px-2 py-4 md:text-lg text-xs  border-r-2 border-white">
-                      district
+                      District
                     </th>
                     <th className="px-2 py-4 md:text-lg text-xs  border-r-2 border-white">
-                      State
+                      City
                     </th>
                     <th className="px-2 py-4 md:text-lg text-xs  border-r-2 border-white">
                       Address
