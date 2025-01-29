@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from "react";
-import AdminSideBarModal from '../AdminSideBarModal'
-import AdminSidebar from '../AdminSideBar';
+import AdminSideBarModal from "../AdminSideBarModal";
+import AdminSidebar from "../AdminSidebar";
 import axios from "axios";
 import RightSideDrawer from "../../../components/RightSideDrawer";
-
 
 const AddProduct = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -66,15 +65,11 @@ const AddProduct = () => {
         console.log("Product updated successfully");
       } else {
         // If adding a new product, send a POST request
-        const response = await axios.post(
-          `${URI}/api/e-commerce`,
-          formData,
-          {
-            headers: {
-              "Content-Type": "multipart/form-data",
-            },
-          }
-        );
+        const response = await axios.post(`${URI}/api/e-commerce`, formData, {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        });
         console.log("Add response:", response.data);
         console.log("Product added successfully");
       }
@@ -127,7 +122,6 @@ const AddProduct = () => {
         <AdminSidebar />
       </div>
 
-
       <div className="lg:ml-80  font-serif w-full lg:p-10 md:p-5 ">
         <div className=" bg-[#93c5fd] rounded-md shadow p-4 flex gap-4 items-center justify-between">
           <h1 className="flex-grow text-start text-xs sm:text-sm md:text-lg lg:text-xl font-bold text-gray-800">
@@ -141,7 +135,6 @@ const AddProduct = () => {
           >
             Add Product
           </button>
-         
 
           {email && (
             <div className="hidden sm:flex items-center lg:text-2xl md:text-xl text-sm font-bold text-white border-4 border-[#1e40af] p-2 rounded-lg bg-[rgb(42,108,194)] hover:bg-blue-800 transition-colors duration-300 ease-in-out">
@@ -152,7 +145,6 @@ const AddProduct = () => {
             <AdminSideBarModal />
           </div>
         </div>
-
 
         {/* Search bar */}
         <div className="my-6">
@@ -171,10 +163,7 @@ const AddProduct = () => {
               <h2 className="text-2xl font-bold mb-6">
                 {updateProductId ? "Update Product" : "Add Product"}
               </h2>
-              <form
-                className=" p-6"
-                onSubmit={handleSubmit}
-              >
+              <form className=" p-6" onSubmit={handleSubmit}>
                 <div className="mb-4">
                   <label
                     className="block text-gray-700 text-sm font-bold mb-2"
@@ -265,7 +254,6 @@ const AddProduct = () => {
         )}
 
         <div className="mt-8">
-
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
             {filteredProducts.map((product) => (
               <div
@@ -273,7 +261,7 @@ const AddProduct = () => {
                 className="border-2 border-blue-500 hover:border-blue-50 p-4 rounded-lg shadow-lg flex flex-col items-center transition-all duration-300 hover:shadow-xl hover:scale-105 hover:bg-gray-50"
               >
                 <img
-                  src={`${URI}/src/uploads/${product.image}`} // Assuming image URLs are served from '/uploads' directory
+                  src={`${URI}/uploads/${product.image}`} // Assuming image URLs are served from '/uploads' directory
                   alt={product.title}
                   className="w-full h-60 object-contain mb-4 transition-all duration-300 hover:scale-105"
                 />
