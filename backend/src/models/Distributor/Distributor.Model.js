@@ -6,11 +6,11 @@ const DistributorSchema = mongoose.Schema(
       type: String,
       required: [true, "Please add the user name"],
     },
-
     email: {
       type: String,
       required: [true, "Please add the user email address"],
       unique: [true, "Email address already taken"],
+      lowercase: true, // Ensures the email is stored in lowercase
     },
     mobileNo: {
       type: String,
@@ -21,7 +21,6 @@ const DistributorSchema = mongoose.Schema(
       type: String,
       required: [true, "Please add the user password"],
     },
-
     country: {
       type: String,
       required: true,
@@ -33,7 +32,6 @@ const DistributorSchema = mongoose.Schema(
       required: true,
     },
     district: {
-      // Added region field
       type: String,
       required: [true, "Please add the region"],
     },
@@ -59,10 +57,17 @@ const DistributorSchema = mongoose.Schema(
     resetToken: String,
     resetTokenExpiration: Date,
   },
-
   {
     timestamps: true,
   }
 );
+
+// Pre-save hook to ensure email is lowercase
+DistributorSchema.pre("save", function (next) {
+  if (this.email) {
+    this.email = this.email.toLowerCase();
+  }
+  next();
+});
 
 module.exports = mongoose.model("Distributor", DistributorSchema);

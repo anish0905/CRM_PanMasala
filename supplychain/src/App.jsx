@@ -14,6 +14,8 @@ import FEA from "./pages/Distributer/FEA&FE/FEA.Details";
 import FE from "./pages/Distributer/FEA&FE/FE.Details";
 import FEARegistaionForm from "./pages/Distributer/FEA&FE/FEA_Register_Form";
 import Distributors from "./pages/CNF/distributors/Distributors";
+import DistributorsDetails from "./pages/CNF/distributors/DistributorsDetails";
+import MakeAttendance from "./pages/Attendance/Camera/Makeattendance";
 import ShowcaseProduct from "./Component/Showcase/ShowcaseProduct";
 import ShowcaseProductReport from "./Component/Showcase/ShowcaseProductReport";
 
@@ -25,6 +27,7 @@ function App() {
 
   return (
     <Routes>
+      <Route path="/Attendance/:role/:work" element={<MakeAttendance />} />
       <Route path="/" element={<Login />} />
       <Route path="/CNFDashBoard" element={<CNFDashbord />} />
       <Route
@@ -43,6 +46,12 @@ function App() {
       />
 
       // Distributer
+      <Route path="/DistributorDashBoard" element={<DistributerDashBoard />} />
+      <Route
+        path="/DistributorProductReport"
+        element={<DistributorProductReport />}
+      />
+      <Route path="/FEA" element={<FEA />} />
       <Route path="/DistributerDashBoard" element={<DistributerDashBoard />} />
       <Route path="/FEA/:work" element={<FEA />} />
       <Route path="/FEARegistaionForm" element={<FEARegistaionForm />} />
@@ -58,6 +67,10 @@ function App() {
       <Route
         path="/manage/cnf/distributor/:name/:role"
         element={<Distributors />}
+      />
+      <Route
+        path="/manage/cnf/distributor/:id"
+        element={<DistributorsDetails />}
       />
     </Routes>
   );

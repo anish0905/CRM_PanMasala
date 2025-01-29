@@ -261,12 +261,12 @@ const deleteSubAdmin = expressAsyncHandler(async (req, res) => {
 
 const cnfDetailsBySubAdmin = async (req, res) => {
   try {
-    const { cnfId } = req.params;
-    console.log(`CNF ID: ${cnfId}`);
+    const { id } = req.params;
+    
 
     // Find distributors filtered by CNF ID
     const distributors = await cnfagents.find({
-      superstockist: cnfId,
+      subAdmin: id,
     });
 
     if (!distributors || distributors.length === 0) {

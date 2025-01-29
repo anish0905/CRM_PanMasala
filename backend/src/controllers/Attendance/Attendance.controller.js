@@ -1,11 +1,11 @@
-const Attendance = require('../../models/Attendance/Attendance.model');
+const Attendance = require("../../models/Attendance/Attendance.model");
 
 exports.AttendanceLoginTime = async (req, res, next) => {
   try {
-    const { user_id, loginLocation, loginImg } = req.body;
+    const { user_id, loginLocation, loginImg, role } = req.body;
 
-    if (!user_id || !loginLocation || !loginImg) {
-      return res.status(400).json({ message: 'Missing required fields.' });
+    if (!user_id || !loginLocation || !loginImg || !role) {
+      return res.status(400).json({ message: "Missing required fields." });
     }
 
     const attendance = new Attendance({
@@ -13,17 +13,17 @@ exports.AttendanceLoginTime = async (req, res, next) => {
       loginLocation,
       logintime: new Date(),
       ispresent: true,
-      loginImg
+      role,
+      loginImg,
     });
 
     await attendance.save();
     res.status(201).json(attendance);
   } catch (error) {
-    console.error('Error saving attendance:', error);
-    res.status(500).json({ message: 'Error saving attendance.' });
+    console.error("Error saving attendance:", error);
+    res.status(500).json({ message: "Error saving attendance." });
   }
 };
-
 
 exports.AttendanceLogoutTime = async (req, res, next) => {
   const { id } = req.params; // ID of the attendance record
@@ -33,7 +33,7 @@ exports.AttendanceLogoutTime = async (req, res, next) => {
     const { user_id, logoutLocation, logoutImg } = req.body;
 
     if (!user_id || !logoutLocation || !logoutImg) {
-      return res.status(400).json({ message: 'Missing required fields.' });
+      return res.status(400).json({ message: "Missing required fields." });
     }
 
     // Find and update the attendance record
@@ -49,17 +49,15 @@ exports.AttendanceLogoutTime = async (req, res, next) => {
 
     // If attendance is not found, send an appropriate error response
     if (!attendance) {
-      return res.status(404).json({ message: 'Attendance record not found.' });
+      return res.status(404).json({ message: "Attendance record not found." });
     }
 
     res.status(200).json(attendance); // Return the updated attendance record
   } catch (error) {
-    console.error('Error updating attendance:', error);
-    res.status(500).json({ message: 'Error updating attendance.' });
+    console.error("Error updating attendance:", error);
+    res.status(500).json({ message: "Error updating attendance." });
   }
 };
-
-
 
 exports.AttendanceGetAttendanceByUserId = async (req, res, next) => {
   const { user_id } = req.params; // ID of the user
@@ -80,26 +78,21 @@ exports.AttendanceGetAttendanceByUserId = async (req, res, next) => {
       .sort({ loginTime: -1 }) // Sort by loginTime in descending order
       .limit(1); // Limit to the latest record of the day
 
-   
     res.json(attendance);
   } catch (error) {
-    console.error('Error retrieving attendance:', error);
-    res.status(500).json({ message: 'Error retrieving attendance.' });
+    console.error("Error retrieving attendance:", error);
+    res.status(500).json({ message: "Error retrieving attendance." });
   }
 };
 
-
 exports.getAllAttendanceUserById = async (req, res, next) => {
   const { user_id } = req.params; // ID of the user and by field
-  
+
   try {
-    const attendance = await Attendance.find({ user_id});
+    const attendance = await Attendance.find({ user_id });
     res.json(attendance);
-    } catch (error) {
-      console.error('Error retrieving attendance:', error);
-      res.status(500).json({ message: 'Error retrieving attendance.' });
-    }
-    };
-
-
-
+  } catch (error) {
+    console.error("Error retrieving attendance:", error);
+    res.status(500).json({ message: "Error retrieving attendance." });
+  }
+};

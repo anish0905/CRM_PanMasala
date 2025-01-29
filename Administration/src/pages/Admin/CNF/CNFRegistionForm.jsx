@@ -4,9 +4,11 @@ import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { IoMdClose } from "react-icons/io";
 import stateData from "../../../statesData"; // Import stateData
+import { useLocation } from "react-router-dom";
 
 const CNFRegistionForm = ({ onClose, selectedCNF, fetchCNFs }) => {
   const [subAdmins, setSubAdmins] = useState([]);
+  const currentUserId = localStorage.getItem("userId");
   const [formData, setFormData] = useState({
     username: "",
     email: "",
@@ -20,11 +22,13 @@ const CNFRegistionForm = ({ onClose, selectedCNF, fetchCNFs }) => {
     pinCode: "",
     selectedsubAdmin: "",
     district: "",
-    subAdmin: "", // This will store subAdmin selection
+    subAdmin: "",
     region: "", // Added region to the form data
   });
 
   const URI = import.meta.env.VITE_API_URL;
+
+  const location = useLocation();
 
   // Handle form field changes
   const handleChange = (e) => {
@@ -41,6 +45,13 @@ const CNFRegistionForm = ({ onClose, selectedCNF, fetchCNFs }) => {
   const handlesubAdminChange = (e) => {
     setFormData({ ...formData, subAdmin: e.target.value });
   };
+
+  // Set subAdmin if on specific page
+  useEffect(() => {
+    if (location.pathname === "/manage/CNF/Registration/sub-Admin") {
+      setFormData({ ...formData, subAdmin: currentUserId });
+    }
+  }, [location.pathname]);
 
   // Handle form submission
   const handleSubmit = async (e) => {
@@ -97,18 +108,20 @@ const CNFRegistionForm = ({ onClose, selectedCNF, fetchCNFs }) => {
     }
   };
 
+  // Fetch sub-admins data if not on sub-admin registration page
   useEffect(() => {
-    fetchSubAdmin();
-  }, []);
-
-  const fetchSubAdmin = async () => {
-    try {
-      const respo = await axios.get(`${URI}/api/subAdmin/getAlluser`);
-      setSubAdmins(respo.data);
-    } catch (error) {
-      console.error("Error fetching sub-admins:", error);
+    if (location.pathname !== "/manage/CNF/Registration/sub-Admin") {
+      const fetchSubAdmin = async () => {
+        try {
+          const respo = await axios.get(`${URI}/api/subAdmin/getAlluser`);
+          setSubAdmins(respo.data);
+        } catch (error) {
+          console.error("Error fetching sub-admins:", error);
+        }
+      };
+      fetchSubAdmin();
     }
-  };
+  }, [location.pathname]);
 
   // Effect to pre-fill data when editing an existing sub-admin
   useEffect(() => {
@@ -322,7 +335,7 @@ const CNFRegistionForm = ({ onClose, selectedCNF, fetchCNFs }) => {
           </div>
 
           {/* Sub-Admin */}
-          <div>
+          {location.pathname !="/manage/CNF/Registration/sub-Admin" && (<div>
             <label htmlFor="subAdmin" className="block text-sm font-medium text-gray-700">Sub-Admin</label>
             <select
               id="subAdmin"
@@ -336,7 +349,7 @@ const CNFRegistionForm = ({ onClose, selectedCNF, fetchCNFs }) => {
                 <option key={index} value={user._id}>{user.username} ({user.state} {user.district})</option>
               ))}
             </select>
-          </div>
+          </div>)}
 
           {/* Submit Button */}
           <div className="mt-4">
