@@ -1,6 +1,6 @@
 import React from 'react';
 import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
-import { IoCloseSharp } from "react-icons/io5";
+import CloseIcon from '@mui/icons-material/Close'; // assuming you're using MUI for the CloseIcon
 
 export const Location = ({ onClose, location }) => {
   // Check if latitude and longitude are valid
@@ -12,8 +12,8 @@ export const Location = ({ onClose, location }) => {
   return (
     <div>
       <div className="justify-end flex">
-        <div className="text-white w-10 rounded-lg text-center cursor-pointer bg-red-500">
-          <IoCloseSharp onClick={onClose} className='text-4xl' />
+        <div className="text-white w-20 text-center cursor-pointer bg-red-500">
+          <CloseIcon onClick={onClose} />
         </div>
       </div>
 

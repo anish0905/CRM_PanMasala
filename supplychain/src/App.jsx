@@ -14,6 +14,8 @@ import FEA from "./pages/Distributer/FEA&FE/FEA.Details";
 import FE from "./pages/Distributer/FEA&FE/FE.Details";
 import FEARegistaionForm from "./pages/Distributer/FEA&FE/FEA_Register_Form";
 import Distributors from "./pages/CNF/distributors/Distributors";
+import DistributorsDetails from "./pages/CNF/distributors/DistributorsDetails";
+import MakeAttendance from "./pages/Attendance/Camera/Makeattendance";
 
 function App() {
   const navigate = useNavigate();
@@ -23,6 +25,7 @@ function App() {
 
   return (
     <Routes>
+      <Route path="/Attendance/:role/:work" element={<MakeAttendance />} />
       <Route path="/" element={<Login />} />
       <Route path="/CNFDashBoard" element={<CNFDashbord />} />
       <Route
@@ -49,6 +52,10 @@ function App() {
       <Route
         path="/manage/cnf/distributor/:name/:role"
         element={<Distributors />}
+      />
+      <Route
+        path="/manage/cnf/distributor/:id"
+        element={<DistributorsDetails />}
       />
     </Routes>
   );

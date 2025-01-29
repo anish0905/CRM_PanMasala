@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-
+import Sidebar from "../../../components/Sidebar/FEASidebar";
 import { useLocation, useNavigate } from "react-router-dom";
 import dayjs from "dayjs";
 import { Location } from "./Location";
@@ -13,11 +13,8 @@ import {
   FaRegCalendarAlt,
 } from "react-icons/fa";
 import { MdDateRange } from "react-icons/md";
-import AdminSidebar from "../AdminSidebar";
-import AdminSideBarModal from "../AdminSideBarModal";
 
-
-const AttendanceRecordDashboard = () => {
+const AttendanceRecord = () => {
   const { state } = useLocation();
   const user = state?.user;
   const [attendanceData, setAttendanceData] = useState([]);
@@ -36,7 +33,7 @@ const AttendanceRecordDashboard = () => {
   const [zoomedImageId, setZoomedImageId] = useState(null);
   const handleOpenModal = () => setModalOpen(true);
   const handleCloseImgModal = () => setModalOpen(false);
-  const navigate = useNavigate();
+  const navigate= useNavigate();
 
   const BASE_URL = import.meta.env.VITE_API_URL;
 
@@ -122,42 +119,36 @@ const AttendanceRecordDashboard = () => {
   };
 
   const handleBack = () => {
-    navigate(-1);
+    navigate(-1); 
   };
   return (
-    <div className="min-h-screen  flex w-full">
+    <div className="min-h-screen bg-blue-100 flex w-full">
       {/* Sidebar */}
-      <div className="hidden lg:block">
-        <AdminSidebar />
+      <div>
+        <Sidebar />
       </div>
 
-
       {/* Main Content */}
-      <div className="lg:ml-70 xl:ml-80  flex flex-col h-full px-5 my-4 w-full">
-        <header className="bg-[#93c5fd] rounded-md shadow p-4 flex items-center justify-between relative">
-          {/* Back Button */}
-          <button
-            onClick={handleBack}
-            className="absolute left-4 top-1/2 transform -translate-y-1/2 bg-[#1e40af] text-white text-xs sm:text-sm md:text-base lg:text-lg font-semibold px-3 sm:px-4 py-1.5 sm:py-2 rounded-lg hover:bg-blue-800 transition-colors duration-300 ease-in-out hidden sm:block  cursor-pointer"
-          >
-            Back
-          </button>
+      <div className="lg:p-5 md:p-5 p-4 w-full">
+      <header className="bg-[#93c5fd] rounded-md shadow p-4 flex items-center justify-between relative">
+      {/* Back Button */}
+      <button
+        onClick={handleBack}
+        className="absolute left-4 top-1/2 transform -translate-y-1/2 bg-[#1e40af] text-white text-sm md:text-base lg:text-lg font-semibold px-4 py-2 rounded-lg hover:bg-blue-800 transition-colors duration-300 ease-in-out hidden md:block"
+      >
+        Back
+      </button>
 
-          {/* Heading */}
-          <h1 className="flex-grow text-center text-xs sm:text-sm md:text-lg lg:text-xl font-bold text-gray-800">
-            Attendance Record
-          </h1>
+      {/* Heading */}
+      <h1 className="text-center flex-grow lg:text-xl md:text-base text-xs font-bold text-gray-800">
+        Attendance Record
+      </h1>
 
-          {/* Email Section */}
-          <div className="hidden sm:flex items-center lg:text-2xl md:text-xl text-sm font-bold text-white border-4 border-[#1e40af] p-2 rounded-lg bg-[rgb(42,108,194)] hover:bg-blue-800 transition-colors duration-300 ease-in-out">
-            {email}
-          </div>
-
-          {/* Management Sidebar Modal */}
-          <div className="lg:hidden block">
-            <AdminSideBarModal />
-          </div>
-        </header>
+      {/* Email Section */}
+      <div className="lg:text-2xl md:text-xl text-xs text-white font-bold border-4 border-[#1e40af] p-2 rounded-lg bg-[rgb(42,108,194)] hover:bg-blue-800 transition-colors duration-300 ease-in-out">
+        {email}
+      </div>
+    </header>
 
         {model && selectLocation && (
           <div className="fixed inset-0 z-50 flex items-center justify-center">
@@ -172,9 +163,9 @@ const AttendanceRecordDashboard = () => {
         )}
 
         {/* Attendance Table */}
-        <div className="overflow-x-auto mt-8">
+        <div className="overflow-x-auto p-4">
           {user && (
-            <div className="bg-gray-100 shadow-lg rounded-2xl p-6 grid gap-6 h-auto w-full">
+            <div className="bg-white shadow-lg rounded-2xl p-6 grid gap-6 h-auto w-full">
               {/* User Details Section */}
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 {/* Column 1 */}
@@ -275,14 +266,15 @@ const AttendanceRecordDashboard = () => {
           )}
 
           <div
-            className={`bg-white rounded-xl p-4 mt-8 ${filteredData.length > 7 ? "overflow-x-auto" : ""
-              }`}
+            className={`bg-white rounded-xl p-4 mt-8 ${
+              filteredData.length > 7 ? "overflow-x-auto" : ""
+            }`}
           >
             {filteredData.length > 0 ? (
               <table className="w-full table-auto">
                 <thead>
                   <tr className="bg-gray-200 text-left">
-                    <th className="p-2 bg-blue-100 text-sm sm:text-base">
+                    <th className="p-2 bg-blue-100  text-sm sm:text-base">
                       Date
                     </th>
                     <th className="p-2 bg-blue-200 text-sm sm:text-base">
@@ -312,8 +304,9 @@ const AttendanceRecordDashboard = () => {
                   {paginatedData.map((record, index) => (
                     <tr
                       key={record._id}
-                      className={`border-b ${index % 2 === 0 ? "bg-gray-50" : "bg-white"
-                        }`}
+                      className={`border-b ${
+                        index % 2 === 0 ? "bg-gray-50" : "bg-white"
+                      }`}
                     >
                       <td className="p-2 bg-blue-50 text-xs sm:text-sm lg:text-base">
                         {dayjs(record.logintime).format("YYYY-MM-DD")}
@@ -353,7 +346,7 @@ const AttendanceRecordDashboard = () => {
                                 )}
                               </div>
                               <button
-                                className="absolute top-2 right-2 bg-red-600 p-2 px-4 rounded-full text-white cursor-pointer"
+                                className="absolute top-2 right-2 bg-red-600 p-2 px-4 rounded-full text-white"
                                 onClick={handleCloseImgModal}
                               >
                                 Close
@@ -369,7 +362,7 @@ const AttendanceRecordDashboard = () => {
                           onClick={() =>
                             handleLocationModal(record.loginLocation)
                           }
-                          className="bg-blue-500 px-2 py-1 text-xs sm:text-sm text-white rounded-md hover:bg-blue-600 transition duration-200 ease-in-out shadow focus:outline-none focus:ring-2 focus:ring-blue-300 cursor-pointer"
+                          className="bg-blue-500 px-2 py-1 text-xs sm:text-sm text-white rounded-md hover:bg-blue-600 transition duration-200 ease-in-out shadow focus:outline-none focus:ring-2 focus:ring-blue-300"
                         >
                           Login Location
                         </button>
@@ -408,7 +401,7 @@ const AttendanceRecordDashboard = () => {
                                 )}
                               </div>
                               <button
-                                className="absolute top-2 right-2 bg-red-600 p-2 px-4 rounded-full text-white cursor-pointer"
+                                className="absolute top-2 right-2 bg-red-600 p-2 px-4 rounded-full text-white"
                                 onClick={handleCloseImgModal}
                               >
                                 Close
@@ -424,7 +417,7 @@ const AttendanceRecordDashboard = () => {
                           onClick={() =>
                             handleLocationModal(record.logoutLocation)
                           }
-                          className="bg-blue-500 px-2 py-1 text-xs sm:text-sm text-white rounded-md hover:bg-blue-600 transition duration-200 ease-in-out shadow focus:outline-none focus:ring-2 focus:ring-blue-300 cursor-pointer"
+                          className="bg-blue-500 px-2 py-1 text-xs sm:text-sm text-white rounded-md hover:bg-blue-600 transition duration-200 ease-in-out shadow focus:outline-none focus:ring-2 focus:ring-blue-300"
                         >
                           Logout Location
                         </button>
@@ -447,10 +440,11 @@ const AttendanceRecordDashboard = () => {
             <button
               onClick={() => setCurrentPage((prev) => Math.max(1, prev - 1))}
               disabled={currentPage === 1}
-              className={`px-4 py-2 rounded ${currentPage === 1
+              className={`px-4 py-2 rounded ${
+                currentPage === 1
                   ? "bg-gray-300 text-gray-700"
                   : "bg-blue-500 text-white hover:bg-blue-600"
-                }`}
+              }`}
             >
               Previous
             </button>
@@ -460,10 +454,11 @@ const AttendanceRecordDashboard = () => {
                 setCurrentPage((prev) => Math.min(totalPages, prev + 1))
               }
               disabled={currentPage === totalPages}
-              className={`px-4 py-2 rounded ${currentPage === totalPages
+              className={`px-4 py-2 rounded ${
+                currentPage === totalPages
                   ? "bg-gray-300 text-gray-700"
                   : "bg-blue-500 text-white hover:bg-blue-600"
-                }`}
+              }`}
             >
               Next
             </button>
@@ -474,4 +469,4 @@ const AttendanceRecordDashboard = () => {
   );
 };
 
-export default AttendanceRecordDashboard;
+export default AttendanceRecord;

@@ -13,7 +13,7 @@ const Distributors = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [sortField, setSortField] = useState("username");
   const [sortDirection, setSortDirection] = useState("asc");
-  const [selectedSuperStockist, setSelectedSuperStockist] = useState();
+
   const email = localStorage.getItem("email");
   const currentUserId = localStorage.getItem("currentUserId");
   const { name, role } = useParams();
@@ -35,12 +35,10 @@ const Distributors = () => {
       const response =
         location.pathname ===
           "/manage/cnf/distributor/supertockist-distributor/CNF" ||
-        location.pathname === "/manage/superstockist/Super-Stockist/CNF"
+        location.pathname ===
+          "/manage/cnf/distributor/supertockist-distributors/CNF"
           ? await fetch(`${BASE_URL}/api/superstockist/getAlluser`)
-          : await fetch(
-              `${BASE_URL}/api/superstockist/getAlluser/${currentUserId}`
-            );
-
+          : "";
       if (!response.ok) {
         throw new Error("Failed to fetch SuperStockists");
       }
@@ -83,38 +81,10 @@ const Distributors = () => {
     filteredAndSortedSuperStockists().length / itemsPerPage
   );
 
-  const handleDeleteClick = async (id) => {
-    const confirmResult = await Swal.fire({
-      title: "Are you sure?",
-      text: "This action cannot be undone!",
-      icon: "warning",
-      showCancelButton: true,
-      confirmButtonText: "Yes, delete it!",
-      cancelButtonText: "No, cancel!",
-      buttonsStyling: false, // Disable SweetAlert2 default button styling
-      customClass: {
-        confirmButton: "bg-red-500 text-white px-4 py-2 rounded-md mx-2", // Add margin to the button
-        cancelButton: "bg-gray-500 text-white px-4 py-2 rounded-md mx-2", // Add margin to the button
-      },
-    });
-
-    if (confirmResult.isConfirmed) {
-      try {
-        const response = await fetch(`${BASE_URL}/api/superstockist/${id}`, {
-          method: "DELETE",
-        });
-      } catch (error) {
-        console.error("Error Super Stockist:", error);
-        Swal.fire("Error", "Could not delete Super Stockist", "error");
-      }
-    }
-    fetchSuperStockists();
-  };
-
-  const handleUpdate = (superstockist) => {
+  const handleClick = (superstockist) => {
     console.log("Super Stockist", superstockist);
-    setSelectedSuperStockist(superstockist);
-    setShowModal(true);
+
+    navigate(`/manage/cnf/distributor/${superstockist}`);
   };
 
   const handleInventory = (user) => {
@@ -138,10 +108,6 @@ const Distributors = () => {
           <h1 className="flex-grow text-start text-xs sm:text-sm md:text-lg lg:text-xl font-bold text-gray-800">
             {name === "supertockist-distributor"
               ? "Superstockist Distributor"
-              : name === "Super-Stockist"
-              ? "Super Stockist List"
-              : name === "stock"
-              ? "Super Stockist Inventory"
               : "Super Stockist Registration"}
           </h1>
 
@@ -181,26 +147,15 @@ const Distributors = () => {
                     <th className="px-2 py-4 md:text-lg text-xs  border-r-2 border-white">
                       Name
                     </th>
-                    <th className="px-2 py-4 md:text-lg text-xs  border-r-2 border-white">
-                      Email
-                    </th>
-                    <th className="px-2 py-4 md:text-lg text-xs  border-r-2 border-white">
-                      Phone No
-                    </th>
+
                     <th className="px-2 py-4 md:text-lg text-xs  border-r-2 border-white">
                       State
                     </th>
                     <th className="px-2 py-4 md:text-lg text-xs  border-r-2 border-white">
-                      district
+                      District
                     </th>
                     <th className="px-2 py-4 md:text-lg text-xs  border-r-2 border-white">
-                      State
-                    </th>
-                    <th className="px-2 py-4 md:text-lg text-xs  border-r-2 border-white">
-                      Address
-                    </th>
-                    <th className="px-2 py-4 md:text-lg text-xs   border-r-2 border-white">
-                      PinCode
+                      City
                     </th>
 
                     <th className="px-2 py-4 md:text-lg text-xs">Actions</th>
@@ -215,12 +170,7 @@ const Distributors = () => {
                       <td className="px-2 py-4 md:text-lg text-xs  whitespace-nowrap overflow-hidden overflow-ellipsis border-r-2 border-white">
                         {SuperStockist.username}
                       </td>
-                      <td className="px-2 py-4 md:text-lg text-xs  whitespace-nowrap overflow-hidden overflow-ellipsis border-r-2 border-white">
-                        {SuperStockist.email}
-                      </td>
-                      <td className="px-2 py-4 md:text-lg text-xs  whitespace-nowrap overflow-hidden overflow-ellipsis border-r-2 border-white">
-                        {SuperStockist.mobileNo}
-                      </td>
+
                       <td className="px-2 py-4 md:text-lg text-xs  whitespace-nowrap overflow-hidden overflow-ellipsis border-r-2 border-white">
                         {SuperStockist.state}
                       </td>
@@ -230,17 +180,11 @@ const Distributors = () => {
                       <td className="px-2 py-4 md:text-lg text-xs  whitespace-nowrap overflow-hidden overflow-ellipsis border-r-2 border-white">
                         {SuperStockist.city}
                       </td>
-                      <td className="px-2 py-4 md:text-lg text-xs  whitespace-nowrap overflow-hidden overflow-ellipsis border-r-2 border-white">
-                        {SuperStockist.address}
-                      </td>
-                      <td className="px-2 py-4 md:text-lg text-xs  whitespace-nowrap overflow-hidden overflow-ellipsis  border-r-2 border-white">
-                        {SuperStockist.pinCode}
-                      </td>
 
                       <td className="px-2 py-4 md:text-lg text-xs  whitespace-nowrap overflow-hidden overflow-ellipsis ">
                         <>
                           <button
-                            onClick={() => handleUpdate(SuperStockist._id)}
+                            onClick={() => handleClick(SuperStockist._id)}
                             className="bg-blue-500 text-white p-2 rounded cursor-pointer"
                           >
                             View
