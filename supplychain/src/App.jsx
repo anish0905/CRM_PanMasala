@@ -18,6 +18,7 @@ import DistributorsDetails from "./pages/CNF/distributors/DistributorsDetails";
 import MakeAttendance from "./pages/Attendance/Camera/Makeattendance";
 import ShowcaseProduct from "./Component/Showcase/ShowcaseProduct";
 import ShowcaseProductReport from "./Component/Showcase/ShowcaseProductReport";
+import ShowCase from "./Component/Showcase/ShowCase";
 
 function App() {
   const navigate = useNavigate();
@@ -27,6 +28,7 @@ function App() {
 
   return (
     <Routes>
+      <Route path="/showCase" element={<ShowCase />} />
       <Route path="/Attendance/:role/:work" element={<MakeAttendance />} />
       <Route path="/" element={<Login />} />
       <Route path="/CNFDashBoard" element={<CNFDashbord />} />
@@ -34,17 +36,12 @@ function App() {
         path="/SuperStockistDashBoard"
         element={<SuperStockistdashboard />}
       />
-
       // showcase
       <Route
         path="/ShowcaseProductReport"
-        element={<ShowcaseProductReport/>}
+        element={<ShowcaseProductReport />}
       />
-      <Route
-        path="/ShowcaseProduct"
-        element={<ShowcaseProduct />}
-      />
-
+      <Route path="/ShowcaseProduct" element={<ShowcaseProduct />} />
       // Distributer
       <Route path="/DistributorDashBoard" element={<DistributerDashBoard />} />
       <Route

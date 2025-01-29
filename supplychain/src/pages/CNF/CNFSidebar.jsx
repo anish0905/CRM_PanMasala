@@ -10,8 +10,9 @@ import {
   MdOutlineEventAvailable,
   MdInventory,
 } from "react-icons/md";
-import { GiShop } from "react-icons/gi";
+
 import { TbReport } from "react-icons/tb";
+import { GiGlassBall, GiShop } from "react-icons/gi";
 
 const CNFSidebar = ({ onClose }) => {
   const [showDropdown, setShowDropdown] = useState(false);
@@ -69,6 +70,12 @@ const CNFSidebar = ({ onClose }) => {
           icon={<RxDashboard style={{ color: "#eab308", fontSize: "2rem" }} />}
           text="Dashboard"
           onClick={() => handleItemClick("/managementDashboard")}
+        />
+
+        <NavItem
+          icon={<GiGlassBall style={{ color: "#eab308", fontSize: "2rem" }} />}
+          text="Show Case"
+          onClick={() => handleItemClick("/showCase")}
         />
         <NavItem
           icon={
