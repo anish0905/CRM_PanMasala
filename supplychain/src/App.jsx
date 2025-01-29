@@ -16,6 +16,7 @@ import FEARegistaionForm from "./pages/Distributer/FEA&FE/FEA_Register_Form";
 import Distributors from "./pages/CNF/distributors/Distributors";
 import DistributorsDetails from "./pages/CNF/distributors/DistributorsDetails";
 import MakeAttendance from "./pages/Attendance/Camera/Makeattendance";
+import AttendanceRecord from "./pages/Attendance/attendanceRecord/AttendanceRecord";
 
 function App() {
   const navigate = useNavigate();
@@ -57,6 +58,12 @@ function App() {
         path="/manage/cnf/distributor/:id"
         element={<DistributorsDetails />}
       />
+
+      <Route
+        path="/manage/Attendance/:role"
+        element={<AttendanceRecord />}
+      />
+
     </Routes>
   );
 }
