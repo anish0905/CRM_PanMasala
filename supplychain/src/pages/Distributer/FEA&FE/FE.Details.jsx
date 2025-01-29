@@ -47,10 +47,6 @@ const FE = () => {
     }
   };
 
-  const handleRegisterButtonClick = () => {
-    setShowModal(true);
-  };
-
   const handleCloseModal = () => {
     setShowModal(false);
   };
@@ -159,21 +155,18 @@ const FE = () => {
           <h1 className="flex-grow text-start text-xs sm:text-sm md:text-lg lg:text-xl font-bold text-gray-800">
             Field Executive
           </h1>
-          <SMSDrawer />
-          {work === "Registration" && (
-            <button
-              onClick={handleRegisterButtonClick}
-              className="lg:mr-12 lg:-ml-2 md:mr-8 mr-2 lg:text-xl md:text-lg  lg:p-3 bg-[#1e40af] rounded-md text-white p-2 text-xs  font-semibold cursor-pointer"
-            >
-              Register
-            </button>
-          )}
-
-          {email && (
-            <div className="hidden sm:flex items-center lg:text-2xl md:text-xl text-sm font-bold text-white border-4 border-[#1e40af] p-2 rounded-lg bg-[rgb(42,108,194)] hover:bg-blue-800 transition-colors duration-300 ease-in-out">
-              {email}
+          <div>
+            <SMSDrawer />
+          </div>
+          <div className="flex gap-0">
+            <div className="flex gap-[2px] items-center">
+              {email && (
+                <div className="sm:flex items-center lg:text-2xl md:text-xl text-sm font-bold text-white border-2 border-[#1e40af] p-2 rounded-lg bg-[rgb(42,108,194)] hover:bg-blue-800 transition-colors duration-300 ease-in-out">
+                  {email}
+                </div>
+              )}
             </div>
-          )}
+          </div>
           <div className="lg:hidden block">
             <DistributorBarModal />
           </div>
@@ -205,7 +198,7 @@ const FE = () => {
                 placeholder="Search by Name, Address, or Email"
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="p-2 border rounded"
+                className="p-2 border rounded bg-gray-200 text-gray-800 placeholder-gray-500 focus:ring-2 focus:ring-gray-400"
               />
               <select
                 id="state"
@@ -213,12 +206,11 @@ const FE = () => {
                 value={selectedState}
                 onChange={(e) => setSelectedState(e.target.value)}
                 required
-                className="p-3 w-full border text-black border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="p-3 w-full border bg-gray-200 text-black border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-gray-400"
               >
                 <option value="" disabled>
                   Select your state
                 </option>
-                {/* List of states */}
                 <option value="Assam">Assam</option>
                 <option value="Bihar">Bihar</option>
                 {/* Add other states */}
@@ -248,6 +240,7 @@ const FE = () => {
                 <option value="West Bengal">West Bengal</option>
               </select>
             </div>
+
             <div
               className="overflow-x-auto overflow-y-auto"
               style={{ maxHeight: "600px" }}
@@ -333,33 +326,33 @@ const FE = () => {
 
           {/* Pagination */}
           <div className="flex justify-center items-center my-4 gap-4">
-              {/* Conditionally render the Previous button */}
-              {currentPage > 1 && (
-                <button
-                  onClick={() => setCurrentPage(Math.max(1, currentPage - 1))}
-                  className="px-4 py-2 bg-blue-500 text-white rounded-md"
-                >
-                  Previous
-                </button>
-              )}
+            {/* Conditionally render the Previous button */}
+            {currentPage > 1 && (
+              <button
+                onClick={() => setCurrentPage(Math.max(1, currentPage - 1))}
+                className="px-4 py-2 bg-blue-500 text-white rounded-md"
+              >
+                Previous
+              </button>
+            )}
 
-              {/* Display the page number in the center */}
-              <span className="font-bold text-lg">
-                Page {currentPage} of {totalPages}
-              </span>
+            {/* Display the page number in the center */}
+            <span className="font-bold text-lg">
+              Page {currentPage} of {totalPages}
+            </span>
 
-              {/* Conditionally render the Next button */}
-              {currentPage < totalPages && (
-                <button
-                  onClick={() =>
-                    setCurrentPage(Math.min(totalPages, currentPage + 1))
-                  }
-                  className="px-4 py-2 bg-blue-500 text-white rounded-md"
-                >
-                  Next
-                </button>
-              )}
-            </div>
+            {/* Conditionally render the Next button */}
+            {currentPage < totalPages && (
+              <button
+                onClick={() =>
+                  setCurrentPage(Math.min(totalPages, currentPage + 1))
+                }
+                className="px-4 py-2 bg-blue-500 text-white rounded-md"
+              >
+                Next
+              </button>
+            )}
+          </div>
         </div>
       </div>
     </div>

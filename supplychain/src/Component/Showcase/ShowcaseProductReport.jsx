@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import DistributorSidebar from "../sidebar/DistributorSidebar";
-import "../sidebar/DistributorSidebar.css"
+import DistributorSidebar from "../../pages/Distributer/sidebar/DistributorSidebar";
+import "../../pages/Distributer/sidebar/DistributorSidebar.css"
 
-const DistributorProductReport = () => {
+const ShowcaseProductReport = () => {
   const [showCases, setShowCases] = useState([]);
   const [error, setError] = useState(null);
   const [searchTerm, setSearchTerm] = useState("");
@@ -135,7 +135,7 @@ const DistributorProductReport = () => {
                   <p className="text-lg font-bold text-blue-600 mt-2">
                     ₹{showCase.productEommDetails.price}
                   </p>
-                  <div className="mt-4 text-center">
+                  {/* <div className="mt-4 text-center">
                     <p className="font-semibold">Fragrance:</p>
                     <span className="text-">
                       {" "}
@@ -149,7 +149,7 @@ const DistributorProductReport = () => {
                     <span className="text-2xl">
                       {renderStars(showCase.averageReviewsRating)}
                     </span>
-                  </div>
+                  </div> */}
                 </div>
               ))
             ) : (
@@ -164,4 +164,4 @@ const DistributorProductReport = () => {
   );
 };
 
-export default DistributorProductReport;
+export default ShowcaseProductReport;

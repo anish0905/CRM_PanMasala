@@ -4,6 +4,7 @@ import "./SuperStockistSidebar.css";
 // import "../../Styles/Styles.css";
 import logo from "../../../assets/logo.png";
 import { FaShoppingCart, FaUserPlus, FaSignOutAlt } from "react-icons/fa";
+import { RiUserLocationFill } from "react-icons/ri";
 import { RxDashboard } from "react-icons/rx";
 import {
   MdOutlineDeliveryDining,
@@ -228,8 +229,8 @@ const SuperStockistSidebar = ({ onClose }) => {
             className="nav-item nav-item-dropdown flex items-center gap-4 cursor-pointer p-4 transition duration-300 ease-in-out transform rounded-full mb-2"
             onClick={toggleNearByDropdown}
           >
-            <MdOutlineManageAccounts
-              style={{ color: "#047857", fontSize: "2rem" }}
+            <RiUserLocationFill
+              style={{ color: "#ed9940", fontSize: "2rem" }}
             />
             <span className="text-lg font-semibold">Search NearBy</span>
           </span>

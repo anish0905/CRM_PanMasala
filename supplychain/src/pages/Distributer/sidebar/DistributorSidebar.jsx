@@ -78,8 +78,8 @@ const DistributorSidebar = ({ onClose }) => {
         />
         <NavItem
           icon={<GiGlassBall style={{ color: "#eab308", fontSize: "2rem" }} />}
-          text="Showcase Report"
-          onClick={() => handleItemClick("/DistributorProductReport")}
+          text="Showcase "
+          onClick={() => handleItemClick("/ShowcaseProductReport")}
         />
         <NavItem
           icon={
@@ -169,7 +169,7 @@ const DistributorSidebar = ({ onClose }) => {
               />
               <DropdownItem
                 text="FEA Details"
-                onClick={() => handleItemClick("/FEA")}
+                onClick={() => handleItemClick("/FEA/Registration")}
               />
               <DropdownItem
                 text="FE Details"

@@ -160,22 +160,28 @@ const FEA = () => {
           <h1 className="flex-grow text-start text-xs sm:text-sm md:text-lg lg:text-xl font-bold text-gray-800">
             Field Executive Approval
           </h1>
-          <SMSDrawer />
-          {work === "Registration" && (
-            <button
-              onClick={handleRegisterButtonClick}
-              aria-label="Register a new Field Executive"
-              className="lg:mr-12 lg:-ml-2 md:mr-8 mr-2 lg:text-xl md:text-lg lg:p-3 bg-[#1e40af] hover:bg-[#1d4ed8] focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 rounded-md text-white p-2 text-xs font-semibold transition-all duration-300 ease-in-out shadow-md"
-            >
-              Register
-            </button>
-          )}
-
-          {email && (
-            <div className="hidden sm:flex items-center lg:text-2xl md:text-xl text-sm font-bold text-white border-4 border-[#1e40af] p-2 rounded-lg bg-[rgb(42,108,194)] hover:bg-blue-800 transition-colors duration-300 ease-in-out">
-              {email}
+          <div>
+            <SMSDrawer />
+          </div>
+          <div className="flex gap-0">
+            <div className="flex gap-[2px] items-center">
+              {work === "Registration" && (
+                <button
+                  onClick={handleRegisterButtonClick}
+                  aria-label="Register a new Field Executive"
+                  className="lg:text-xl md:text-lg lg:p-3 bg-[#1e40af] hover:bg-[#1d4ed8] focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 rounded-md text-white p-2 text-xs font-semibold transition-all duration-300 ease-in-out shadow-md"
+                >
+                  Register
+                </button>
+              )}
+              {email && (
+                <div className="sm:flex items-center lg:text-2xl md:text-xl text-sm font-bold text-white border-2 border-[#1e40af] p-2 rounded-lg bg-[rgb(42,108,194)] hover:bg-blue-800 transition-colors duration-300 ease-in-out">
+                  {email}
+                </div>
+              )}
             </div>
-          )}
+          </div>
+
           <div className="lg:hidden block">
             <DistributorBarModal />
           </div>
