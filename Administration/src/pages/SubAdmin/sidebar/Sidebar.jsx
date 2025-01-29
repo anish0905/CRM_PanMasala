@@ -11,7 +11,7 @@ import {
   MdOutlineEventAvailable,
   MdInventory,
 } from "react-icons/md";
-import { GiShop } from "react-icons/gi";
+import { GiGlassBall, GiShop } from "react-icons/gi";
 import { TbReport } from "react-icons/tb";
 
 const Sidebar = ({ onClose }) => {
@@ -70,6 +70,12 @@ const Sidebar = ({ onClose }) => {
           text="Dashboard"
           onClick={() => handleItemClick("/SubadminDashBoard")}
         />
+
+        <NavItem
+          icon={<GiGlassBall style={{ color: "#eab308", fontSize: "2rem" }} />}
+          text="Show Case"
+          onClick={() => handleItemClick("/showCase")}
+        />
         <NavItem
           icon={
             <FaShoppingCart style={{ color: "#047857", fontSize: "2rem" }} />
@@ -117,11 +123,12 @@ const Sidebar = ({ onClose }) => {
           </span>
           {showDropdown && (
             <div className="flex justify-start ml-10 flex-col font-semibold text-xl text-black">
-               <DropdownItem
+              <DropdownItem
                 text="CNF"
-                onClick={() => handleItemClick("/manage/CNF/Registration/sub-Admin")}
+                onClick={() =>
+                  handleItemClick("/manage/CNF/Registration/sub-Admin")
+                }
               />
-              
             </div>
           )}
         </div>
@@ -146,24 +153,9 @@ const Sidebar = ({ onClose }) => {
                   )
                 }
               />
-            
-              
             </div>
           )}
         </div>
-
-        
-
-       
-
-        
-        
-
-        
-
-        
-       
-        
 
         <LogoutItem
           icon={<FaSignOutAlt style={{ color: "gray", fontSize: "2rem" }} />}

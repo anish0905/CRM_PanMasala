@@ -10,6 +10,9 @@ import {
   MdOutlineEventAvailable,
   MdInventory,
 } from "react-icons/md";
+
+import { TbReport } from "react-icons/tb";
+import { GiGlassBall, GiShop } from "react-icons/gi";
 import { CgProfile } from "react-icons/cg";
 import Swal from 'sweetalert2';
 
@@ -85,6 +88,12 @@ const CNFSidebar = ({ onClose }) => {
           icon={<RxDashboard style={{ color: "#eab308", fontSize: "2rem" }} />}
           text="Dashboard"
           onClick={() => handleItemClick("/managementDashboard")}
+        />
+
+        <NavItem
+          icon={<GiGlassBall style={{ color: "#eab308", fontSize: "2rem" }} />}
+          text="Show Case"
+          onClick={() => handleItemClick("/showCase")}
         />
         <NavItem
           icon={

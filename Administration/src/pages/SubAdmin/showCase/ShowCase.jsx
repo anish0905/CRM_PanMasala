@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from "react";
-import DistributorbarModal from "../../pages/Distributer/sidebar/DistributorBarModal";
-import DistributorSidebar from "../../pages/Distributer/sidebar/DistributorSidebar";
+import AdminSideBarModal from "../sidebar/SidebarModel";
+import AdminSidebar from "../sidebar/Sidebar";
 import axios from "axios";
+import RightSideDrawer from "../../../components/RightSideDrawer";
 
-const ShowcaseProduct = () => {
+const ShowCase = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [productName, setProductName] = useState("");
   const [productDescription, setProductDescription] = useState("");
@@ -89,7 +90,7 @@ const ShowcaseProduct = () => {
   return (
     <div className="flex gap-6 bg-blue-100 w-full min-h-screen p-5">
       <div className=" hidden lg:block">
-        <DistributorSidebar />
+        <AdminSidebar />
       </div>
 
       <div className="lg:ml-80  font-serif w-full lg:p-10 md:p-5 ">
@@ -97,7 +98,7 @@ const ShowcaseProduct = () => {
           <h1 className="flex-grow text-start text-xs sm:text-sm md:text-lg lg:text-xl font-bold text-gray-800">
             My Product
           </h1>
-        
+          <RightSideDrawer />
 
           {email && (
             <div className="hidden sm:flex items-center lg:text-2xl md:text-xl text-sm font-bold text-white border-4 border-[#1e40af] p-2 rounded-lg bg-[rgb(42,108,194)] hover:bg-blue-800 transition-colors duration-300 ease-in-out">
@@ -105,7 +106,7 @@ const ShowcaseProduct = () => {
             </div>
           )}
           <div className="lg:hidden block">
-            <DistributorbarModal />
+            <AdminSideBarModal />
           </div>
         </div>
 
@@ -230,4 +231,4 @@ const ShowcaseProduct = () => {
   );
 };
 
-export default ShowcaseProduct;
+export default ShowCase;
