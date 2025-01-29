@@ -8,13 +8,12 @@ const storage = multer.diskStorage({
   },
   filename: function (req, file, cb) {
     const extension = path.extname(file.originalname);
-    const uniqueName = `${path.basename(
-      file.originalname,
-      extension
-    )}-${Date.now()}${extension}`;
+    const sanitizedFilename = file.originalname.replace(/\s+/g, "_"); // Replace spaces with underscores
+    const uniqueName = `${sanitizedFilename}-${Date.now()}${extension}`;
     cb(null, uniqueName);
   },
 });
+
 
 // Initialize multer with the defined storage
 const upload = multer({ storage });

@@ -13,16 +13,14 @@ const uploadProduct = (req, res, next) => {
       return res.status(500).send("An unknown error occurred");
     }
 
-    // Extracting fields from req.body
     const { title, description, price } = req.body;
 
-    // Ensure req.file is available
     if (!req.file) {
       return res.status(400).send("No file uploaded.");
     }
 
     const fileData = new Product({
-      image: req.file.filename, // Corrected from req.file.image
+      image: req.file.filename,
       title,
       description,
       price,
@@ -30,13 +28,14 @@ const uploadProduct = (req, res, next) => {
 
     try {
       await fileData.save();
-      const fileUrl = `${req.protocol}://${req.get("host")}/uploads/${
-        req.file.filename
-      }`;
+      
+      // ✅ Define `fileUrl` inside the request handler, where `req` is available.
+      const fileUrl = `${req.protocol}://${req.get("host")}/uploads/${req.file.filename}`;
+
       res.json({
         message: "Upload successful",
         file: req.file,
-        url: fileUrl,
+        url: fileUrl, // ✅ Now correctly defined inside the function.
         fileData,
       });
     } catch (error) {
@@ -44,6 +43,7 @@ const uploadProduct = (req, res, next) => {
     }
   });
 };
+
 
 const getAllProduct = async (req, res) => {
   try {
