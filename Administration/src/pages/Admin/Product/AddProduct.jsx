@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import AdminSideBarModal from '../AdminSideBarModal'
-import AdminSidebar from '../AdminSideBar';
+import AdminSidebar from '../AdminSidebar';
 import axios from "axios";
 import RightSideDrawer from "../../../components/RightSideDrawer";
 
@@ -273,7 +273,7 @@ const AddProduct = () => {
                 className="border-2 border-blue-500 hover:border-blue-50 p-4 rounded-lg shadow-lg flex flex-col items-center transition-all duration-300 hover:shadow-xl hover:scale-105 hover:bg-gray-50"
               >
                 <img
-                  src={`${URI}/src/uploads/${product.image}`} // Assuming image URLs are served from '/uploads' directory
+                  src={`${URI}/uploads/${product.image}`} // Assuming image URLs are served from '/uploads' directory
                   alt={product.title}
                   className="w-full h-60 object-contain mb-4 transition-all duration-300 hover:scale-105"
                 />

@@ -2,6 +2,7 @@ const express = require("express");
 const dotenv = require("dotenv").config();
 const cors = require("cors");
 const connectDb = require("./src/config/dbConnection");
+const path = require("path");
 
 // Import Routes
 const adminRoutes = require("./src/routes/adminRoutes");
@@ -48,7 +49,8 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-// Routes
+// Routes image upload
+app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
 // Admin Routes
 app.use("/api/admin", adminRoutes);

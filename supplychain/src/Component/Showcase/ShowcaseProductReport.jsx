@@ -135,21 +135,7 @@ const ShowcaseProductReport = () => {
                   <p className="text-lg font-bold text-blue-600 mt-2">
                     ₹{showCase.productEommDetails.price}
                   </p>
-                  {/* <div className="mt-4 text-center">
-                    <p className="font-semibold">Fragrance:</p>
-                    <span className="text-">
-                      {" "}
-                      {renderStars(showCase.averageFragranceRating)}
-                    </span>
-                    <p className="font-semibold mt-2">Taste/Flavor:</p>                 
-                    <span className="text-2xl">
-                      {renderStars(showCase.averageTasteAndFlavorRating)}
-                    </span>
-                    <p className="font-semibold mt-2 ">Kick and High:</p>
-                    <span className="text-2xl">
-                      {renderStars(showCase.averageReviewsRating)}
-                    </span>
-                  </div> */}
+                  
                 </div>
               ))
             ) : (
