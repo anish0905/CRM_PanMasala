@@ -65,10 +65,11 @@ const MakeAttendance = () => {
 
       const payload = {
         user_id: userId,
+        role: role.toLocaleLowerCase(), //,
         [`${isLogin ? "login" : "logout"}Img`]: capturedData.image,
         [`${isLogin ? "login" : "logout"}Location`]: {
-          lat: capturedData.location.latitude,
-          lng: capturedData.location.longitude,
+          latitude: capturedData.location.latitude,
+          longitude: capturedData.location.longitude,
         },
       };
 
