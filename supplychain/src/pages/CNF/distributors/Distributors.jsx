@@ -6,6 +6,7 @@ import { useLocation, useNavigate, useParams } from "react-router-dom";
 import SuperstockistRegister from "../../CNF/superStockist/SuperstockistRegister";
 import CNFSidebar from "../../CNF/CNFSidebar";
 import CNFSideBarModal from "../../CNF/CNFSideBarModal";
+import SMSDrawer from "../../../Component/SMS_Drawer";
 
 const Distributors = () => {
   const [SuperStockists, setSuperStockists] = useState([]);
@@ -121,6 +122,9 @@ const Distributors = () => {
               <CNFSideBarModal />
             </div>
           )}
+           <div>
+        <SMSDrawer />
+      </div>
         </div>
 
         <div className=" py-8">

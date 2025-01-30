@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react";
 import DistributorbarModal from "../../pages/Distributer/sidebar/DistributorBarModal";
 import DistributorSidebar from "../../pages/Distributer/sidebar/DistributorSidebar";
 import axios from "axios";
+import SMSDrawer from "../SMS_Drawer";
+import { FcSearch } from "react-icons/fc";
 
 const ShowcaseProduct = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -92,30 +94,33 @@ const ShowcaseProduct = () => {
         <DistributorSidebar />
       </div>
 
-      <div className="lg:ml-80  font-serif w-full lg:p-10 md:p-5 ">
+      <div className="lg:ml-72  font-serif w-full lg:p-10 md:p-5 ">
         <div className=" bg-[#93c5fd] rounded-md shadow p-4 flex gap-4 items-center justify-between">
           <h1 className="flex-grow text-start text-xs sm:text-sm md:text-lg lg:text-xl font-bold text-gray-800">
-            My Product
+            Our Product
           </h1>
-        
 
           {email && (
-            <div className="hidden sm:flex items-center lg:text-2xl md:text-xl text-sm font-bold text-white border-4 border-[#1e40af] p-2 rounded-lg bg-[rgb(42,108,194)] hover:bg-blue-800 transition-colors duration-300 ease-in-out">
+            <div className="hidden sm:flex items-center lg:text-2xl md:text-xl text-sm font-bold text-white border-2 border-[#1e40af] p-2 rounded-lg bg-[rgb(42,108,194)] hover:bg-blue-800 transition-colors duration-300 ease-in-out">
               {email}
             </div>
           )}
           <div className="lg:hidden block">
             <DistributorbarModal />
           </div>
+          <div>
+            <SMSDrawer />
+          </div>
         </div>
 
         {/* Search bar */}
-        <div className="my-6">
+        <div className="my-6 relative">
+          <FcSearch className="absolute left-3 top-1/2 transform -translate-y-1/2 text-xl text-gray-500" />
           <input
             type="text"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+            className="shadow appearance-none border rounded w-full py-2 pl-10 pr-3 py-2 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
             placeholder="Search by product name or description"
           />
         </div>

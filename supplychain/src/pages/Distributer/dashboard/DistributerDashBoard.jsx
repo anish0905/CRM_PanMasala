@@ -10,6 +10,7 @@ import { Link } from "react-router-dom";
 import Img from "../../../assets/avataaars.png";
 import DistributorBarModal from "../sidebar/DistributorBarModal"
 import DistributorSidebar from "../sidebar/DistributorSidebar";
+import SMSDrawer from "../../../Component/SMS_Drawer";
 // import OrderChart from "./OrderChart";
 // import OrderDetailsCityTaluka from "./OrderDetailsCityTaluka";
 
@@ -109,6 +110,9 @@ const DistributerDashBoard = () => {
           <div className="lg:hidden md:hidden block">
             <DistributorBarModal />
           </div>
+          <div>
+        <SMSDrawer />
+      </div>
         </div>
 
         <div className="grid lg:grid-cols-4 md:grid-cols-2 gap-4 my-10">
