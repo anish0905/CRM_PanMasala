@@ -123,7 +123,7 @@ const AdminSidebar = ({ onClose }) => {
                 text="CNF"
                 onClick={() => handleItemClick("/manage/CNF/Registration/Admin")}
               />
-              <DropdownItem
+              {/* <DropdownItem
                 text="Super Stockist"
                 onClick={() => handleItemClick("/manage/superstockist/Registration/Admin")}
               />
@@ -144,7 +144,7 @@ const AdminSidebar = ({ onClose }) => {
               <DropdownItem
                 text="Delivery Boy"
                 onClick={() => handleItemClick("/deliveryboyDetails")}
-              />
+              /> */}
 
               
 
