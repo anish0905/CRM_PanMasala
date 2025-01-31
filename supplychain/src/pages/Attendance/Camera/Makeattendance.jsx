@@ -63,9 +63,11 @@ const MakeAttendance = () => {
         return;
       }
 
+      let roleValue = role === "CNF" ? role : role.toLowerCase();
+
       const payload = {
         user_id: userId,
-        role: role.toLocaleLowerCase(), //,
+        role: roleValue,
         [`${isLogin ? "login" : "logout"}Img`]: capturedData.image,
         [`${isLogin ? "login" : "logout"}Location`]: {
           latitude: capturedData.location.latitude,
@@ -73,41 +75,43 @@ const MakeAttendance = () => {
         },
       };
 
-      const response = await (isLogin ? axios.post : axios.put)(
-        apiEndpoint,
-        payload
-      );
 
-      Swal.fire({
-        icon: "success",
-        title: isLogin ? "Login Successful" : "Logout Successful",
-        text: `You have successfully ${isLogin ? "logged in" : "logged out"}.`,
-        timer: 2000,
-        showConfirmButton: false,
-      });
 
-      if (isLogin) {
-        setTimeout(handleRedirection, 1000);
-      } else {
-        setTimeout(() => {
-          localStorage.clear();
-          navigate("/");
-        }, 3000);
-      }
-    } catch (error) {
-      console.error("Error:", error);
-      setError(`Failed to ${isLogin ? "login" : "logout"}.`);
+    const response = await (isLogin ? axios.post : axios.put)(
+      apiEndpoint,
+      payload
+    );
+
+    Swal.fire({
+      icon: "success",
+      title: isLogin ? "Login Successful" : "Logout Successful",
+      text: `You have successfully ${isLogin ? "logged in" : "logged out"}.`,
+      timer: 2000,
+      showConfirmButton: false,
+    });
+
+    if (isLogin) {
+      setTimeout(handleRedirection, 1000);
+    } else {
+      setTimeout(() => {
+        localStorage.clear();
+        navigate("/");
+      }, 3000);
     }
-  };
+  } catch (error) {
+    console.error("Error:", error);
+    setError(`Failed to ${isLogin ? "login" : "logout"}.`);
+  }
+};
 
-  return (
-    <div>
-      {(work === "Attendance" || work === "logout") && (
-        <NewCamera onCapture={handleCapture} role={role} />
-      )}
-      {error && <div className="text-red-500 mt-3">{error}</div>}
-    </div>
-  );
+return (
+  <div>
+    {(work === "Attendance" || work === "logout") && (
+      <NewCamera onCapture={handleCapture} role={role} />
+    )}
+    {error && <div className="text-red-500 mt-3">{error}</div>}
+  </div>
+);
 };
 
 export default MakeAttendance;
