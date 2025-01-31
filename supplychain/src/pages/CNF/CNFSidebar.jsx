@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom"; // Import useNavigate
 import "./CNFSidebar.css";
-// import "../../Styles/Styles.css";
+
 import logo from "../../assets/logo.png";
 import { FaShoppingCart, FaUserPlus, FaSignOutAlt } from "react-icons/fa";
 import { RxDashboard } from "react-icons/rx";
