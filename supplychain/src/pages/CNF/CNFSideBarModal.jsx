@@ -12,7 +12,7 @@ import CNFSidebar from "./CNFSidebar";
 export default function CNFSideBarModal() {
   const [open, setOpen] = React.useState(false);
   const theme = useTheme();
-  const fullScreen = useMediaQuery(theme.breakpoints.down("md"));
+  const fullScreen = useMediaQuery(theme.breakpoints.down("xs"));
 
   const handleClickOpen = () => {
     setOpen(true);

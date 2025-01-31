@@ -11,11 +11,14 @@
   border-radius: 10px; /* Optional: Add border radius */
 }
 
-.sidebar ul {
+.sidebar ul{
   padding-right: 10px;
   padding-left: 10px;
+  padding-top: 20px;
+  padding-bottom: 50px;
   overflow-y: auto; /* Enable vertical scrolling */
   scrollbar-width: none; /* Hide scrollbar in Firefox */
+
 }
 
 .sidebar ul::-webkit-scrollbar {
