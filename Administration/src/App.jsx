@@ -10,12 +10,14 @@ import SubAdminDetails from "./pages/Admin/subAdmin/SubAdminDetails";
 import CNFDetails from "./pages/Admin/CNF/CNFDetails";
 import AddProduct from "./pages/Admin/Product/AddProduct";
 import VendorRegisterIntrsted from "./pages/Admin/Vendor/VendorRegisterIntrsted";
+import VendorRegisterIntrsteds from "./pages/SubAdmin/Vendor/VendorRegisterIntrsted";
 import VendorNotInterested from "./pages/Admin/Vendor/VendorNotIntrested";
 import FEADetails from "./pages/Admin/FEA/FEADetails";
 import { ContentHistory } from "./pages/Admin/Vendor/ContentHistory";
 import AttendanceRecordDashboard from "./pages/Admin/Attendance/AttendanceRecordDashboard";
 import DistributorDetails from "./pages/Admin/Distributor/DistributorDetails";
 import ShowCase from "./pages/SubAdmin/showCase/ShowCase";
+
 import MakeAttendance from "./pages/Attendance/Camera/Makeattendance";
 function App() {
   const navigate = useNavigate();
@@ -44,6 +46,11 @@ function App() {
       <Route path="/Add-product" element={<AddProduct />} />
 
       <Route path="/mange/vendor/:name" element={<VendorRegisterIntrsted />} />
+
+      <Route
+        path="/mange/vendors/:name"
+        element={<VendorRegisterIntrsteds />}
+      />
 
       <Route
         path="/mange/vendor/Not-intrested"

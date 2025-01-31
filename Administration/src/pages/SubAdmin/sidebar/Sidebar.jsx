@@ -188,23 +188,23 @@ const Sidebar = ({ onClose }) => {
             <div className="flex justify-start ml-10 flex-col font-semibold text-xl text-black">
               <DropdownItem
                 text="Pending Vendor"
-                onClick={() => handleItemClick("/mange/vendor/pending")}
+                onClick={() => handleItemClick("/mange/vendors/pending")}
               />
               <DropdownItem
                 text="Re-verification vendor"
-                onClick={() => handleItemClick("/mange/vendor/re-verify")}
+                onClick={() => handleItemClick("/mange/vendors/re-verify")}
               />
               <DropdownItem
                 text="Approved Vendor"
-                onClick={() => handleItemClick("/mange/vendor/approved")}
+                onClick={() => handleItemClick("/mange/vendors/approved")}
               />
               <DropdownItem
                 text="Rejected Vendor"
-                onClick={() => handleItemClick("/mange/vendor/rejected")}
+                onClick={() => handleItemClick("/mange/vendors/rejected")}
               />
               <DropdownItem
                 text="Vendor Not Intrested"
-                onClick={() => handleItemClick("/mange/vendor/Not-intrested")}
+                onClick={() => handleItemClick("/mange/vendors/Not-intrested")}
               />
             </div>
           )}
