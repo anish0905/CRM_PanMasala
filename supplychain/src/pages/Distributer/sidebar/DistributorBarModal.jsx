@@ -13,7 +13,7 @@ import DistributorSidebar from './DistributorSidebar';
 export default function DistributorBarModal() {
   const [open, setOpen] = React.useState(false);
   const theme = useTheme();
-  const fullScreen = useMediaQuery(theme.breakpoints.down('md'));
+  const fullScreen = useMediaQuery(theme.breakpoints.down('xs'));
 
   const handleClickOpen = () => {
     setOpen(true);

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import dayjs from "dayjs";
-import { Location } from "./Location";
+import  Location  from "./Location";
 import Modal from "react-modal";
 import { FaRegCalendarAlt } from "react-icons/fa";
 import { MdDateRange } from "react-icons/md";
@@ -212,7 +212,7 @@ const AttendanceRecord = () => {
       {model && selectLocation && (
         <div className="fixed inset-0 z-50 flex items-center justify-center">
           <div className="absolute inset-0 bg-black opacity-50"></div>
-          <div className="z-50 bg-white w-[80%] p-8 rounded-lg shadow-lg">
+          <div className="z-50 bg-white w-[100%] p-8 rounded-lg shadow-lg">
             <Location onClose={handleLocationModalClose} location={selectLocation} />
           </div>
         </div>

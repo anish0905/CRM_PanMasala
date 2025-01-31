@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 
 import { useLocation, useNavigate } from "react-router-dom";
 import dayjs from "dayjs";
-import { Location } from "./Location";
+import  Location  from "./Location";
 import Modal from "react-modal";
 import {
   FaUser,
