@@ -19,6 +19,8 @@ import MakeAttendance from "./pages/Attendance/Camera/Makeattendance";
 import ShowcaseProduct from "./Component/Showcase/ShowcaseProduct";
 import ShowcaseProductReport from "./Component/Showcase/ShowcaseProductReport";
 import ShowCase from "./Component/Showcase/ShowCase";
+import AttendanceRecord from "./pages/Attendance/attendanceRecord/AttendanceRecord";
+import UserProfile from "./pages/UserProfile/userProfile";
 
 function App() {
   const navigate = useNavigate();
@@ -69,6 +71,12 @@ function App() {
         path="/manage/cnf/distributor/:id"
         element={<DistributorsDetails />}
       />
+
+      <Route
+        path="/manage/userProfile/:role"
+        element={<UserProfile />}
+      />
+
     </Routes>
   );
 }

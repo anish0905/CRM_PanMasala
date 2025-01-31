@@ -1,10 +1,16 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
-import CloseIcon from '@mui/icons-material/Close'; // assuming you're using MUI for the CloseIcon
+import CloseIcon from '@mui/icons-material/Close';
 
 export const Location = ({ onClose, location }) => {
-  // Check if latitude and longitude are valid
-  const isValidLocation = location && location.latitude !== null && location.longitude !== null;
+  // Log the location for debugging purposes
+  console.log('location:', location);
+
+  // Check if latitude and longitude are valid in the location object
+  const isValidLocation = location && location.latitude && location.longitude;
+
+  // Log the validity of location
+  console.log('isValidLocation:', isValidLocation);
 
   // If valid location, use the provided coordinates, otherwise use a default center (e.g., London)
   const center = isValidLocation ? [location.latitude, location.longitude] : [51.505, -0.09];
@@ -17,7 +23,7 @@ export const Location = ({ onClose, location }) => {
         </div>
       </div>
 
-      {/* Conditionally render the map only if valid location data exists */}
+      {/* Conditionally render the map only if the location is valid */}
       {isValidLocation ? (
         <MapContainer center={center} zoom={15} style={{ width: '100%', height: '800px' }}>
           <TileLayer
@@ -27,12 +33,12 @@ export const Location = ({ onClose, location }) => {
           <Marker position={center}>
             <Popup>
               Shop Location: <br />
-              Latitude: {location.latitude}, Longitude: {location.longitude}
+              latitude: {location.latitude}, longitude: {location.longitude}
             </Popup>
           </Marker>
         </MapContainer>
       ) : (
-        <div>Location data is not available.</div> // Fallback message when location data is invalid
+        <div>Location data is not available.</div> // Fallback message
       )}
     </div>
   );

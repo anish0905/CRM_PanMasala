@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom"; // Import useNavigate
 import "./DistributorSidebar.css";
 // import "../../Styles/Styles.css";
 import logo from "../../../assets/logo.png";
+import Swal from 'sweetalert2';
 
 import { FaShoppingCart, FaUserPlus, FaSignOutAlt } from "react-icons/fa";
 import { RiUserLocationFill } from "react-icons/ri";
@@ -14,7 +15,8 @@ import {
   MdOutlineEventAvailable,
   MdInventory,
 } from "react-icons/md";
-import { TbReport } from "react-icons/tb";
+
+import { CgProfile } from "react-icons/cg";
 
 const DistributorSidebar = ({ onClose }) => {
   const [showDropdown, setShowDropdown] = useState(false);
@@ -60,9 +62,27 @@ const DistributorSidebar = ({ onClose }) => {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
+
+
   const handleLogout = () => {
-    localStorage.clear();
-    navigate("/");
+    Swal.fire({
+      title: 'Are you sure?',
+      text: 'Do you want to log out? Make sure to finish your tasks before logging out.',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Yes, log out!',
+      cancelButtonText: 'Causal logout!',
+    }).then((result) => {
+      if (result.isConfirmed) {
+        
+        navigate('/Attendance/distributor/logout'); // Navigate to logout route
+      } else if (result.isDismissed) {
+        localStorage.clear(); 
+        navigate('/'); // Navigate to home page
+      }
+    });
   };
 
   return (
@@ -163,10 +183,7 @@ const DistributorSidebar = ({ onClose }) => {
           </span>
           {manageFEADropdown && (
             <div className="flex justify-start ml-10 flex-col font-semibold text-xl text-black">
-              <DropdownItem
-                text="Add-FEA"
-                onClick={() => handleItemClick("/FEARegistaionForm")}
-              />
+             
               <DropdownItem
                 text="FEA Details"
                 onClick={() => handleItemClick("/FEA/Registration")}
@@ -243,6 +260,17 @@ const DistributorSidebar = ({ onClose }) => {
             </div>
           )}
         </div>
+        <NavItem
+          icon={
+            <CgProfile style={{ color: "#047857", fontSize: "2rem" }} />
+           
+          }
+          text="My Profile"
+          onClick={() =>
+            handleItemClick("/manage/userProfile/distributor")
+           
+          }
+        />
         <LogoutItem
           icon={<FaSignOutAlt style={{ color: "gray", fontSize: "2rem" }} />}
           text="Logout"
@@ -273,7 +301,6 @@ const DropdownItem = ({ text, onClick }) => (
     {text}
   </div>
 );
-
 const LogoutItem = ({ icon, text, onClick }) => (
   <div
     className="nav-item flex items-center p-4 transition duration-300 ease-in-out transform hover:-translate-y-0.5 hover:scale-95 hover:text-white rounded-full mb-2 cursor-pointer"
@@ -285,5 +312,7 @@ const LogoutItem = ({ icon, text, onClick }) => (
     </span>
   </div>
 );
+
+
 
 export default DistributorSidebar;

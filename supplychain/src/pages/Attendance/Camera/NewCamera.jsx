@@ -7,15 +7,17 @@ function NewCamera({ cameraType, onCapture, onClose, role }) {
   const videoRef = useRef(null);
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
-  const userId = localStorage.getItem("userId");
-  const BASE_URL = import.meta.env.VITE_API_URL;
-  const navigate = useNavigate();
-
+  const [cameraMode, setCameraMode] = useState('user');
   const [currentLocation, setCurrentLocation] = useState({
     latitude: "",
     longitude: "",
     address: "",
   });
+
+  const toggleCamera = () => {
+    setCameraMode(prev => prev === 'user' ? 'environment' : 'user');
+  };
+
 
   const handleLocationChange = async (position) => {
     const { latitude, longitude } = position.coords;
@@ -39,34 +41,39 @@ function NewCamera({ cameraType, onCapture, onClose, role }) {
 
   useEffect(() => {
     const startCamera = async () => {
-      if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
-        try {
-          const constraints = {
-            video: {
-              facingMode: cameraType === "frontend" ? "user" : "environment",
-            },
-          };
-          const stream = await navigator.mediaDevices.getUserMedia(constraints);
-          if (videoRef.current) {
-            videoRef.current.srcObject = stream;
-          }
-        } catch (err) {
-          setError(`Error accessing camera: ${err.message}`);
-          console.error("Error accessing camera:", err);
+      setError(null);
+      
+      // Stop existing stream first
+      if (videoRef.current && videoRef.current.srcObject) {
+        videoRef.current.srcObject.getTracks().forEach(track => track.stop());
+      }
+
+      try {
+        const constraints = {
+          video: { facingMode: cameraMode }
+        };
+        
+        const stream = await navigator.mediaDevices.getUserMedia(constraints);
+        if (videoRef.current) {
+          videoRef.current.srcObject = stream;
         }
-      } else {
-        setError("getUserMedia API is not supported in this browser.");
-        console.error("getUserMedia API is not supported in this browser.");
+      } catch (err) {
+        setError(`Camera error: ${err.message}`);
+        console.error("Camera access error:", err);
       }
     };
 
     startCamera();
 
-    // Cleanup the stream when the component unmounts
     return () => {
-      stopCamera();
+      if (videoRef.current && videoRef.current.srcObject) {
+        videoRef.current.srcObject.getTracks().forEach(track => track.stop());
+      }
     };
-  }, [cameraType]);
+  }, [cameraMode]); // Restart camera when mode changes
+
+  // ... rest of the existing code (capturePhoto, etc) ...
+
 
   const stopCamera = () => {
     if (videoRef.current && videoRef.current.srcObject) {
@@ -107,45 +114,22 @@ function NewCamera({ cameraType, onCapture, onClose, role }) {
 
       setLoading(true);
 
-      const messageData = {
-        user_id: userId,
-        role : role.toLowerCase(),
-        loginLocation: {
+      const capturedData = {
+        image: imageDataUrl,
+        location: {
           latitude: currentLocation.latitude,
           longitude: currentLocation.longitude,
         },
-        loginImg: imageDataUrl, // The compressed Base64 encoded image
       };
 
+      setLoading(true);
       try {
-        const response = await axios.post(
-          `${BASE_URL}/api/attendance/login`,
-          messageData
-        );
-        console.log("Photo and data sent successfully:", response.data);
-
         if (onCapture) {
-          onCapture(imageDataUrl);
+          await onCapture(capturedData);
         }
-
         stopCamera();
-        if (role === "CNF") {
-          navigate("/CNFDashBoard");
-        } else if (role === "Distributor") {
-          navigate("/DistributorDashBoard");
-        } else if (role === "SuperStockist") {
-          navigate("/SuperStockistDashBoard");
-        }
-
-        if (onClose) {
-          onClose();
-        }
       } catch (error) {
-        if (error.response) {
-          console.error("Error response:", error.response.data);
-        }
-        console.error("Error sending data:", error.message);
-        setError("Failed to send photo and data.");
+        setError("Failed to process capture.");
       } finally {
         setLoading(false);
       }
@@ -163,17 +147,35 @@ function NewCamera({ cameraType, onCapture, onClose, role }) {
   }, []);
 
   return (
-    <div className="camera-container">
-      {error && <p className="error-message">{error}</p>}
-      <video ref={videoRef} autoPlay playsInline className="camera-video" />
+    <div className="camera-container h-screen ">
+  {error && <p className="error-message">{error}</p>}
+  <video ref={videoRef} autoPlay playsInline className="camera-video "  />
+  
+  <div className="camera-controls ">
+    <button
+      className="toggle-camera-button"
+      onClick={toggleCamera}
+      title="Switch camera"
+    >
+      🔄
+    </button>
+    
+    <div className="capture-button-container ">
       <button
         className="capture-button"
         onClick={capturePhoto}
         disabled={loading}
+        title="Take photo"
       >
-        {loading ? "Processing..." : "Capture Photo"}
+        {loading && (
+          <div className="loading-spinner">
+            {/* Add your spinner component or animation here */}
+          </div>
+        )}
       </button>
     </div>
+  </div>
+</div>
   );
 }
 

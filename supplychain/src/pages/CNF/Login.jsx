@@ -197,7 +197,7 @@ const Login = () => {
                   type="submit"
                   value="Sign In"
                   disabled={!role}
-                  className={`w-full py-3 rounded-lg font-bold text-lg shadow-lg mt-4 ${
+                  className={`w-full py-3 rounded-lg font-bold text-lg shadow-lg mt-4 cursor-pointer ${
                     role
                       ? "bg-blue-600 text-white hover:bg-white hover:text-blue-600 hover:border hover:border-blue-600 hover:shadow-xl"
                       : "bg-gray-400 text-gray-700 cursor-not-allowed"
@@ -209,7 +209,7 @@ const Login = () => {
 
               <button
                 onClick={handleBack}
-                className="w-full py-3 mt-4 mb-20 rounded-lg font-bold text-lg shadow-lg bg-gray-200 text-blue-600 hover:bg-gray-300 hover:shadow-xl"
+                className="w-full py-3 mt-4 mb-20 rounded-lg font-bold text-lg shadow-lg bg-gray-200 text-blue-600 hover:bg-gray-300 hover:shadow-xl cursor-pointer"
               >
                 Select Role
               </button>

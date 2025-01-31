@@ -13,6 +13,8 @@ import {
 
 import { TbReport } from "react-icons/tb";
 import { GiGlassBall, GiShop } from "react-icons/gi";
+import { CgProfile } from "react-icons/cg";
+import Swal from 'sweetalert2';
 
 const CNFSidebar = ({ onClose }) => {
   const [showDropdown, setShowDropdown] = useState(false);
@@ -55,10 +57,26 @@ const CNFSidebar = ({ onClose }) => {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-  const handleLogout = () => {
-    localStorage.clear();
-    navigate("/");
-  };
+   const handleLogout = () => {
+      Swal.fire({
+        title: 'Are you sure?',
+        text: 'Do you want to log out? Make sure to finish your tasks before logging out.',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes, log out!',
+        cancelButtonText: 'Causal logout!',
+      }).then((result) => {
+        if (result.isConfirmed) {
+          
+          navigate('/Attendance/CNF/logout'); // Navigate to logout route
+        } else if (result.isDismissed) {
+          localStorage.clear(); 
+          navigate('/'); // Navigate to home page
+        }
+      });
+    };
 
   return (
     <div className="sidebar flex flex-col h-full w-64 bg-gray-800 text-black shadow-lg">
@@ -164,94 +182,17 @@ const CNFSidebar = ({ onClose }) => {
           )}
         </div>
 
-        {/* <div className="relative">
-          <span
-            className="nav-item nav-item-dropdown flex items-center gap-4 cursor-pointer p-4 transition duration-300 ease-in-out transform rounded-full mb-2"
-            onClick={toggleVendorDropdown}
-          >
-            <MdOutlineManageAccounts
-              style={{ color: "#047857", fontSize: "2rem" }}
-            />
-            <span className="text-lg font-semibold">Manage Vendors</span>
-          </span>
-          {vendorDropdown && (
-            <div className="flex justify-start ml-10 flex-col font-semibold text-xl text-black">
-              <DropdownItem
-                text="Pending Vendor"
-                onClick={() => handleItemClick("/mange/vendor/pending")}
-              />
-              <DropdownItem
-                text="Re-verification vendor"
-                onClick={() => handleItemClick("/mange/vendor/re-verify")}
-              />
-              <DropdownItem
-                text="Approved Vendor"
-                onClick={() => handleItemClick("/mange/vendor/approved")}
-              />
-              <DropdownItem
-                text="Rejected Vendor"
-                onClick={() => handleItemClick("/mange/vendor/rejected")}
-              />
-              <DropdownItem
-                text="Vendor Not Intrested"
-                onClick={() => handleItemClick("/mange/vendor/Not-intrested")}
-              />
-            </div>
-          )}
-        </div> */}
-
-        {/* Manage Attendance Record */}
-
-        {/* <div className="relative">
-          <span
-            className="nav-item nav-item-dropdown flex items-center gap-4 cursor-pointer p-4 transition duration-300 ease-in-out transform rounded-full mb-2"
-            onClick={toggleTrackerDropdown}
-          >
-            <MdOutlineEventAvailable
-              style={{ color: "blue", fontSize: "2rem" }}
-            />
-            <span className="text-lg font-semibold">Manage Attendance</span>
-          </span>
-          {trackerDropdown && (
-            <div className="flex justify-start ml-10 flex-col font-semibold text-xl text-black">
-              <DropdownItem
-                text={<>Field Executive</>}
-                onClick={() =>
-                  handleItemClick(
-                    "/mange/Field-Executive-Approval/FieldManager/Attendance"
-                  )
-                }
-              />
-              <DropdownItem
-                text={<>Field Executive Approval</>}
-                onClick={() =>
-                  handleItemClick(
-                    "/mange/Field-Executive-Approval/Admin/Attendance"
-                  )
-                }
-              />
-            </div>
-          )}
-        </div> */}
-
-        {/* <div className="relative">
-          <span
-            className="nav-item nav-item-dropdown flex items-center gap-4 cursor-pointer p-4 transition duration-300 ease-in-out transform rounded-full mb-2"
-            onClick={toggleShopDropdown}
-          >
-            <GiShop style={{ color: "#047857", fontSize: "2rem" }} />
-            <span className="text-lg font-semibold">Shop Details</span>
-          </span>
-          {shopDropdown && (
-            <div className="flex justify-start ml-10 flex-col font-semibold text-xl text-black">
-              <DropdownItem
-                text="Pan Shop Details"
-                onClick={() => handleItemClick("/panshowDetails")}
-              />
-            </div>
-          )}
-        </div> */}
-
+        <NavItem
+          icon={
+            <CgProfile style={{ color: "#047857", fontSize: "2rem" }} />
+           
+          }
+          text="My Profile"
+          onClick={() =>
+            handleItemClick("/manage/userProfile/cnf")
+           
+          }
+        />
         <LogoutItem
           icon={<FaSignOutAlt style={{ color: "gray", fontSize: "2rem" }} />}
           text="Logout"

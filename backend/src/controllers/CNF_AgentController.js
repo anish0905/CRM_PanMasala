@@ -106,12 +106,12 @@ const loginUser = asyncHandler(async (req, resp) => {
         user: {
           username: user.username,
           email: user.email,
-          id: user.id,
+          id: user._id,
         },
       },
       process.env.ACCESS_TOKEN_SECRET,
       {
-        expiresIn: "15m",
+        expiresIn: "1d",
       }
     );
 
@@ -206,8 +206,21 @@ const getAllUsers = asyncHandler(async (req, res) => {
 // @desc Get current user info
 // @route POST /api/users/current
 // @access Private
-const currentUser = asyncHandler(async (req, resp) => {
-  resp.json(req.user);
+const currentUser = asyncHandler(async (req, res) => {
+  const cnfAgentId = req.user.id; // Use `req.user.id`
+
+  // Query using the model name `CNFAgent`
+  const cnfAgent = await CNFAgent.findById(cnfAgentId).select("-password");
+
+  if (!cnfAgent) {
+    res.status(404);
+    throw new Error("CNF Agent not found");
+  }
+
+  res.status(200).json({
+    message: "CNF Agent details fetched successfully",
+    data: cnfAgent,
+  });
 });
 
 // @desc Delete a user

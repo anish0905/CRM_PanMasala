@@ -6,6 +6,7 @@ import { useLocation, useNavigate, useParams } from "react-router-dom";
 import DistributorRegister from "../../SuperStockists/distributor/DistributorRegister";
 import SuperStockistSidebar from "../SSsidebar/SuperStockistSidebar";
 import SuperStockistBarModal from "../SSsidebar/SuperStockistBarModal";
+import SMSDrawer from "../../../Component/SMS_Drawer";
 
 const DistributorDetails = () => {
   const [Distributors, setDistributors] = useState([]);
@@ -194,6 +195,9 @@ const DistributorDetails = () => {
               <SuperStockistBarModal />
             </div>
           )}
+           <div>
+        <SMSDrawer />
+      </div>
         </div>
 
         {showModal && (

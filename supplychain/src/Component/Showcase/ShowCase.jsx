@@ -2,6 +2,9 @@ import React, { useState, useEffect } from "react";
 import AdminSideBarModal from "../../pages/CNF/CNFSideBarModal";
 import AdminSidebar from "../../pages/CNF/CNFSidebar";
 import axios from "axios";
+import SMSDrawer from "../SMS_Drawer";
+import { FcSearch } from "react-icons/fc";
+
 
 const ShowCase = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -106,15 +109,19 @@ const ShowCase = () => {
           <div className="lg:hidden block">
             <AdminSideBarModal />
           </div>
+          <div>
+            <SMSDrawer />
+          </div>
         </div>
 
         {/* Search bar */}
-        <div className="my-6">
+        <div className="my-6 relative">
+          <FcSearch className="absolute left-3 top-1/2 transform -translate-y-1/2 text-xl text-gray-500" />
           <input
             type="text"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+            className="shadow appearance-none border rounded w-full py-2 pl-10 pr-3 py-2 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
             placeholder="Search by product name or description"
           />
         </div>

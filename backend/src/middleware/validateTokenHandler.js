@@ -7,21 +7,20 @@ const validateToken = asyncHandler(async (req, res, next) => {
 
     if (authHeader && authHeader.startsWith("Bearer")) {
         token = authHeader.split(" ")[1];
-        console.log("JWT Token Received:", token);  // Log the received JWT token for debugging purposes
+        console.log("JWT Token Received:", token);
 
         jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, decoded) => {
             if (err) {
-                console.error("JWT Verification Error:", err);  // Log the error
+                console.error("JWT Verification Error:", err);
                 res.status(401);
                 throw new Error("User is not authorized");
             }
-            req.userAdministrator = decoded.userAdministrator;
-            console.log(req.userAdministrator);  // Log decoded user info
+            // Attach decoded user information to req.user
+            req.user = decoded.user; // Ensure the token's payload includes a 'user' object
+            console.log("Decoded User:", req.user);
             next();
         });
-        
     } else {
-        // If the authorization header is missing or invalid
         res.status(401);
         throw new Error("Authorization header missing or invalid");
     }
