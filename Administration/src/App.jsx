@@ -16,6 +16,7 @@ import { ContentHistory } from "./pages/Admin/Vendor/ContentHistory";
 import AttendanceRecordDashboard from "./pages/Admin/Attendance/AttendanceRecordDashboard";
 import DistributorDetails from "./pages/Admin/Distributor/DistributorDetails";
 import ShowCase from "./pages/SubAdmin/showCase/ShowCase";
+import MakeAttendance from "./pages/Attendance/Camera/Makeattendance";
 function App() {
   const navigate = useNavigate();
   const email = localStorage.getItem("email");
@@ -25,6 +26,7 @@ function App() {
   return (
     <Routes>
       <Route path="/" element={<Login />} />
+      <Route path="/Attendance/:role/:work" element={<MakeAttendance />} />
       <Route path="/AdminDashBoard" element={<AdminDashbord />} />
 
       <Route path="/SubadminDashBoard" element={<SubAdminDashboard />} />

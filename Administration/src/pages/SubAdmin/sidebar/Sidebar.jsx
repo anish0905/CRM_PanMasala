@@ -13,6 +13,7 @@ import {
 } from "react-icons/md";
 import { GiGlassBall, GiShop } from "react-icons/gi";
 import { TbReport } from "react-icons/tb";
+import Swal from 'sweetalert2';
 
 const Sidebar = ({ onClose }) => {
   const [showDropdown, setShowDropdown] = useState(false);
@@ -55,8 +56,24 @@ const Sidebar = ({ onClose }) => {
   }, []);
 
   const handleLogout = () => {
-    localStorage.clear();
-    navigate("/");
+    Swal.fire({
+      title: 'Are you sure?',
+      text: 'Do you want to log out? Make sure to finish your tasks before logging out.',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Yes, log out!',
+      cancelButtonText: 'Causal logout!',
+    }).then((result) => {
+      if (result.isConfirmed) {
+        
+        navigate('/Attendance/subadmin/logout'); // Navigate to logout route
+      } else if (result.isDismissed) {
+        localStorage.clear(); 
+        navigate('/'); // Navigate to home page
+      }
+    });
   };
 
   return (
