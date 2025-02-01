@@ -157,6 +157,42 @@ const Sidebar = ({ onClose }) => {
           )}
         </div>
 
+        <div className="relative">
+          <span
+            className="nav-item nav-item-dropdown flex items-center gap-4 cursor-pointer p-4 transition duration-300 ease-in-out transform rounded-full mb-2"
+            onClick={toggleVendorDropdown}
+          >
+            <MdOutlineManageAccounts
+              style={{ color: "#047857", fontSize: "2rem" }}
+            />
+            <span className="text-lg font-semibold">Manage Vendors</span>
+          </span>
+          {vendorDropdown && (
+            <div className="flex justify-start ml-10 flex-col font-semibold text-xl text-black">
+              <DropdownItem
+                text="Pending Vendor"
+                onClick={() => handleItemClick("/mange/vendor/pending")}
+              />
+              <DropdownItem
+                text="Re-verification vendor"
+                onClick={() => handleItemClick("/mange/vendor/re-verify")}
+              />
+              <DropdownItem
+                text="Approved Vendor"
+                onClick={() => handleItemClick("/mange/vendor/approved")}
+              />
+              <DropdownItem
+                text="Rejected Vendor"
+                onClick={() => handleItemClick("/mange/vendor/rejected")}
+              />
+              <DropdownItem
+                text="Vendor Not Intrested"
+                onClick={() => handleItemClick("/mange/vendor/Not-intrested")}
+              />
+            </div>
+          )}
+        </div>
+
         <LogoutItem
           icon={<FaSignOutAlt style={{ color: "gray", fontSize: "2rem" }} />}
           text="Logout"

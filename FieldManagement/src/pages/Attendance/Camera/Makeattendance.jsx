@@ -5,119 +5,116 @@ import axios from "axios";
 import Swal from "sweetalert2";
 
 const MakeAttendance = () => {
+  const { name } = useParams();
   const navigate = useNavigate();
-  const { name } = useParams(); // 'name' will determine if it's 'login' or 'logout'
   const [attendance, setAttendance] = useState([]);
   const [error, setError] = useState(null);
   const role = localStorage.getItem("role");
-  const BASE_URL = import.meta.env.VITE_API_URL;
   const userId = localStorage.getItem("fieldManager_Id");
+  const BASE_URL = import.meta.env.VITE_API_URL;
 
   useEffect(() => {
-    // Redirect to login page if role is not available
-    if (!role) {
-      navigate("/");
-    } else {
-      fetchAttendanceDetails();
-    }
-  }, [role, navigate]);
+    if (!role) navigate("/");
+    fetchAttendance();
+  }, []);
 
-  // Fetch attendance data
-  const fetchAttendanceDetails = async () => {
+  const fetchAttendance = async () => {
     try {
-      const response = await axios.get(
-        `${BASE_URL}/api/attendance/user/${userId}`
-      );
-      setAttendance(response.data);
-    } catch (error) {
-      console.error("Error fetching attendance details:", error);
-      setError("Unable to fetch attendance details.");
+      const res = await axios.get(`${BASE_URL}/api/attendance/user/${userId}`);
+      setAttendance(res.data);
+    } catch (err) {
+      setError("Failed to load attendance records");
     }
   };
 
-  // Redirect based on attendance status and login/logout action
-  useEffect(() => {
-    if (attendance.length > 0 && name === "login") {
-      if (role === "Admin") {
-        navigate("/Field-Executive-Approval-Dashboard");
-      } else if (role === "FieldManager") {
-        navigate("/fieldManagerDashboard");
-      }
-    }
-  }, [attendance, name, role, navigate]);
-
-  const handleCapture = async (capturedData) => {
+  const handleCapture = async ({ image, location }) => {
     try {
-      if (!capturedData || !capturedData.image) {
-        setError("No image captured.");
-        return;
-      }
-
       const isLogin = name === "login";
-      const apiEndpoint = isLogin
-        ? `${BASE_URL}/api/attendance/login`
-        : `${BASE_URL}/api/attendance/logout/${attendance[0]?._id}`;
+      const hasOpenAttendance = attendance.some((a) => !a.logoutTime);
 
-      // Handle logout API separately (if needed for logout)
-      if (!isLogin) {
-        // Logout request for field manager
-        await axios.post(`${BASE_URL}/api/fieldManager/logout/${userId}`);
+      if (isLogin && hasOpenAttendance) {
+        Swal.fire(
+          "Error",
+          "You already have an open attendance session",
+          "error"
+        );
+        return navigate(
+          role === "Admin"
+            ? "/Field-Executive-Approval-Dashboard"
+            : "/fieldManagerDashboard"
+        );
       }
+
+      if (!isLogin && !hasOpenAttendance) {
+        Swal.fire("Error", "No open attendance session to close", "error");
+        return navigate("/");
+      }
+
+      let NewRole = role === "Admin" ? "fea" : "fieldexecutive";
 
       const payload = {
         user_id: userId,
-        [`${isLogin ? "login" : "logout"}Img`]: capturedData.image,
+        role: NewRole,
+        [`${isLogin ? "login" : "logout"}Img`]: image,
         [`${isLogin ? "login" : "logout"}Location`]: {
-          lat: capturedData.location.latitude,
-          lng: capturedData.location.longitude,
+          latitude: location.latitude,
+          longitude: location.longitude,
+          address: location.address,
         },
       };
 
-      const response = await (isLogin ? axios.post : axios.put)(
-        apiEndpoint,
-        payload
-      );
-
-      console.log(`Successfully hit the ${name} endpoint`, response.data);
+      let response;
+      if (isLogin) {
+        response = await axios.post(
+          `${BASE_URL}/api/attendance/login`,
+          payload
+        );
+      } else {
+        const attendanceId = attendance.find((a) => !a.logoutTime)?._id;
+        response = await axios.put(
+          `${BASE_URL}/api/attendance/logout/${attendanceId}`,
+          payload
+        );
+        await axios.post(`${BASE_URL}/api/fieldManager/logout/${userId}`);
+      }
 
       Swal.fire({
         icon: "success",
-        title: isLogin ? "Login Successful" : "Logout Successful",
-        text: `You have successfully completed the ${name} process.`,
+        title: `${isLogin ? "Login" : "Logout"} Successful`,
         timer: 2000,
         showConfirmButton: false,
       });
 
-      // Clear local storage and redirect on logout
-      if (!isLogin) {
-        setTimeout(() => {
-          localStorage.clear();
-          navigate("/"); // Redirect to login or home page on logout
-        }, 3000);
+      if (isLogin) {
+        navigate(
+          role === "Admin"
+            ? "/Field-Executive-Approval-Dashboard"
+            : "/fieldManagerDashboard"
+        );
       } else {
-        // Redirect on login based on role
-        if (role === "Admin") {
-          setTimeout(() => {
-            navigate("/Field-Executive-Approval-Dashboard");
-          }, 3000);
-        } else if (role === "FieldManager") {
-          setTimeout(() => {
-            navigate("/fieldManagerDashboard");
-          }, 3000);
-        }
+        localStorage.clear();
+        navigate("/");
       }
-    } catch (error) {
-      console.error(`Error hitting the ${name} endpoint:`, error);
-      setError(`Failed to complete ${name} process.`);
+    } catch (err) {
+      const errorMessage =
+        err.response?.data?.message || "Something went wrong";
+      setError(errorMessage);
+
+      // Use a valid error message, avoiding `null`
+      Swal.fire("Error", errorMessage, "error");
     }
   };
 
   return (
     <div>
-      {((name === "login" && attendance.length === 0) || name === "logout") && (
-        <NewCamera onCapture={handleCapture} />
+      {(name === "login" || attendance.some((a) => !a.logoutTime)) && (
+        <NewCamera
+          cameraType={name === "login" ? "environment" : "user"}
+          onCapture={handleCapture}
+          onClose={() => navigate(-1)}
+        />
       )}
-      {error && <div className="text-red-500 mt-3">{error}</div>}
+      {error && <div className="error-banner">{error}</div>}
     </div>
   );
 };

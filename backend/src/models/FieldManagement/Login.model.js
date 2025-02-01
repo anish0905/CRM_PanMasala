@@ -34,8 +34,8 @@ const LoginSchema = new mongoose.Schema(
     },
     role: {
       type: String,
-      enum: ["FieldManager", "Admin"],
-      default: "FieldManager",
+      enum: ["fieldExecutive", "Admin"],
+      default: "fieldExecutive",
     },
     address: {
       type: String,

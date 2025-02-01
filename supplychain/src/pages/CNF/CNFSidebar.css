@@ -3,21 +3,19 @@
   position: fixed;
   top: 0;
   left: 0;
-  width: 320px; /* Width for the sidebar */
+  width: 400px; /* Width for the sidebar */
   height: 100vh;
   margin: 13px;
   z-index: 20;
   background-color: white;
   border-radius: 10px; /* Optional: Add border radius */
- 
 }
 
-.sidebar ul{
+.sidebar ul {
   padding-right: 10px;
   padding-left: 10px;
   overflow-y: auto; /* Enable vertical scrolling */
   scrollbar-width: none; /* Hide scrollbar in Firefox */
-
 }
 
 .sidebar ul::-webkit-scrollbar {
@@ -74,7 +72,7 @@
 }
 
 .sidebar-menu li::after {
-  content: '';
+  content: "";
   position: absolute;
   bottom: 0;
   left: 0;
@@ -97,5 +95,3 @@
   transform: scale(1.1); /* Slightly enlarge */
   transition: transform 0.12s ease-in-out;
 }
-
-
