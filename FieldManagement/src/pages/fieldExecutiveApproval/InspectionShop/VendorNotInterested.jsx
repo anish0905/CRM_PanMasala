@@ -21,7 +21,7 @@ const VendorNotInterested = () => {
   const fetchData = async () => {
     try {
       const response = await axios.get(
-        `${BASE_URL}/api/vendornotIntrested/${id}`
+        `${BASE_URL}/api/vendorNotInterested/${id}`
       );
       setData(response.data);
     } catch (error) {
@@ -42,7 +42,7 @@ const VendorNotInterested = () => {
       });
 
       if (confirmResult.isConfirmed) {
-        await axios.delete(`${BASE_URL}/api/vendornotIntrested/${id}`);
+        await axios.delete(`${BASE_URL}/api/vendorNotInterested/${id}`);
         Swal.fire("Deleted!", "The vendor has been removed.", "success");
         fetchData(); // Refresh the data after deletion
       }
