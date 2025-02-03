@@ -34,9 +34,9 @@ const Login = () => {
       const data = await response.json();
       localStorage.setItem("token", data.token);
       localStorage.setItem("email", data.user.email);
-      localStorage.setItem("fieldManager_Id", data.user.id);
+      localStorage.setItem("FEA_id", data.user.id);
       localStorage.setItem("role", data.user.role);
-      localStorage.setItem("FEA_id", data.user.FEA_id);
+      // localStorage.setItem("FEA_id", data.user.FEA_id);
       navigate("/Attendance/login");
     } catch (error) {
       setError("Failed to login. Please try again.");

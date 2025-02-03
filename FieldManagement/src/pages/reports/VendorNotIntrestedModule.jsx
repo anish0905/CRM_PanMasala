@@ -20,7 +20,7 @@ const VendorNotIntrestedModule = () => {
     otherReasonDetails: "",
     vendorNotIntrested_Location: [],
     showCaseTestId: "",
-    FEA_id,
+    FEA_id: fieldManagerId,
   });
 
   // Initialize data only when the component is mounted

@@ -3,6 +3,10 @@ const bcrypt = require("bcrypt");
 
 const LoginSchema = new mongoose.Schema(
   {
+    distributors_id: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Distributor",
+    },
     name: {
       type: String,
       required: true,
@@ -34,7 +38,7 @@ const LoginSchema = new mongoose.Schema(
     },
     role: {
       type: String,
-      enum: ["fieldExecutive", "Admin"],
+      enum: ["fieldExecutive", "fea"],
       default: "fieldExecutive",
     },
     address: {

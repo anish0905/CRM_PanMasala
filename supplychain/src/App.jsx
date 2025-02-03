@@ -50,9 +50,8 @@ function App() {
         path="/DistributorProductReport"
         element={<DistributorProductReport />}
       />
-      <Route path="/FEA" element={<FEA />} />
       <Route path="/DistributerDashBoard" element={<DistributerDashBoard />} />
-      <Route path="/FEA/:work" element={<FEA />} />
+      <Route path="/manage/:name/:work" element={<FEA />} />
       <Route path="/FEARegistaionForm" element={<FEARegistaionForm />} />
       <Route path="/FE" element={<FE />} />
       <Route
@@ -71,12 +70,7 @@ function App() {
         path="/manage/cnf/distributor/:id"
         element={<DistributorsDetails />}
       />
-
-      <Route
-        path="/manage/userProfile/:role"
-        element={<UserProfile />}
-      />
-
+      <Route path="/manage/userProfile/:role" element={<UserProfile />} />
     </Routes>
   );
 }
