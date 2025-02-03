@@ -10,7 +10,7 @@ exports.AttendanceLoginTime = async (req, res, next) => {
 
     const attendance = new Attendance({
       user_id,
-      loginLocation,
+      loginLocation:loginLocation,
       logintime: new Date(),
       ispresent: true,
       role,

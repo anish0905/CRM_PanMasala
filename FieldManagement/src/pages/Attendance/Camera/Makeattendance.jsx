@@ -9,6 +9,7 @@ const MakeAttendance = () => {
   const navigate = useNavigate();
   const [attendance, setAttendance] = useState([]);
   const [error, setError] = useState(null);
+
   const role = localStorage.getItem("role");
   const userId = localStorage.getItem("fieldManager_Id");
   const BASE_URL = import.meta.env.VITE_API_URL;
@@ -20,12 +21,28 @@ const MakeAttendance = () => {
 
   const fetchAttendance = async () => {
     try {
-      const res = await axios.get(`${BASE_URL}/api/attendance/user/${userId}`);
-      setAttendance(res.data);
+      const { data } = await axios.get(
+        `${BASE_URL}/api/attendance/user/${userId}`
+      );
+      setAttendance(data);
     } catch (err) {
       setError("Failed to load attendance records");
     }
   };
+
+  const redirectToDashboard = () => {
+    navigate(
+      role === "Admin"
+        ? "/Field-Executive-Approval-Dashboard"
+        : "/fieldManagerDashboard"
+    );
+  };
+
+  useEffect(() => {
+    if (attendance.length > 0) {
+      redirectToDashboard();
+    }
+  }, []);
 
   const handleCapture = async ({ image, location }) => {
     try {
@@ -38,11 +55,7 @@ const MakeAttendance = () => {
           "You already have an open attendance session",
           "error"
         );
-        return navigate(
-          role === "Admin"
-            ? "/Field-Executive-Approval-Dashboard"
-            : "/fieldManagerDashboard"
-        );
+        return redirectToDashboard();
       }
 
       if (!isLogin && !hasOpenAttendance) {
@@ -50,11 +63,10 @@ const MakeAttendance = () => {
         return navigate("/");
       }
 
-      let NewRole = role === "Admin" ? "fea" : "fieldexecutive";
-
+      const roleMapping = role === "Admin" ? "fea" : "fieldexecutive";
       const payload = {
         user_id: userId,
-        role: NewRole,
+        role: roleMapping,
         [`${isLogin ? "login" : "logout"}Img`]: image,
         [`${isLogin ? "login" : "logout"}Location`]: {
           latitude: location.latitude,
@@ -71,7 +83,9 @@ const MakeAttendance = () => {
         );
       } else {
         const attendanceId = attendance.find((a) => !a.logoutTime)?._id;
-        response = await axios.put(
+        if (!attendanceId) throw new Error("Invalid attendance ID");
+
+        await axios.put(
           `${BASE_URL}/api/attendance/logout/${attendanceId}`,
           payload
         );
@@ -85,22 +99,11 @@ const MakeAttendance = () => {
         showConfirmButton: false,
       });
 
-      if (isLogin) {
-        navigate(
-          role === "Admin"
-            ? "/Field-Executive-Approval-Dashboard"
-            : "/fieldManagerDashboard"
-        );
-      } else {
-        localStorage.clear();
-        navigate("/");
-      }
+      isLogin ? redirectToDashboard() : (localStorage.clear(), navigate("/"));
     } catch (err) {
       const errorMessage =
         err.response?.data?.message || "Something went wrong";
       setError(errorMessage);
-
-      // Use a valid error message, avoiding `null`
       Swal.fire("Error", errorMessage, "error");
     }
   };

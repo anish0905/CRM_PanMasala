@@ -3,6 +3,7 @@ import Swal from "sweetalert2";
 import { useParams, useNavigate } from "react-router-dom";
 import CNFSidebar from "../../CNF/CNFSidebar";
 import CNFSideBarModal from "../../CNF/CNFSideBarModal";
+import SMSDrawer from "../../../Component/SMS_Drawer";
 
 const DistributorsDetails = () => {
   const [SuperStockists, setSuperStockists] = useState([]);
@@ -71,6 +72,9 @@ const DistributorsDetails = () => {
           )}
           <div className="lg:hidden block">
             <CNFSideBarModal />
+          </div>
+          <div>
+            <SMSDrawer />
           </div>
         </div>
 

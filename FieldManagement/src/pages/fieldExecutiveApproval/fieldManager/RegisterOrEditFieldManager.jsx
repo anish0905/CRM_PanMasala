@@ -1,8 +1,9 @@
 import React, { useState } from "react";
 
 import { useNavigate } from "react-router-dom";
+import { IoMdClose } from "react-icons/io";
 
-const RegisterFieldManager = () => {
+const RegisterFieldManager = ({ onClose, fetchFiledManagers }) => {
   const feaId = localStorage.getItem("fieldManager_Id");
   const URI = import.meta.env.VITE_API_URL;
   const navigate = useNavigate();
@@ -59,7 +60,8 @@ const RegisterFieldManager = () => {
         const data = await response.json();
         if (response.ok) {
           alert("Field Manager registered successfully");
-          navigate("/");
+          fetchFiledManagers();
+          onClose();
         } else {
           alert(data.message || "Something went wrong");
         }
@@ -70,19 +72,18 @@ const RegisterFieldManager = () => {
   };
 
   return (
-    <div className="flex justify-center items-center  bg-gray-100  ">
-      <div
-        className="flex w-full bg-white shadow-lg rounded-lg "
-        style={{
-          background:
-            "linear-gradient(to right, rgb(23 135 234), rgb(29 236 247))",
-        }}
-      >
-        {/* Registration Form on the right side */}
+    <div className="flex justify-center items-center    ">
+      <div className="flex w-full  ">
         <div className="w-full p-6  ">
-          <h2 className="text-4xl font-semibold text-center text-gray-900 mb-6">
-            Register Field Manager
-          </h2>
+          <div className="flex justify-between gap-10">
+            <h2 className="text-2xl font-semibold text-center text-gray-900 mb-6">
+              Register Field Manager
+            </h2>
+            <IoMdClose
+              onClick={onClose}
+              className=" text-3xl cursor-pointer hover:text-red-500"
+            />
+          </div>
           <form onSubmit={handleSubmit}>
             {/* Name Field */}
             <div className="mb-4">
@@ -169,27 +170,6 @@ const RegisterFieldManager = () => {
               {errors.password && (
                 <p className="text-red-500 text-xs mt-1">{errors.password}</p>
               )}
-            </div>
-
-            {/* Role Dropdown */}
-            <div className="mb-4">
-              <label
-                htmlFor="role"
-                className="block text-sm font-medium text-gray-700"
-              >
-                Role
-              </label>
-              <select
-                id="role"
-                name="role"
-                value={formData.role}
-                onChange={handleChange}
-                className="mt-1 p-2 w-full border rounded-md"
-              >
-                <option value="fieldExecutive">Field Executive</option>
-                <option value="Manager">Manager</option>
-                <option value="User">User</option>
-              </select>
             </div>
 
             {/* Address Field */}
@@ -291,12 +271,19 @@ const RegisterFieldManager = () => {
             </div>
 
             {/* Submit Button */}
-            <div className="mb-4 text-center">
+            <div className="mb-4 flex justify-between gap-4 text-center">
               <button
                 type="submit"
                 className="w-full bg-blue-500 text-white p-2 rounded-md hover:bg-blue-600"
               >
                 Register
+              </button>
+              <button
+                type="submit"
+                className="w-full bg-red-500 text-white p-2 rounded-md hover:bg-red-600"
+                onClick={() => onClose()}
+              >
+                cancle
               </button>
             </div>
           </form>

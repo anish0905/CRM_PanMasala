@@ -12,6 +12,7 @@ import CNFSidebar from "./CNFSidebar";
 import CNFSideBarModal from "./CNFSideBarModal";
 import OrderChart from "./OrderChart";
 import OrderDetailsCityTaluka from "./OrderDetailsCityTaluka";
+import SMSDrawer from "../../Component/SMS_Drawer";
 
 const CNFDashbord = () => {
   const [superStockist, setSuperStockist] = useState([]);
@@ -108,6 +109,9 @@ const CNFDashbord = () => {
           </p>
           <div className="lg:hidden md:hidden block">
             <CNFSideBarModal />
+          </div>
+          <div>
+            <SMSDrawer />
           </div>
         </div>
 

@@ -23,7 +23,7 @@ const ShowCasePage = () => {
 
   const fetchProducts = async () => {
     try {
-      const response = await axios.get(`${URI}/api/e-commerce_product/`);
+      const response = await axios.get(`${URI}/api/e-commerce/`);
       setProducts(response.data.products || []);
     } catch (error) {
       console.error("Error fetching products:", error);

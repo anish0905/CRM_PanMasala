@@ -134,7 +134,7 @@ const loginUser = asyncHandler(async (req, resp) => {
       },
       process.env.ACCESS_TOKEN_SECRET,
       {
-        expiresIn: "1500m",
+        expiresIn: "1day",
       }
     );
 
@@ -153,9 +153,25 @@ const loginUser = asyncHandler(async (req, resp) => {
 //@route POST/api/users/current
 //@access private
 
-const currentUser = asyncHandler(async (req, resp) => {
-  resp.json({ message: "distributor current user information" });
+const currentUser = asyncHandler(async (req, res) => {
+  // Extract the distributor ID from the decoded token
+  const distributorId = req.userdistributor.id;
+
+  // Fetch the distributor's details from the database
+  const distributor = await Distributor.findById(distributorId).select("-password");
+
+  if (!distributor) {
+    res.status(404);
+    throw new Error("Distributor not found");
+  }
+
+  // Return the distributor's details
+  res.status(200).json({
+    message: "Distributor details fetched successfully",
+    data: distributor,
+  });
 });
+
 
 const getStateCity = asyncHandler(async (req, resp) => {
   const distributor = await Distributor.findOne({ email: req.params.email });

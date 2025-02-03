@@ -37,7 +37,7 @@ const ListOfRegisterdField = () => {
       }
       const data = await response.json();
       const FieldManagers = data.filter(
-        (manager) => manager.role === "FieldManager"
+        (manager) => manager.role === "fieldExecutive"
       );
       setFiledManagers(FieldManagers);
     } catch (error) {
@@ -175,7 +175,7 @@ const ListOfRegisterdField = () => {
   return (
     <div className="min-h-screen bg-blue-100 flex w-full">
       {/* Sidebar */}
-      <div h-screen lg:fixed  top-0 left-0  lg:w-64>
+      <div h-screen lg:fixed top-0 left-0 lg:w-64>
         <FEASidebar />
       </div>
 

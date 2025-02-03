@@ -82,7 +82,7 @@ const Login = () => {
         if (role === "admin") {
           navigate("/AdminDashBoard");
         } else {
-          navigate("/SubadminDashBoard");
+          navigate(`/Attendance/${role}/Attendance`);
         }
       } else {
         toast.error('Invalid email or Password', {

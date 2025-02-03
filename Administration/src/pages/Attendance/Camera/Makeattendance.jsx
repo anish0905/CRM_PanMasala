@@ -28,13 +28,9 @@ const MakeAttendance = () => {
   };
 
   const handleRedirection = () => {
-    if (role === "CNF") {
-      navigate("/CNFDashBoard");
-    } else if (role === "Distributor") {
-      navigate("/DistributorDashBoard");
-    } else if (role === "SuperStockist") {
-      navigate("/SuperStockistDashBoard");
-    }
+    if (role === "subadmin") {
+      navigate("/SubadminDashBoard");
+    } 
   };
 
   useEffect(() => {
@@ -63,7 +59,7 @@ const MakeAttendance = () => {
         return;
       }
 
-    
+      
 
       const payload = {
         user_id: userId,
