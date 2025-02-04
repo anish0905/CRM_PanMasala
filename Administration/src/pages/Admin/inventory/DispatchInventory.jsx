@@ -6,6 +6,9 @@ import AdminSidebar from '../AdminSidebar';
 import RightSideDrawer from '../../../components/RightSideDrawer';
 import AdminSideBarModal from '../AdminSideBarModal';
 import Swal from 'sweetalert2';
+import { useParams } from 'react-router-dom';
+import Sidebar from '../../SubAdmin/sidebar/Sidebar';
+import SidebarModel from '../../SubAdmin/sidebar/SidebarModel';
 const DispatchInventory = () => {
     const email = localStorage.getItem("email");
         const currentUserId = localStorage.getItem("userId");
@@ -20,6 +23,8 @@ const DispatchInventory = () => {
         const [isError, setIsError] = useState(false);
     
         const BASE_URL = import.meta.env.VITE_API_URL;
+
+        const { role } = useParams()
 
         useEffect(() => {
             fetchProducts();
@@ -138,7 +143,13 @@ const DispatchInventory = () => {
   return (
     <div className="flex gap-6 min-h-screen w-full">
     <div className="min-h-screen lg:block hidden">
-        <AdminSidebar />
+    {
+                    role === "admin" ? (
+                        <AdminSidebar />
+                    ):(
+                        <Sidebar/>
+                    )
+                }
     </div>
 
     <div className="lg:ml-80 font-serif w-full md:p-5 p-4">
@@ -153,7 +164,13 @@ const DispatchInventory = () => {
                 </div>
             )}
             <div className="lg:hidden block">
-                <AdminSideBarModal />
+            {
+                            role === "admin"? (
+                                <AdminSideBarModal />
+                            ) : (
+                                <SidebarModel />
+                            )
+                           }
             </div>
         </div>
 
