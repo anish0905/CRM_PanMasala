@@ -20,7 +20,7 @@ const VendorNotIntrestedModule = () => {
     otherReasonDetails: "",
     vendorNotIntrested_Location: [],
     showCaseTestId: "",
-    FEA_id,
+    FEA_id: fieldManagerId,
   });
 
   // Initialize data only when the component is mounted
@@ -119,7 +119,7 @@ const VendorNotIntrestedModule = () => {
 
     try {
       const response = await axios.post(
-        `${URI}/api/vendornotIntrested`,
+        `${URI}/api/vendorNotInterested`,
         dataToSubmit
       );
 
@@ -148,9 +148,9 @@ const VendorNotIntrestedModule = () => {
       <div className="flex-1 p-6 lg:ml-80 overflow-y-auto">
         <div className="mt-28">
           <ToastContainer />
-            <h2 className="text-2xl mb-4 text-center font-semibold">
-              Vendor Not Interested Form
-            </h2>
+          <h2 className="text-2xl mb-4 text-center font-semibold">
+            Vendor Not Interested Form
+          </h2>
           <form
             onSubmit={handleSubmit}
             className="bg-white p-6 rounded-lg shadow-md"

@@ -2,8 +2,9 @@ const asyncHandler = require("express-async-handler");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const Distributor = require("../../models/Distributor/Distributor.Model");
-const  mongoose = require("mongoose");
-
+const mongoose = require("mongoose");
+const FeaDetails = require("../../models/FieldManagement/Login.model");
+console.log(FeaDetails);
 function validatePassword(password) {
   const minLength = 8; // Minimum length for the password
   const maxLength = 20; // Maximum length for the password
@@ -158,7 +159,9 @@ const currentUser = asyncHandler(async (req, res) => {
   const distributorId = req.userdistributor.id;
 
   // Fetch the distributor's details from the database
-  const distributor = await Distributor.findById(distributorId).select("-password");
+  const distributor = await Distributor.findById(distributorId).select(
+    "-password"
+  );
 
   if (!distributor) {
     res.status(404);
@@ -171,7 +174,6 @@ const currentUser = asyncHandler(async (req, res) => {
     data: distributor,
   });
 });
-
 
 const getStateCity = asyncHandler(async (req, resp) => {
   const distributor = await Distributor.findOne({ email: req.params.email });
@@ -350,6 +352,26 @@ const deleteUser = asyncHandler(async (req, resp) => {
   });
 });
 
+const feaDetailsList = asyncHandler(async (req, resp) => {
+  const distributors_id = req.params.id; // The distributor's ID for which Field Manager details are requested
+  try {
+    // Fetching all the field executive details
+    const details = await FeaDetails.find({ distributors_id });
+
+    // Check if there are no details found
+    if (!details || details.length === 0) {
+      return resp
+        .status(404)
+        .json({ message: "No Field Manager details found" });
+    }
+
+    // Sending the fetched details in the response
+    resp.status(200).json(details);
+  } catch (error) {
+    // Handling any errors that occur during the fetch operation
+    resp.status(500).json({ message: error.message || "Something went wrong" });
+  }
+});
 
 module.exports = {
   registerUser,
@@ -361,4 +383,5 @@ module.exports = {
   getDistributorBySuperByID,
   updateUser,
   deleteUser,
+  feaDetailsList,
 };

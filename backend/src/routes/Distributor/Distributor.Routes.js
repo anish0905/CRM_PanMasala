@@ -10,6 +10,7 @@ const {
   getDistributorBySuperByID,
   updateUser,
   deleteUser,
+  feaDetailsList,
 } = require("../../controllers/Distributor/Distributor.Controller");
 const executiveValidateToken = require("../../middleware/executiveValidateTokenHandler");
 
@@ -27,6 +28,8 @@ router.put("/update/:id", updateUser);
 router.delete("/:id", deleteUser);
 
 //Current user information
+
+router.get("/feaDetails/:id", feaDetailsList);
 
 router.get("/currentDistributor", executiveValidateToken, currentUser);
 router.get("/getAlluser", GetAllUser);

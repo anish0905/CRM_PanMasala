@@ -19,7 +19,6 @@ const ShopInspectionModule = ({ onClose, fetchShops, shopData }) => {
   const FEA_id = localStorage.getItem("FEA_id");
 
   const [formData, setFormData] = useState({
-    fieldManagerId: localStorage.getItem("fieldManager_Id") || "",
     shop_name: "",
     shop_address: "",
     shop_contact_number: "",
@@ -28,7 +27,7 @@ const ShopInspectionModule = ({ onClose, fetchShops, shopData }) => {
     shop_Location: "",
     productId: [],
     showCaseTestId: "",
-    FEA_id: FEA_id,
+    FEA_id: localStorage.getItem("fieldManager_Id"),
   });
 
   const [selectedImage, setSelectedImage] = useState(null);
@@ -167,7 +166,7 @@ const ShopInspectionModule = ({ onClose, fetchShops, shopData }) => {
 
         // Reset the form and other states
         setFormData({
-          fieldManagerId: localStorage.getItem("fieldManager_Id") || "",
+          FEA_id: localStorage.getItem("fieldManager_Id") || "",
           shop_name: "",
           shop_address: "",
           shop_contact_number: "",

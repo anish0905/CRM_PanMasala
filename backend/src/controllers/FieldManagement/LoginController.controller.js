@@ -30,6 +30,7 @@ const registerFieldManager = async (req, res) => {
       pincode,
       status,
       FEA_id,
+      distributors_id,
     } = req.body;
 
     // Check if email already exists
@@ -50,6 +51,7 @@ const registerFieldManager = async (req, res) => {
       pincode,
       status,
       FEA_id: FEA_id,
+      distributors_id: distributors_id,
     });
 
     // Save the new user
@@ -125,14 +127,14 @@ const getFieldManager = async (req, res) => {
 
     // Fetch Inspection Shop details for each field manager
     const inspectionShops = await InspectionShop.find({
-      fieldManagerId: { $in: fieldManagers.map(fm => fm._id) },
+      fieldManagerId: { $in: fieldManagers.map((fm) => fm._id) },
     });
 
     // Map inspection shops to their respective field managers
-    const fieldManagersWithShops = fieldManagers.map(fm => ({
+    const fieldManagersWithShops = fieldManagers.map((fm) => ({
       ...fm.toObject(),
-      inspectionShops: inspectionShops.filter(shop =>
-        shop.fieldManagerId.toString() === fm._id.toString()
+      inspectionShops: inspectionShops.filter(
+        (shop) => shop.fieldManagerId.toString() === fm._id.toString()
       ),
     }));
 
@@ -147,7 +149,7 @@ const getFieldManagerbYfeaid = async (req, res) => {
   try {
     const id = req.params.id;
     const fieldManagers = await FieldManager.find({
-      FEA_id: id
+      FEA_id: id,
     });
 
     if (!fieldManagers.length) {
@@ -156,14 +158,14 @@ const getFieldManagerbYfeaid = async (req, res) => {
 
     // Fetch Inspection Shop details for each field manager
     const inspectionShops = await InspectionShop.find({
-      fieldManagerId: { $in: fieldManagers.map(fm => fm._id) },
+      fieldManagerId: { $in: fieldManagers.map((fm) => fm._id) },
     });
 
     // Map inspection shops to their respective field managers
-    const fieldManagersWithShops = fieldManagers.map(fm => ({
+    const fieldManagersWithShops = fieldManagers.map((fm) => ({
       ...fm.toObject(),
-      inspectionShops: inspectionShops.filter(shop =>
-        shop.fieldManagerId.toString() === fm._id.toString()
+      inspectionShops: inspectionShops.filter(
+        (shop) => shop.fieldManagerId.toString() === fm._id.toString()
       ),
     }));
 
@@ -318,8 +320,6 @@ const logout = async (req, res) => {
   }
 };
 
-
-
 module.exports = {
   registerFieldManager,
   login,
@@ -328,5 +328,5 @@ module.exports = {
   getByIdFieldManager,
   deleteByIdFieldManager,
   logout,
-  getFieldManagerbYfeaid
+  getFieldManagerbYfeaid,
 };

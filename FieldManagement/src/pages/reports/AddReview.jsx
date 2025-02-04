@@ -9,7 +9,7 @@ const AddReview = ({ selectedProduct, setShowModal }) => {
   const FEA_id = localStorage.getItem("FEA_id");
 
   const [formData, setFormData] = useState({
-    fieldManagerId: fieldManagerId,
+    // fieldManagerId: fieldManagerId,
     productId: selectedProduct?._id || "",
     productName: selectedProduct?.title || "",
     fragrance: 1,
@@ -19,7 +19,7 @@ const AddReview = ({ selectedProduct, setShowModal }) => {
     locations: [],
     createdAt: "",
     updatedAt: "",
-    FEA_id: FEA_id,
+    FEA_id: fieldManagerId,
   });
 
   const [loading, setLoading] = useState(false);
@@ -162,7 +162,9 @@ const AddReview = ({ selectedProduct, setShowModal }) => {
         </div>
 
         <RangeSlider
-          label={<span className="block text-lg text-center">Kick and High</span>}
+          label={
+            <span className="block text-lg text-center">Kick and High</span>
+          }
           value={formData.reviews}
           onChange={(value) => handleSliderChange("reviews", value)}
         />

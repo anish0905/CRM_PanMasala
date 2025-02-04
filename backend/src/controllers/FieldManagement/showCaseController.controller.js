@@ -10,7 +10,7 @@ const createShowCase = async (req, res) => {
       productSimilarity,
       locations,
       reviews,
-      FEA_id
+      FEA_id,
     } = req.body;
 
     // Validate required fields
@@ -101,7 +101,7 @@ const createShowCase = async (req, res) => {
       productSimilarity,
       locations: normalizedLocations,
       reviews: normalizedReviews,
-      FEA_id
+      FEA_id: FEA_id,
     });
 
     // Save the ShowCase object
