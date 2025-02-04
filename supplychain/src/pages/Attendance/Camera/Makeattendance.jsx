@@ -13,7 +13,7 @@ const MakeAttendance = () => {
   const BASE_URL = import.meta.env.VITE_API_URL;
   const userId = localStorage.getItem("userId");
 
-  const isLogin = work === 'Attendance'; // Determine action based on 'work'
+  const isLogin = work === "Attendance"; // Determine action based on 'work'
 
   const fetchAttendanceDetails = async () => {
     try {
@@ -63,8 +63,6 @@ const MakeAttendance = () => {
         return;
       }
 
-    
-
       const payload = {
         user_id: userId,
         role: role.toLowerCase(),
@@ -75,43 +73,41 @@ const MakeAttendance = () => {
         },
       };
 
+      const response = await (isLogin ? axios.post : axios.put)(
+        apiEndpoint,
+        payload
+      );
 
+      Swal.fire({
+        icon: "success",
+        title: isLogin ? "Login Successful" : "Logout Successful",
+        text: `You have successfully ${isLogin ? "logged in" : "logged out"}.`,
+        timer: 2000,
+        showConfirmButton: false,
+      });
 
-    const response = await (isLogin ? axios.post : axios.put)(
-      apiEndpoint,
-      payload
-    );
-
-    Swal.fire({
-      icon: "success",
-      title: isLogin ? "Login Successful" : "Logout Successful",
-      text: `You have successfully ${isLogin ? "logged in" : "logged out"}.`,
-      timer: 2000,
-      showConfirmButton: false,
-    });
-
-    if (isLogin) {
-      setTimeout(handleRedirection, 1000);
-    } else {
-      setTimeout(() => {
-        localStorage.clear();
-        navigate("/");
-      }, 3000);
+      if (isLogin) {
+        setTimeout(handleRedirection, 1000);
+      } else {
+        setTimeout(() => {
+          localStorage.clear();
+          navigate("/");
+        }, 3000);
+      }
+    } catch (error) {
+      console.error("Error:", error);
+      setError(`Failed to ${isLogin ? "login" : "logout"}.`);
     }
-  } catch (error) {
-    console.error("Error:", error);
-    setError(`Failed to ${isLogin ? "login" : "logout"}.`);
-  }
-};
+  };
 
-return (
-  <div>
-    {(work === "Attendance" || work === "logout") && (
-      <NewCamera onCapture={handleCapture} role={role} />
-    )}
-    {error && <div className="text-red-500 mt-3">{error}</div>}
-  </div>
-);
+  return (
+    <div>
+      {(work === "Attendance" || work === "logout") && (
+        <NewCamera onCapture={handleCapture} role={role} />
+      )}
+      {error && <div className="text-red-500 mt-3">{error}</div>}
+    </div>
+  );
 };
 
 export default MakeAttendance;

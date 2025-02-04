@@ -135,7 +135,7 @@ const DistributorSidebar = ({ onClose }) => {
 
         {/* Manage Attendance Record */}
 
-        <div className="relative">
+        {/* <div className="relative">
           <span
             className="nav-item nav-item-dropdown flex items-center gap-4 cursor-pointer p-4 transition duration-300 ease-in-out transform rounded-full mb-2"
             onClick={toggleAttendanceDropdown}
@@ -165,7 +165,7 @@ const DistributorSidebar = ({ onClose }) => {
               />
             </div>
           )}
-        </div>
+        </div> */}
 
         {/* FEA and FE */}
         <div className="relative">

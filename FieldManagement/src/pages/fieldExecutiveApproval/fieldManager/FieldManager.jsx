@@ -18,7 +18,7 @@ const ListOfRegisterdField = () => {
   const [showModal, setShowModal] = useState(false);
   const [selectedFieldManager, setSelectedFieldManager] = useState(null);
   const email = localStorage.getItem("email");
-  const id = localStorage.getItem("fieldManager_Id");
+  const id = localStorage.getItem("FEA_id");
   const navigate = useNavigate();
 
   const BASE_URL = import.meta.env.VITE_API_URL;
@@ -353,6 +353,7 @@ const ListOfRegisterdField = () => {
                           onClick={() => handleEditButtonClick(filedManager)}
                           className="flex items-center justify-center text-blue-500 hover:text-blue-700 p-2 rounded-md transition duration-300 ease-in-out transform hover:scale-110"
                         >
+                          {console.log(filedManager)}
                           <FaRegEdit size={20} />
                           <span className="ml-1 hidden md:inline">Edit</span>
                         </button>

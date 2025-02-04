@@ -1,14 +1,13 @@
 import React, { useState, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import dayjs from "dayjs";
-import  Location  from "./Location";
+import Location from "./Location";
 import Modal from "react-modal";
 import { FaRegCalendarAlt } from "react-icons/fa";
 import { MdDateRange } from "react-icons/md";
 
-
 const AttendanceRecord = () => {
-  const userId = localStorage.getItem("userId");
+  const userId = localStorage.getItem("FEA_id");
   const [attendanceData, setAttendanceData] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [selectedMonth, setSelectedMonth] = useState(dayjs().month() + 1);
@@ -121,9 +120,15 @@ const AttendanceRecord = () => {
           <tbody>
             {paginatedData.map((record) => (
               <tr key={record._id} className="border-b hover:bg-gray-50">
-                <td className="p-3">{dayjs(record.logintime).format("YYYY-MM-DD")}</td>
-                <td className="p-3">{record.ispresent ? "Present" : "Absent"}</td>
-                <td className="p-3">{dayjs(record.logintime).format("HH:mm:ss")}</td>
+                <td className="p-3">
+                  {dayjs(record.logintime).format("YYYY-MM-DD")}
+                </td>
+                <td className="p-3">
+                  {record.ispresent ? "Present" : "Absent"}
+                </td>
+                <td className="p-3">
+                  {dayjs(record.logintime).format("HH:mm:ss")}
+                </td>
                 <td className="p-3">
                   {record.loginImg ? (
                     <img
@@ -148,7 +153,9 @@ const AttendanceRecord = () => {
                   </button>
                 </td>
                 <td className="p-3">
-                  {record.logouttime ? dayjs(record.logouttime).format("HH:mm:ss") : "N/A"}
+                  {record.logouttime
+                    ? dayjs(record.logouttime).format("HH:mm:ss")
+                    : "N/A"}
                 </td>
                 <td className="p-3">
                   {record.logoutImg ? (
@@ -189,13 +196,15 @@ const AttendanceRecord = () => {
               currentPage === 1
                 ? "bg-gray-300 text-gray-700"
                 : "bg-blue-500 text-white hover:bg-blue-600"
-            }` }
+            }`}
           >
             Previous
           </button>
           <span className="font-bold text-lg">Page {currentPage}</span>
           <button
-            onClick={() => setCurrentPage((prev) => Math.min(totalPages, prev + 1))}
+            onClick={() =>
+              setCurrentPage((prev) => Math.min(totalPages, prev + 1))
+            }
             disabled={currentPage === totalPages}
             className={`px-4 py-2 rounded ${
               currentPage === totalPages
@@ -213,7 +222,10 @@ const AttendanceRecord = () => {
         <div className="fixed inset-0 z-50 flex items-center justify-center">
           <div className="absolute inset-0 bg-black opacity-50"></div>
           <div className="z-50 bg-white w-[100%] p-8 rounded-lg shadow-lg">
-            <Location onClose={handleLocationModalClose} location={selectLocation} />
+            <Location
+              onClose={handleLocationModalClose}
+              location={selectLocation}
+            />
           </div>
         </div>
       )}
@@ -227,7 +239,11 @@ const AttendanceRecord = () => {
       >
         <div className="flex justify-center items-center">
           {zoomedImageId && (
-            <img src={zoomedImageId} alt="Zoomed" className="max-w-full max-h-screen" />
+            <img
+              src={zoomedImageId}
+              alt="Zoomed"
+              className="max-w-full max-h-screen"
+            />
           )}
         </div>
         <button
