@@ -39,6 +39,8 @@ const DistributorRoutes = require("./src/routes/Distributor/Distributor.Routes")
 const panShopOrderRoutes = require("./src/routes/panshop/panShopOrderRoutes");
 const panShopOwnerRoutes = require("./src/routes/panshop/panShopOwnerRoutes");
 
+const subAdminInventoryRoute = require("./src/routes/Inventory/subAdminInventoryRoute");
+
 // Connect to Database
 connectDb();
 
@@ -89,6 +91,8 @@ app.use("/api/distributor", DistributorRoutes);
 // Pan Shop Routes
 app.use("/api/panshop/order", panShopOrderRoutes);
 app.use("/api/panShop", panShopOwnerRoutes);
+
+app.use("/api/subAdmin/inventory",subAdminInventoryRoute)
 
 // Fallback Route for Undefined Endpoints
 app.use((req, res, next) => {

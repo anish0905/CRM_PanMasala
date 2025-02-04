@@ -60,7 +60,7 @@ const attendanceSchema = new mongoose.Schema(
         "admin",
         "fieldexecutive",
       ],
-      default: "FEA",
+      default: "fea",
     },
   },
   { timestamps: true }

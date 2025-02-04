@@ -21,6 +21,7 @@ const registersubAdmin = expressAsyncHandler(async (req, resp) => {
     location, // Added location here (could be text or coordinates)
     district,
     state,
+    admin, // Added subAdmin here
   } = req.body;
 
   // Validate password match
@@ -74,6 +75,7 @@ const registersubAdmin = expressAsyncHandler(async (req, resp) => {
     location,
     district,
     state,
+    admin,
   });
 
   if (newSubAdmin) {
@@ -88,6 +90,7 @@ const registersubAdmin = expressAsyncHandler(async (req, resp) => {
       location: newSubAdmin.location,
       district: newSubAdmin.district,
       state: newSubAdmin.state,
+      admin: newSubAdmin.admin,
     });
   } else {
     resp.status(400);
@@ -132,6 +135,7 @@ const loginsubAdmin = expressAsyncHandler(async (req, resp) => {
       message: "Login successful",
       accessToken,
       userId: subAdmin.id,
+      admin: subAdmin.admin,
     });
   } catch (error) {
     console.error("Login error:", error.message);

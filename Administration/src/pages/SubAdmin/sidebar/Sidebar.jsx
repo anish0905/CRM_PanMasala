@@ -67,10 +67,10 @@ const Sidebar = ({ onClose }) => {
       cancelButtonText: 'Causal logout!',
     }).then((result) => {
       if (result.isConfirmed) {
-        
+
         navigate('/Attendance/subadmin/logout'); // Navigate to logout route
       } else if (result.isDismissed) {
-        localStorage.clear(); 
+        localStorage.clear();
         navigate('/'); // Navigate to home page
       }
     });
@@ -112,20 +112,33 @@ const Sidebar = ({ onClose }) => {
             <div className="flex justify-start ml-10 flex-col font-semibold text-xl text-black">
               <DropdownItem
                 text="My Inventory"
-                onClick={() => handleItemClick("/manage/Inventory")}
+                onClick={() => handleItemClick("/my-inventory/subAdmin")}
+              />
+
+              <DropdownItem
+                text="Stock History"
+                onClick={() => handleItemClick("/Stock-History/subAdmin")}
+              />
+
+              <DropdownItem
+                text="Dispatch History"
+                onClick={() => handleItemClick("/Dispatch-Inventory/subAdmin")}
+              />
+
+              <DropdownItem
+                text="CNF Inventory"
+                onClick={() => handleItemClick("/manage/superStockit/Inventory")}
               />
 
               <DropdownItem
                 text="Super Stockist Inventory"
-                onClick={() =>
-                  handleItemClick("/manage/superStockit/Inventory")
-                }
+                onClick={() => handleItemClick("/manage/superStockit/Inventory")}
               />
+
+
               <DropdownItem
-                text="Stockist Inventory"
-                onClick={() =>
-                  handleItemClick("/manage/stockist/stock/management")
-                }
+                text="Distributor Inventory"
+                onClick={() => handleItemClick("/manage/distributor/inventory")}
               />
             </div>
           )}
@@ -188,7 +201,7 @@ const Sidebar = ({ onClose }) => {
             <div className="flex justify-start ml-10 flex-col font-semibold text-xl text-black">
               <DropdownItem
                 text="Pending Vendor"
-<<<<<<< HEAD
+
                 onClick={() => handleItemClick("/mange/vendor/pending")}
               />
               <DropdownItem
@@ -206,8 +219,8 @@ const Sidebar = ({ onClose }) => {
               <DropdownItem
                 text="Vendor Not Intrested"
                 onClick={() => handleItemClick("/mange/vendor/Not-intrested")}
-=======
-                onClick={() => handleItemClick("/mange/vendors/pending")}
+
+
               />
               <DropdownItem
                 text="Re-verification vendor"
@@ -224,7 +237,7 @@ const Sidebar = ({ onClose }) => {
               <DropdownItem
                 text="Vendor Not Intrested"
                 onClick={() => handleItemClick("/mange/vendors/Not-intrested")}
->>>>>>> 353b39303e132062b7102591ddf99598fa5b8fcf
+
               />
             </div>
           )}
