@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 
 import { useLocation, useNavigate } from "react-router-dom";
 import dayjs from "dayjs";
-import  Location  from "./Location";
+import Location from "./Location";
 import Modal from "react-modal";
 import {
   FaUser,
@@ -16,7 +16,6 @@ import { MdDateRange } from "react-icons/md";
 import AdminSidebar from "../AdminSidebar";
 import AdminSideBarModal from "../AdminSideBarModal";
 import RightSideDrawer from "../../../components/RightSideDrawer";
-
 
 const AttendanceRecordDashboard = () => {
   const { state } = useLocation();
@@ -132,7 +131,6 @@ const AttendanceRecordDashboard = () => {
         <AdminSidebar />
       </div>
 
-
       {/* Main Content */}
       <div className="lg:ml-70 xl:ml-80  flex flex-col h-full px-5 my-4 w-full">
         <header className="bg-[#93c5fd] rounded-md shadow p-4 flex items-center justify-between relative">
@@ -150,8 +148,8 @@ const AttendanceRecordDashboard = () => {
           </h1>
 
           <div className="relative">
-           <RightSideDrawer />
-           </div>
+            <RightSideDrawer />
+          </div>
 
           {/* Email Section */}
           <div className="hidden sm:flex items-center lg:text-2xl md:text-xl text-sm font-bold text-white border-4 border-[#1e40af] p-2 rounded-lg bg-[rgb(42,108,194)] hover:bg-blue-800 transition-colors duration-300 ease-in-out">
@@ -280,8 +278,9 @@ const AttendanceRecordDashboard = () => {
           )}
 
           <div
-            className={`bg-white rounded-xl p-4 mt-8 ${filteredData.length > 7 ? "overflow-x-auto" : ""
-              }`}
+            className={`bg-white rounded-xl p-4 mt-8 ${
+              filteredData.length > 7 ? "overflow-x-auto" : ""
+            }`}
           >
             {filteredData.length > 0 ? (
               <table className="w-full table-auto">
@@ -317,8 +316,9 @@ const AttendanceRecordDashboard = () => {
                   {paginatedData.map((record, index) => (
                     <tr
                       key={record._id}
-                      className={`border-b ${index % 2 === 0 ? "bg-gray-50" : "bg-white"
-                        }`}
+                      className={`border-b ${
+                        index % 2 === 0 ? "bg-gray-50" : "bg-white"
+                      }`}
                     >
                       <td className="p-2 bg-blue-50 text-xs sm:text-sm lg:text-base">
                         {dayjs(record.logintime).format("YYYY-MM-DD")}
@@ -452,10 +452,11 @@ const AttendanceRecordDashboard = () => {
             <button
               onClick={() => setCurrentPage((prev) => Math.max(1, prev - 1))}
               disabled={currentPage === 1}
-              className={`px-4 py-2 rounded ${currentPage === 1
+              className={`px-4 py-2 rounded ${
+                currentPage === 1
                   ? "bg-gray-300 text-gray-700"
                   : "bg-blue-500 text-white hover:bg-blue-600"
-                }`}
+              }`}
             >
               Previous
             </button>
@@ -465,10 +466,11 @@ const AttendanceRecordDashboard = () => {
                 setCurrentPage((prev) => Math.min(totalPages, prev + 1))
               }
               disabled={currentPage === totalPages}
-              className={`px-4 py-2 rounded ${currentPage === totalPages
+              className={`px-4 py-2 rounded ${
+                currentPage === totalPages
                   ? "bg-gray-300 text-gray-700"
                   : "bg-blue-500 text-white hover:bg-blue-600"
-                }`}
+              }`}
             >
               Next
             </button>

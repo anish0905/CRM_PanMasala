@@ -13,7 +13,7 @@ import {
 } from "react-icons/md";
 import { GiGlassBall, GiShop } from "react-icons/gi";
 import { TbReport } from "react-icons/tb";
-import Swal from 'sweetalert2';
+import Swal from "sweetalert2";
 
 const Sidebar = ({ onClose }) => {
   const [showDropdown, setShowDropdown] = useState(false);
@@ -57,21 +57,23 @@ const Sidebar = ({ onClose }) => {
 
   const handleLogout = () => {
     Swal.fire({
-      title: 'Are you sure?',
-      text: 'Do you want to log out? Make sure to finish your tasks before logging out.',
-      icon: 'warning',
+      title: "Are you sure?",
+      text: "Do you want to log out? Make sure to finish your tasks before logging out.",
+      icon: "warning",
       showCancelButton: true,
-      confirmButtonColor: '#3085d6',
-      cancelButtonColor: '#d33',
-      confirmButtonText: 'Yes, log out!',
-      cancelButtonText: 'Causal logout!',
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, log out!",
+      cancelButtonText: "Causal logout!",
     }).then((result) => {
       if (result.isConfirmed) {
-
-        navigate('/Attendance/subadmin/logout'); // Navigate to logout route
+        navigate("/Attendance/subadmin/logout"); // Navigate to logout route
+        navigate("/Attendance/subadmin/logout"); // Navigate to logout route
       } else if (result.isDismissed) {
         localStorage.clear();
-        navigate('/'); // Navigate to home page
+        navigate("/"); // Navigate to home page
+        localStorage.clear();
+        navigate("/"); // Navigate to home page
       }
     });
   };
@@ -127,14 +129,17 @@ const Sidebar = ({ onClose }) => {
 
               <DropdownItem
                 text="CNF Inventory"
-                onClick={() => handleItemClick("/manage/superStockit/Inventory")}
+                onClick={() =>
+                  handleItemClick("/manage/superStockit/Inventory")
+                }
               />
 
               <DropdownItem
                 text="Super Stockist Inventory"
-                onClick={() => handleItemClick("/manage/superStockit/Inventory")}
+                onClick={() =>
+                  handleItemClick("/manage/superStockit/Inventory")
+                }
               />
-
 
               <DropdownItem
                 text="Distributor Inventory"
@@ -201,7 +206,6 @@ const Sidebar = ({ onClose }) => {
             <div className="flex justify-start ml-10 flex-col font-semibold text-xl text-black">
               <DropdownItem
                 text="Pending Vendor"
-
                 onClick={() => handleItemClick("/mange/vendor/pending")}
               />
               <DropdownItem
@@ -220,7 +224,7 @@ const Sidebar = ({ onClose }) => {
                 text="Vendor Not Intrested"
                 onClick={() => handleItemClick("/mange/vendor/Not-intrested")}
 
-
+                // onClick={() => handleItemClick("/mange/vendors/pending")}
               />
               <DropdownItem
                 text="Re-verification vendor"
@@ -237,7 +241,6 @@ const Sidebar = ({ onClose }) => {
               <DropdownItem
                 text="Vendor Not Intrested"
                 onClick={() => handleItemClick("/mange/vendors/Not-intrested")}
-
               />
             </div>
           )}

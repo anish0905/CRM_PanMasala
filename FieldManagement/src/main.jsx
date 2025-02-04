@@ -9,7 +9,7 @@ import Dashboard from "./components/Dashboard/Dashboard.jsx";
 import InspectionList from "./pages/InspectionList.jsx";
 import ShowCaseList from "./pages/ShowCase/ShowCaseList.jsx";
 import ShopInspection from "./pages/reports/ShopInspection.jsx";
-import  ShowCasePage  from "./pages/reports/ShowCasePage.jsx";
+import ShowCasePage from "./pages/reports/ShowCasePage.jsx";
 import ShopInspectionModule from "./pages/reports/ShopInspectionModule.jsx";
 import VendorNotIntrestedModule from "./pages/reports/VendorNotIntrestedModule.jsx";
 
@@ -31,10 +31,6 @@ import ProductReview from "./pages/fieldExecutiveApproval/ExecutiveReports/Produ
 import Reverification from "./pages/FieldExecutive/Re-verification/Reverification.jsx";
 import Makeattendance from "./pages/Attendance/Camera/Makeattendance.jsx";
 import AttendanceRecord from "./pages/Attendance/attendanceRecord/attendanceRecord.jsx";
-
-
-
-
 
 // Get the user's role from localStorage
 const role = localStorage.getItem("role");
@@ -59,20 +55,14 @@ createRoot(document.getElementById("root")).render(
           path="/vendor-not-intrested"
           element={<VendorNotIntrestedModule />}
         />
-        <Route
-          path="/Attendance/:name"
-          element={<Makeattendance />}
-        />
-        <Route
-              path="/Reverification"
-              element={<Reverification/>}
-            />
+        <Route path="/Attendance/:name" element={<Makeattendance />} />
+        <Route path="/Reverification" element={<Reverification />} />
 
         {/* Route for RegisterFieldManager page */}
         {/* Add more routes as needed */}
 
         {/* Conditionally render the Field Executive Approval Dashboard for admin */}
-        {role === "Admin" ? (
+        {role === "fea" ? (
           <>
             <Route
               path="/Field-Executive-Approval-Dashboard"
@@ -131,9 +121,8 @@ createRoot(document.getElementById("root")).render(
             />
             <Route
               path="/Field-Executive/AttendanceRecord"
-              element={<AttendanceRecord/>}
+              element={<AttendanceRecord />}
             />
-            
           </>
         ) : (
           <Route path="*" element={<NotFound />} />

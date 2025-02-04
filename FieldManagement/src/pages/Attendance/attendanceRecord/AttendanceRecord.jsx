@@ -33,7 +33,7 @@ const AttendanceRecord = () => {
   const [zoomedImageId, setZoomedImageId] = useState(null);
   const handleOpenModal = () => setModalOpen(true);
   const handleCloseImgModal = () => setModalOpen(false);
-  const navigate= useNavigate();
+  const navigate = useNavigate();
 
   const BASE_URL = import.meta.env.VITE_API_URL;
 
@@ -119,7 +119,7 @@ const AttendanceRecord = () => {
   };
 
   const handleBack = () => {
-    navigate(-1); 
+    navigate(-1);
   };
   return (
     <div className="min-h-screen bg-blue-100 flex w-full">
@@ -130,25 +130,25 @@ const AttendanceRecord = () => {
 
       {/* Main Content */}
       <div className="lg:p-5 md:p-5 p-4 w-full">
-      <header className="bg-[#93c5fd] rounded-md shadow p-4 flex items-center justify-between relative">
-      {/* Back Button */}
-      <button
-        onClick={handleBack}
-        className="absolute left-4 top-1/2 transform -translate-y-1/2 bg-[#1e40af] text-white text-sm md:text-base lg:text-lg font-semibold px-4 py-2 rounded-lg hover:bg-blue-800 transition-colors duration-300 ease-in-out hidden md:block"
-      >
-        Back
-      </button>
+        <header className="bg-[#93c5fd] rounded-md shadow p-4 flex items-center justify-between relative">
+          {/* Back Button */}
+          <button
+            onClick={handleBack}
+            className="absolute left-4 top-1/2 transform -translate-y-1/2 bg-[#1e40af] text-white text-sm md:text-base lg:text-lg font-semibold px-4 py-2 rounded-lg hover:bg-blue-800 transition-colors duration-300 ease-in-out hidden md:block"
+          >
+            Back
+          </button>
 
-      {/* Heading */}
-      <h1 className="text-center flex-grow lg:text-xl md:text-base text-xs font-bold text-gray-800">
-        Attendance Record
-      </h1>
+          {/* Heading */}
+          <h1 className="text-center flex-grow lg:text-xl md:text-base text-xs font-bold text-gray-800">
+            Attendance Record
+          </h1>
 
-      {/* Email Section */}
-      <div className="lg:text-2xl md:text-xl text-xs text-white font-bold border-4 border-[#1e40af] p-2 rounded-lg bg-[rgb(42,108,194)] hover:bg-blue-800 transition-colors duration-300 ease-in-out">
-        {email}
-      </div>
-    </header>
+          {/* Email Section */}
+          <div className="lg:text-2xl md:text-xl text-xs text-white font-bold border-4 border-[#1e40af] p-2 rounded-lg bg-[rgb(42,108,194)] hover:bg-blue-800 transition-colors duration-300 ease-in-out">
+            {email}
+          </div>
+        </header>
 
         {model && selectLocation && (
           <div className="fixed inset-0 z-50 flex items-center justify-center">
