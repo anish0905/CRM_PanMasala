@@ -19,6 +19,10 @@ import DistributorDetails from "./pages/Admin/Distributor/DistributorDetails";
 import ShowCase from "./pages/SubAdmin/showCase/ShowCase";
 
 import MakeAttendance from "./pages/Attendance/Camera/Makeattendance";
+import Addinventory from "./pages/Admin/inventory/Addinventory";
+import AdminInventory from "./pages/Admin/inventory/AdminInventroy";
+import StockHistory from "./pages/Admin/inventory/StockHistory";
+import DispatchInventory from "./pages/Admin/inventory/DispatchInventory";
 function App() {
   const navigate = useNavigate();
   const email = localStorage.getItem("email");
@@ -72,7 +76,30 @@ function App() {
         path="/manage/Distributor/:name/:role"
         element={<DistributorDetails />}
       />
+
+      <Route
+        path="/add-inventory/:role"
+        element={<Addinventory />}
+      />
+      <Route
+        path="/my-inventory/:role"
+        element={<AdminInventory />}
+      />
+
+      <Route
+        path="/Stock-History/:role"
+        element={<StockHistory />}
+      />
+
+      <Route
+        path="/Dispatch-Inventory/:role"
+        element={<DispatchInventory />}
+      />
+
+
     </Routes>
+
+
   );
 }
 

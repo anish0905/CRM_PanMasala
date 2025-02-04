@@ -68,7 +68,10 @@ const Sidebar = ({ onClose }) => {
     }).then((result) => {
       if (result.isConfirmed) {
         navigate("/Attendance/subadmin/logout"); // Navigate to logout route
+        navigate("/Attendance/subadmin/logout"); // Navigate to logout route
       } else if (result.isDismissed) {
+        localStorage.clear();
+        navigate("/"); // Navigate to home page
         localStorage.clear();
         navigate("/"); // Navigate to home page
       }
@@ -111,7 +114,24 @@ const Sidebar = ({ onClose }) => {
             <div className="flex justify-start ml-10 flex-col font-semibold text-xl text-black">
               <DropdownItem
                 text="My Inventory"
-                onClick={() => handleItemClick("/manage/Inventory")}
+                onClick={() => handleItemClick("/my-inventory/subAdmin")}
+              />
+
+              <DropdownItem
+                text="Stock History"
+                onClick={() => handleItemClick("/Stock-History/subAdmin")}
+              />
+
+              <DropdownItem
+                text="Dispatch History"
+                onClick={() => handleItemClick("/Dispatch-Inventory/subAdmin")}
+              />
+
+              <DropdownItem
+                text="CNF Inventory"
+                onClick={() =>
+                  handleItemClick("/manage/superStockit/Inventory")
+                }
               />
 
               <DropdownItem
@@ -120,11 +140,10 @@ const Sidebar = ({ onClose }) => {
                   handleItemClick("/manage/superStockit/Inventory")
                 }
               />
+
               <DropdownItem
-                text="Stockist Inventory"
-                onClick={() =>
-                  handleItemClick("/manage/stockist/stock/management")
-                }
+                text="Distributor Inventory"
+                onClick={() => handleItemClick("/manage/distributor/inventory")}
               />
             </div>
           )}

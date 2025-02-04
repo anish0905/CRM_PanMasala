@@ -60,6 +60,10 @@ const subAdminSchema = mongoose.Schema(
         }
       },
      
+    },
+    admin:{
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "admin"
     }
   },
   {

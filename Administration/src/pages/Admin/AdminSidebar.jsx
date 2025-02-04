@@ -86,18 +86,37 @@ const AdminSidebar = ({ onClose }) => {
           </span>
           {manageInventory && (
             <div className="flex justify-start ml-10 flex-col font-semibold text-xl text-black">
+
+              <DropdownItem
+                text="Add Inventory"
+                onClick={() => handleItemClick("/add-inventory/admin")}
+              />
               <DropdownItem
                 text="My Inventory"
-                onClick={() => handleItemClick("/manage/Inventory")}
+                onClick={() => handleItemClick("/my-inventory/admin")}
+              />
+
+            
+              <DropdownItem
+                text="Stock History"
+                onClick={() => handleItemClick("/Stock-History/admin")}
+              />
+
+              
+              <DropdownItem
+                text="CNF Inventory"
+                onClick={() => handleItemClick("/manage/superStockit/Inventory")}
               />
 
               <DropdownItem
                 text="Super Stockist Inventory"
                 onClick={() => handleItemClick("/manage/superStockit/Inventory")}
               />
+
+
               <DropdownItem
-                text="Stockist Inventory"
-                onClick={() => handleItemClick("/manage/stockist/stock/management")}
+                text="Distributor Inventory"
+                onClick={() => handleItemClick("/manage/distributor/inventory")}
               />
 
 
@@ -117,7 +136,7 @@ const AdminSidebar = ({ onClose }) => {
 
               <DropdownItem
                 text="Sub-Admin"
-                onClick={() =>handleItemClick("/manage/Sub-Admin/Registration/Admin")}
+                onClick={() => handleItemClick("/manage/Sub-Admin/Registration/Admin")}
               />
               <DropdownItem
                 text="CNF"
@@ -146,10 +165,10 @@ const AdminSidebar = ({ onClose }) => {
                 onClick={() => handleItemClick("/deliveryboyDetails")}
               /> */}
 
-              
 
 
-              
+
+
 
 
             </div>
@@ -172,7 +191,7 @@ const AdminSidebar = ({ onClose }) => {
             <div className="flex justify-start ml-10 flex-col font-semibold text-xl text-black">
               <DropdownItem
                 text="Sub-Admin"
-                onClick={() =>handleItemClick("/manage/Sub-Admin/user/Admin")}
+                onClick={() => handleItemClick("/manage/Sub-Admin/user/Admin")}
               />
               <DropdownItem
                 text="CNF"
@@ -287,7 +306,7 @@ const AdminSidebar = ({ onClose }) => {
                 text="Pan Shop Details"
                 onClick={() => handleItemClick("/panshowDetails")}
               />
-              
+
             </div>
           )}
         </div>
@@ -308,7 +327,7 @@ const AdminSidebar = ({ onClose }) => {
                 text="Delivery Tracker"
                 onClick={() => handleItemClick("/deliveryBoyTracker")}
               />
-             
+
               <DropdownItem
                 text="Field Executive"
                 onClick={() => handleItemClick("/field-executive/details")}
@@ -337,13 +356,13 @@ const AdminSidebar = ({ onClose }) => {
           )}
         </div>
 
-       
+
         <NavItem
           icon={<FaUserPlus style={{ color: "green", fontSize: "2rem" }} />}
           text="Create Product"
           onClick={() => handleItemClick("/Add-product")}
         />
-        
+
 
         <LogoutItem
           icon={<FaSignOutAlt style={{ color: "gray", fontSize: "2rem" }} />}

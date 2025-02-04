@@ -6,6 +6,7 @@ import { IoMdClose } from "react-icons/io";
 import stateData from "../../../statesData"; // Import stateData
 
 const SubAdminRegistionForm = ({ onClose, selectedsubAdmin ,fetchsubAdmins}) => {
+  const currentUserId = localStorage.getItem("userId");
   const [formData, setFormData] = useState({
     username: "",
     email: "",
@@ -19,6 +20,7 @@ const SubAdminRegistionForm = ({ onClose, selectedsubAdmin ,fetchsubAdmins}) => 
     pinCode: "",
     selectedSuperStockist: "",
     district: "", // To handle district selection
+    admin: currentUserId,
   });
 
   const URI = import.meta.env.VITE_API_URL;
@@ -81,6 +83,7 @@ const SubAdminRegistionForm = ({ onClose, selectedsubAdmin ,fetchsubAdmins}) => 
         pinCode: "",
         selectedSuperStockist: "",
         district: "", // Reset district on form submission
+        selectedadmin: "", // Reset selected sub-admin on form submission
       });
       onClose();
     } catch (error) {
@@ -101,6 +104,7 @@ const SubAdminRegistionForm = ({ onClose, selectedsubAdmin ,fetchsubAdmins}) => 
         state: selectedsubAdmin.state,
         district: selectedsubAdmin.district || "", // Pre-fill district if available
         mobileNo: selectedsubAdmin.mobileNo || "",
+
         
       });
     }

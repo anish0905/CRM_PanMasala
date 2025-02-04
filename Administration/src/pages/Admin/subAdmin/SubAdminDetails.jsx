@@ -17,7 +17,7 @@ const SubAdminDetails = () => {
   const [sortDirection, setSortDirection] = useState('asc');
   const [selectedsubAdmin, setSelectedsubAdmin] = useState();
   const email = localStorage.getItem("email");
-  const currentUserId = localStorage.getItem("currentUserId");
+  const currentUserId = localStorage.getItem("userId");
   const { name,role } = useParams();
   const navigate = useNavigate();
   const location = useLocation();

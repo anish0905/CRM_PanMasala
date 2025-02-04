@@ -67,11 +67,12 @@ const Login = () => {
       // Handle response for admin or subadmin login
       if (loginResponse.ok) {
         const loginData = await loginResponse.json();
-        const { accessToken, userId } = loginData;
+        const { accessToken, userId, admin } = loginData;
 
         localStorage.setItem('email', email);
         localStorage.setItem('token', accessToken);
         localStorage.setItem('userId', userId);
+        localStorage.setItem('admin', admin);
 
         toast.success('Signin is successful', {
           position: "top-center",
