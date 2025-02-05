@@ -1,7 +1,13 @@
 const SubAdminInventory = require('../../models/Inventory/SubAdminInventoryModel');
 const mongoose = require('mongoose');
+const Message = require("../../models/messageModel");
+const subAdmin = require("../../models/subAdmin/subAdminModels");
+const product = require("../../models/e-commerce_product/e-commerce_product.model");
 
 // Add Inventory
+
+
+
 
 exports.addInventory = async (req, res) => {
     try {
@@ -70,7 +76,7 @@ exports.addInventory = async (req, res) => {
 // Dispatch Inventory
 exports.dispatchStock = async (req, res) => {
     try {
-        const { userId, issuedTo, issuedBy, products, otp, orderId,receivedDate } = req.body;
+        const { userId, issuedTo, issuedBy, products, otp, orderId, receivedDate } = req.body;
 
         if (!Array.isArray(products) || products.length === 0) {
             return res.status(400).json({ message: 'Products array is required' });
@@ -120,12 +126,55 @@ exports.dispatchStock = async (req, res) => {
         });
 
         await inventory.save();
+
+        // Fetch sender details correctly
+        const UserDetails = await subAdmin.findById(issuedBy);  // Fixed method name
+
+        if (!UserDetails) {
+            return res.status(404).json({ message: 'Issued by user not found' });
+        }
+
+        // Send notification with corrected parameters
+        await sendNotification(
+            issuedBy,
+            UserDetails.username,  // Correct sender name
+            issuedTo,
+            `📦 Stock Dispatched  
+            Dispatched Products: 
+            ${dispatchedProducts.map(p => `🔹 ${p.productName}: ${p.quantityDispatched}`).join('\n')}  
+            
+            📅 Received Date: ${new Date(receivedDate).toLocaleString()}  
+            🆔 Order ID: ${orderId}  
+            🔢 OTP (For Receiving Order): ${otp}  
+          
+            ⚠️ Note: Please share this OTP only at the time of receiving the order for verification.`
+        );
+
         res.status(200).json({ message: 'Stock dispatched successfully with transaction history' });
     } catch (error) {
         console.error(error);
         res.status(500).json({ message: 'Error dispatching stock', error });
     }
 };
+
+// Fix sendNotification function
+const sendNotification = async (senderId, senderName, recipient, content) => {
+    try {
+        const message = new Message({
+            sender: senderId,
+            senderName: senderName,
+            recipient: recipient,
+            content: { text: content }  // Correct way to structure the content object
+        });
+        await message.save(); // Ensure it's saved properly
+        console.log("Notification sent successfully");
+    } catch (error) {
+        console.error("Error sending notification:", error);
+    }
+};
+
+
+
 
 
 
