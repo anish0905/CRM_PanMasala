@@ -41,6 +41,8 @@ const panShopOwnerRoutes = require("./src/routes/panshop/panShopOwnerRoutes");
 
 const subAdminInventoryRoute = require("./src/routes/Inventory/subAdminInventoryRoute");
 
+const messageRoutes = require("./src/routes/messageRoutes");
+
 // Connect to Database
 connectDb();
 
@@ -87,12 +89,13 @@ app.use("/api/cnfAgent", cnfAgentRoutes);
 // app.use("/api/Distributorinventory", DistributorInventoryRoute);
 app.use("/api/distributor", DistributorRoutes);
 
-
 // Pan Shop Routes
 app.use("/api/panshop/order", panShopOrderRoutes);
 app.use("/api/panShop", panShopOwnerRoutes);
 
-app.use("/api/subAdmin/inventory",subAdminInventoryRoute)
+app.use("/api/subAdmin/inventory", subAdminInventoryRoute);
+
+app.use("/api/message", messageRoutes);
 
 // Fallback Route for Undefined Endpoints
 app.use((req, res, next) => {

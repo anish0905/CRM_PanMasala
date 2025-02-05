@@ -31,6 +31,7 @@ import ProductReview from "./pages/fieldExecutiveApproval/ExecutiveReports/Produ
 import Reverification from "./pages/FieldExecutive/Re-verification/Reverification.jsx";
 import Makeattendance from "./pages/Attendance/Camera/Makeattendance.jsx";
 import AttendanceRecord from "./pages/Attendance/attendanceRecord/attendanceRecord.jsx";
+import MessageForm from "./pages/Message/MessageForm.jsx";
 
 // Get the user's role from localStorage
 const role = localStorage.getItem("role");
@@ -123,6 +124,8 @@ createRoot(document.getElementById("root")).render(
               path="/Field-Executive/AttendanceRecord"
               element={<AttendanceRecord />}
             />
+
+            <Route path="/Field-Executive/message" element={<MessageForm />} />
           </>
         ) : (
           <Route path="*" element={<NotFound />} />

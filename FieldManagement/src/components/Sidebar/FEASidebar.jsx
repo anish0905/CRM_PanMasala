@@ -61,38 +61,35 @@ const FEASidebar = ({ onClose }) => {
     setIsSidebarOpen(false);
   };
 
- const handleLogout = async () => {
-     try {
-       // Show confirmation dialog with SweetAlert
-       const result = await Swal.fire({
-         title: 'Are you sure?',
-         text: 'Have you finished your duty?',
-         icon: 'warning',
-         showCancelButton: true,
-         confirmButtonColor: '#3085d6',
-         cancelButtonColor: '#d33',
-         confirmButtonText: 'Yes, mark as complete!',
-         cancelButtonText: 'No, just log out'
-       });
-       
-   
-       if (result.isConfirmed) {
-        
-         navigate("/Attendance/logout");
-       } else if (result.dismiss === Swal.DismissReason.cancel) {
-         // If user cancels, call the logout API
-         const resp = await axios.post(`${URI}/api/fieldManager/logout/${userId}`);
-         localStorage.clear();
-         navigate("/");
-       }
-     } catch (error) {
-       console.error("Error logging out:", error);
-       Swal.fire('Error', 'An error occurred while logging out', 'error');
-     }
-   };
-   
- 
-  
+  const handleLogout = async () => {
+    try {
+      // Show confirmation dialog with SweetAlert
+      const result = await Swal.fire({
+        title: "Are you sure?",
+        text: "Have you finished your duty?",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Yes, mark as complete!",
+        cancelButtonText: "No, just log out",
+      });
+
+      if (result.isConfirmed) {
+        navigate("/Attendance/logout");
+      } else if (result.dismiss === Swal.DismissReason.cancel) {
+        // If user cancels, call the logout API
+        const resp = await axios.post(
+          `${URI}/api/fieldManager/logout/${userId}`
+        );
+        localStorage.clear();
+        navigate("/");
+      }
+    } catch (error) {
+      console.error("Error logging out:", error);
+      Swal.fire("Error", "An error occurred while logging out", "error");
+    }
+  };
 
   const getRouteWidth = () => {
     return location.pathname === "/Field-Executive-Approval-Dashboard"
@@ -131,6 +128,10 @@ const FEASidebar = ({ onClose }) => {
     {
       text: "Product Reports",
       route: "/showcaseReports/ProductReports",
+    },
+    {
+      text: "Report",
+      route: "/Field-Executive/message",
     },
   ];
   const vendorMenuItems = [
