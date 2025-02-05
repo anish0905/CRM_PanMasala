@@ -70,7 +70,7 @@ exports.addInventory = async (req, res) => {
 // Dispatch Inventory
 exports.dispatchStock = async (req, res) => {
     try {
-        const { userId, issuedTo, issuedBy, products, otp, orderId } = req.body;
+        const { userId, issuedTo, issuedBy, products, otp, orderId,receivedDate } = req.body;
 
         if (!Array.isArray(products) || products.length === 0) {
             return res.status(400).json({ message: 'Products array is required' });
@@ -101,6 +101,7 @@ exports.dispatchStock = async (req, res) => {
             inventory.dispatchedStock += qty;
 
             dispatchedProducts.push({
+                receivedDate,
                 productId,
                 productName,
                 quantityDispatched: qty
@@ -114,7 +115,8 @@ exports.dispatchStock = async (req, res) => {
             products: dispatchedProducts,
             status: 'dispatched',
             otp,
-            orderId
+            orderId,
+            receivedDate
         });
 
         await inventory.save();
@@ -140,6 +142,14 @@ exports.getInventoryByUserId = async (req, res) => {
             .populate({
                 path: 'revisedStockHistory.revisedBy',  // Populate revisedBy inside revisedStockHistory
                 model: 'admin'  // Ensure it references the correct model
+            })
+            .populate({
+                path: 'dispatchedStockHistory.issuedTo',  // Populate revisedBy inside revisedStockHistory
+                model: 'CNFAgent'  // Ensure it references the correct model
+            })
+            .populate({
+                path: 'dispatchedStockHistory.issuedBy',  // Populate issuedBy inside dispatchedStockHistory
+                model: 'subAdmin'  // Ensure it references the correct model
             });
 
         if (!inventory) {

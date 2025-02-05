@@ -101,6 +101,10 @@ const AdminSidebar = ({ onClose }) => {
                 text="Stock History"
                 onClick={() => handleItemClick("/Stock-History/admin")}
               />
+              <DropdownItem
+                text="Dispatch History"
+                onClick={() => handleItemClick("/Dispatch-History/admin")}
+              />
 
               
               <DropdownItem

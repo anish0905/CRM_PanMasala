@@ -31,7 +31,7 @@ const SubAdminInventorySchema = new mongoose.Schema({
   dispatchedStockHistory: [
     {
       issuedTo: { type: mongoose.Schema.Types.ObjectId, ref: 'CNFAgent', required: true },
-      issuedBy: { type: mongoose.Schema.Types.ObjectId, ref: 'SubAdmin', required: true },
+      issuedBy: { type: mongoose.Schema.Types.ObjectId, ref: 'subAdmin', required: true },
       transactionDate: { type: Date, default: Date.now },
       products: [
         {
