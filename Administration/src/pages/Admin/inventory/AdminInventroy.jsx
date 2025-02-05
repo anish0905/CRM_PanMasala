@@ -71,8 +71,8 @@ const AdminInventory = () => {
                             </button>
                         ) : (
                             <button
-                                className="bg-[#0066ff] hover:bg-[#8c8af1] text-white font-bold py-2 px-4 rounded-md transition duration-300 ease-in-out cursor-pointer"
-                                onClick={() => navigate("/add-inventory/subAdmin")}
+                                className="bg-[#FFA500] hover:bg-[#ff7f00] text-white font-bold py-2 px-4 rounded-md transition duration-300 ease-in-out cursor-pointer"
+                                onClick={() => navigate("/Dispatch-History/subAdmin")}
                             >
                                 Dispatch inventory
                             </button>
@@ -99,8 +99,8 @@ const AdminInventory = () => {
 
                 {/* Inventory Table */}
                 {inventory && inventory.products?.length > 0 ? (
-                    <div className="overflow-x-auto p-4">
-                        <div className="border border-gray-300 shadow-lg rounded-lg overflow-hidden">
+                    <div className="overflow-x-auto  ">
+                        <div className="border border-gray-300 shadow-lg rounded-lg  overflow-hidden overflow-x-auto overflow-y-auto">
                             <table className="w-full table-auto border-collapse">
                                 {/* Table Header */}
                                 <thead className="bg-blue-600 text-white text-sm uppercase tracking-wider">

@@ -23,6 +23,7 @@ import Addinventory from "./pages/Admin/inventory/Addinventory";
 import AdminInventory from "./pages/Admin/inventory/AdminInventroy";
 import StockHistory from "./pages/Admin/inventory/StockHistory";
 import DispatchInventory from "./pages/Admin/inventory/DispatchInventory";
+import DispatchHistory from "./pages/Admin/inventory/DispatchHistory";
 function App() {
   const navigate = useNavigate();
   const email = localStorage.getItem("email");
@@ -94,6 +95,11 @@ function App() {
       <Route
         path="/Dispatch-Inventory/:role"
         element={<DispatchInventory />}
+      />
+
+      <Route
+        path="/Dispatch-History/:role"
+        element={<DispatchHistory />}
       />
 
 

@@ -123,8 +123,12 @@ const Sidebar = ({ onClose }) => {
               />
 
               <DropdownItem
-                text="Dispatch History"
+                text="Dispatch Inventory"
                 onClick={() => handleItemClick("/Dispatch-Inventory/subAdmin")}
+              />
+               <DropdownItem
+                text="Dispatch History"
+                onClick={() => handleItemClick("/Dispatch-History/subAdmin")}
               />
 
               <DropdownItem

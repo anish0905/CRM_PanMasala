@@ -222,8 +222,8 @@ const StockHistory = () => {
                 {/* Inventory Table */}
                 {inventory ? (
                     filteredRevisions.length > 0 ? (
-                        <div className="overflow-x-auto p-4">
-                            <div className="border border-gray-300 shadow-lg rounded-lg overflow-hidden">
+                        <div className="overflow-x-auto ">
+                            <div className="border border-gray-300 shadow-lg rounded-lg overflow-hidden overflow-x-auto overflow-y-auto">
                                 <table className="w-full table-auto border-collapse">
                                     <thead className="bg-gradient-to-r from-blue-600 to-indigo-700 text-white text-sm uppercase tracking-wider">
                                         <tr>
