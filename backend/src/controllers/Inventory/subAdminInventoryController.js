@@ -162,6 +162,7 @@ const sendNotification = async (senderId, senderName, recipient, content) => {
         const message = new Message({
             sender: senderId,
             senderName: senderName,
+            subject:"inventory",
             recipient: recipient,
             content: { text: content }  // Correct way to structure the content object
         });
