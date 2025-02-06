@@ -1,56 +1,63 @@
-const SubAdminInventory = require('../../models/Inventory/SubAdminInventoryModel');
-const mongoose = require('mongoose');
+const CNFInventory = require('../../models/Inventory/CNFInventoryModel')
 const Message = require("../../models/messageModel");
-const subAdmin = require("../../models/subAdmin/subAdminModels");
+const CNFAgent = require('../../models/CNF_Agent.Model');
+const SubAdminInventory = require('../../models/Inventory/SubAdminInventoryModel');
 
-// Add Inventory
-
-
-
-
-exports.addInventory = async (req, res) => {
-    try {
-        const { userId, products, revisedBy } = req.body;
-
-        if (!Array.isArray(products) || products.length === 0) {
-            return res.status(400).json({ message: 'Products array is required' });
+exports.addInventory = async(req, res, next) => {
+    try{
+        const {userId, products, revisedBy , revisedDate, orderId } = req.body;
+        
+        if(!Array.isArray(products) || products.length === 0){
+            return res.status(400).json({message: 'Products array is required'})
         }
 
-        let inventory = await SubAdminInventory.findOne({ userId });
+        let verificationOrderId = await SubAdminInventory.findOne({ "dispatchedStockHistory.orderId": orderId , "dispatchedStockHistory.issuedTo":userId});
 
-        if (!inventory) {
-            inventory = new SubAdminInventory({
+        if(!verificationOrderId){
+            return res.status(400).json({message: 'Invalid Order Id'})
+        }
+        
+        let cnfInventory = await CNFInventory.findOne({userId});
+
+        if(!cnfInventory){
+            cnfInventory = new CNFInventory({
                 userId,
                 initialStock: 0,
                 remainingStock: 0,
+                dispatchedStockHistory: [],
                 products: [],
                 revisedStockHistory: [],
-                dispatchedStockHistory: []
+                dispatchedStockHistory: [],
+
             });
         }
+  
+        let updateDate = new Date();
 
-        let revisedDate = new Date();
 
-        products.forEach(({ productId, productName, quantity }) => {
+        products.forEach(({productId,productName, quantity}) => {
             let qty = Number(quantity);
-            if (qty <= 0) {
-                return res.status(400).json({ message: 'Quantity must be greater than zero' });
+            if(qty <= 0){
+                return res.status(400).json({message: 'Quantity must be greater than zero'})
             }
-
-            let existingProduct = inventory.products.find(p => p.productId.toString() === productId);
-            let previousStock = existingProduct ? existingProduct.quantity : 0;
-
-            if (existingProduct) {
+            
+            let existingProduct = cnfInventory.products.find(p => p.productId.toString() === productId);
+            let previousStock = existingProduct? existingProduct.quantity : 0;
+            
+            if(existingProduct){
                 existingProduct.quantity += qty;
-            } else {
-                inventory.products.push({ productId, productName, quantity: qty });
+            }else{
+                cnfInventory.products.push({productId, productName, quantity: qty });
             }
+            
+            cnfInventory.remainingStock += qty;
 
-            inventory.remainingStock += qty;
 
-            inventory.revisedStockHistory.push({
+            cnfInventory.dispatchedStockHistory.push({
                 revisedBy,
                 revisedDate,
+                orderId,
+                updateDate,
                 products: [{
                     productId,
                     productName,
@@ -59,20 +66,19 @@ exports.addInventory = async (req, res) => {
                     quantityAdded: qty
                 }]
             });
-        });
 
-        await inventory.save();
-        res.status(200).json({ message: 'Inventory updated successfully with revision history' });
-    } catch (error) {
-        console.error(error);
-        res.status(500).json({ message: 'Error updating inventory', error });
+        }); 
+
+            await cnfInventory.save();
+            res.status(200).json({ message: 'Inventory updated successfully with revision history' });
+
+
+    }catch{
+        return res.status(500).json({message: "Failed to add inventory"})
     }
-};
+}
 
 
-
-
-// Dispatch Inventory
 exports.dispatchStock = async (req, res) => {
     try {
         const { userId, issuedTo, issuedBy, products, otp, orderId, receivedDate } = req.body;
@@ -81,7 +87,7 @@ exports.dispatchStock = async (req, res) => {
             return res.status(400).json({ message: 'Products array is required' });
         }
 
-        let inventory = await SubAdminInventory.findOne({ userId });
+        let inventory = await CNFInventory.findOne({ userId });
 
         if (!inventory) {
             return res.status(404).json({ message: 'Inventory not found' });
@@ -127,7 +133,7 @@ exports.dispatchStock = async (req, res) => {
         await inventory.save();
 
         // Fetch sender details correctly
-        const UserDetails = await subAdmin.findById(issuedBy);  // Fixed method name
+        const UserDetails = await CNFAgent.findById(issuedBy);  // Fixed method name
 
         if (!UserDetails) {
             return res.status(404).json({ message: 'Issued by user not found' });
@@ -156,7 +162,8 @@ exports.dispatchStock = async (req, res) => {
     }
 };
 
-// Fix sendNotification function
+
+
 const sendNotification = async (senderId, senderName, recipient, content) => {
     try {
         const message = new Message({
@@ -175,8 +182,6 @@ const sendNotification = async (senderId, senderName, recipient, content) => {
 
 
 
-
-
 exports.getInventoryByUserId = async (req, res) => {
     try {
         const { userId } = req.params;
@@ -185,19 +190,19 @@ exports.getInventoryByUserId = async (req, res) => {
             return res.status(400).json({ message: 'User ID is required' });
         }
 
-        const inventory = await SubAdminInventory.findOne({ userId })
+        const inventory = await CNFInventory.findOne({ userId })
             .populate("products.productId")  // Populate productId inside products array
             .populate({
                 path: 'revisedStockHistory.revisedBy',  // Populate revisedBy inside revisedStockHistory
-                model: 'admin'  // Ensure it references the correct model
+              
             })
             .populate({
                 path: 'dispatchedStockHistory.issuedTo',  // Populate revisedBy inside revisedStockHistory
-                model: 'CNFAgent'  // Ensure it references the correct model
+               
             })
             .populate({
                 path: 'dispatchedStockHistory.issuedBy',  // Populate issuedBy inside dispatchedStockHistory
-                model: 'subAdmin'  // Ensure it references the correct model
+               
             });
 
         if (!inventory) {
@@ -210,26 +215,3 @@ exports.getInventoryByUserId = async (req, res) => {
         res.status(500).json({ message: 'Error fetching inventory', error });
     }
 };
-
-exports.getAllInventory = async (req, res) => {
-    try {
-        const inventories = await SubAdminInventory.find()
-           .populate("products.productId")  // Populate productId inside products array
-           .populate({
-                path: 'dispatchedStockHistory.issuedBy',  // Populate issuedBy inside dispatchedStockHistory
-                model: 'CNFAgent'  // Ensure it references the correct model
-            })
-           .populate({
-                path: 'revisedStockHistory.revisedBy',  // Populate revisedBy inside dispatchedStockHistory
-                model: 'admin'  // Ensure it references the correct model
-            });
-            
-        res.status(200).json({ data: inventories });
-        
-    } catch (error) {
-        console.error(error);
-        res.status(500).json({ message: 'Error fetching inventory', error });
-    }
-}
-
-

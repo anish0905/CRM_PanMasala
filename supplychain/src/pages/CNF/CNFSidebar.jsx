@@ -112,9 +112,23 @@ const CNFSidebar = ({ onClose }) => {
           </span>
           {manageInventory && (
             <div className="flex justify-start ml-10 flex-col font-semibold text-xl text-black">
+             <DropdownItem
+                text="Add Inventory"
+                onClick={() => handleItemClick("/add-inventory/cnf")}
+              />
               <DropdownItem
                 text="My Inventory"
-                onClick={() => handleItemClick("/manage/Inventory")}
+                onClick={() => handleItemClick("/my-inventory/cnf")}
+              />
+
+            
+              <DropdownItem
+                text="Stock History"
+                onClick={() => handleItemClick("/Stock-History/cnf")}
+              />
+              <DropdownItem
+                text="Dispatch History"
+                onClick={() => handleItemClick("/Dispatch-History/cnf")}
               />
 
               <DropdownItem
