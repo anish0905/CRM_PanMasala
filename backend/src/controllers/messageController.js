@@ -82,3 +82,31 @@ exports.deleteMessage = async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 };
+
+exports.unReadMessage = async (req, res) => {
+  try {
+    const { messageId } = req.params;
+
+    const unReadMessages = await Message.findByIdAndUpdate(
+      messageId,
+      { isRead: true }, // isRemoved ko true set kar rahe hain
+      { new: true }
+    );
+
+    if (!unReadMessages) {
+      return res
+        .status(404)
+        .json({ success: false, message: "Message not found" });
+    }
+
+    res
+      .status(200)
+      .json({ success: true, message: "Message hidden", unReadMessages });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: "Error hiding message",
+      error: error.message,
+    });
+  }
+};

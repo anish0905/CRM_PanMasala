@@ -25,7 +25,8 @@ const SMSDrawer = () => {
         `${BASE_URL}/api/message/get/${senderId}/${recipientId}`
       );
       setMessages(response.data); // Store messages in state
-      setMessageCount(response.data.length); // Set message count
+      const UnReadMessage = response.data.filter((msg) => !msg.isRead);
+      setMessageCount(UnReadMessage.length); // Set message count
     } catch (error) {
       console.error("Error fetching messages:", error);
     }
@@ -144,8 +145,7 @@ const SMSDrawer = () => {
               </li>
             </ul>
           </nav>
-
-          <div className="flex-1 overflow-y-auto max-h-[800px] scroller">
+          <div className="flex-1  overflow-y-auto max-h-[800px]">
             {isOpen && <UnReadMessage messages={messages} />}
           </div>
 
