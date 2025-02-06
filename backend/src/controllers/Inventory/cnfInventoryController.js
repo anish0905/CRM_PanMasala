@@ -3,23 +3,36 @@ const Message = require("../../models/messageModel");
 const CNFAgent = require('../../models/CNF_Agent.Model');
 const SubAdminInventory = require('../../models/Inventory/SubAdminInventoryModel');
 
-exports.addInventory = async(req, res, next) => {
-    try{
-        const {userId, products, revisedBy , revisedDate, orderId } = req.body;
-        
-        if(!Array.isArray(products) || products.length === 0){
-            return res.status(400).json({message: 'Products array is required'})
+exports.addInventory = async (req, res, next) => {
+    try {
+        const { userId, products, revisedDate, orderId } = req.body;
+
+        // Validate products array
+        if (!Array.isArray(products) || products.length === 0) {
+            return res.status(400).json({ message: 'Products array is required' });
         }
 
-        let verificationOrderId = await SubAdminInventory.findOne({ "dispatchedStockHistory.orderId": orderId , "dispatchedStockHistory.issuedTo":userId});
+        // Corrected MongoDB query using `$elemMatch`
+        const verification = await SubAdminInventory.findOne({
+            dispatchedStockHistory: { 
+                $elemMatch: { issuedTo: userId, orderId: orderId } 
+            }
+        });
 
-        if(!verificationOrderId){
-            return res.status(400).json({message: 'Invalid Order Id'})
+        if (!verification) {
+            return res.status(400).json({ message: 'Invalid User ID or Order ID' });
         }
-        
-        let cnfInventory = await CNFInventory.findOne({userId});
 
-        if(!cnfInventory){
+        const matchedHistory = verification.dispatchedStockHistory.find(
+            history => history.orderId === orderId && history.issuedTo.toString() === userId
+        );
+
+        const revisedBy = matchedHistory ? matchedHistory.issuedBy : "Unknown";
+
+        let cnfInventory = await CNFInventory.findOne({ userId });
+
+        // Create a new inventory record if it does not exist
+        if (!cnfInventory) {
             cnfInventory = new CNFInventory({
                 userId,
                 initialStock: 0,
@@ -27,56 +40,62 @@ exports.addInventory = async(req, res, next) => {
                 dispatchedStockHistory: [],
                 products: [],
                 revisedStockHistory: [],
-                dispatchedStockHistory: [],
-
             });
         }
-  
-        let updateDate = new Date();
 
+        const updateDate = new Date();
+        let totalAddedStock = 0;
 
-        products.forEach(({productId,productName, quantity}) => {
+        const productUpdates = products.map(({ productId, productName, quantity }) => {
             let qty = Number(quantity);
-            if(qty <= 0){
-                return res.status(400).json({message: 'Quantity must be greater than zero'})
+
+            if (qty <= 0) {
+                throw new Error(`Quantity for product ${productName} must be greater than zero`);
             }
-            
+
             let existingProduct = cnfInventory.products.find(p => p.productId.toString() === productId);
-            let previousStock = existingProduct? existingProduct.quantity : 0;
-            
-            if(existingProduct){
+            let previousStock = existingProduct ? existingProduct.quantity : 0;
+
+            if (existingProduct) {
                 existingProduct.quantity += qty;
-            }else{
-                cnfInventory.products.push({productId, productName, quantity: qty });
+            } else {
+                cnfInventory.products.push({ productId, productName, quantity: qty });
             }
-            
-            cnfInventory.remainingStock += qty;
 
+            totalAddedStock += qty;
 
-            cnfInventory.dispatchedStockHistory.push({
-                revisedBy,
-                revisedDate,
-                orderId,
-                updateDate,
-                products: [{
-                    productId,
-                    productName,
-                    previousStock,
-                    newStock: previousStock + qty,
-                    quantityAdded: qty
-                }]
-            });
+            return {
+                productId,
+                productName,
+                previousStock,
+                newStock: previousStock + qty,
+                quantityAdded: qty
+            };
+        });
 
-        }); 
+        // Update remaining stock
+        cnfInventory.remainingStock += totalAddedStock;
 
-            await cnfInventory.save();
-            res.status(200).json({ message: 'Inventory updated successfully with revision history' });
+        // Add revision history
+        cnfInventory.revisedStockHistory.push({
+            revisedBy,
+            revisedDate,
+            orderId,
+            updateDate,
+            products: productUpdates
+        });
 
+        // Save inventory
+        await cnfInventory.save();
+        res.status(200).json({ message: 'Inventory updated successfully with revision history' });
 
-    }catch{
-        return res.status(500).json({message: "Failed to add inventory"})
+    } catch (error) {
+        console.error("Error adding inventory:", error);
+        return res.status(500).json({ message: "Failed to add inventory", error: error.message });
     }
-}
+};
+
+
 
 
 exports.dispatchStock = async (req, res) => {
@@ -194,15 +213,15 @@ exports.getInventoryByUserId = async (req, res) => {
         const inventory = await CNFInventory.findOne({ userId })
             .populate("products.productId")  // Populate productId inside products array
             .populate({
-                path: 'revisedStockHistory.revisedBy',  // Populate revisedBy inside revisedStockHistory
+                path: 'revisedStockHistory.revisedBy',  
               
             })
             .populate({
-                path: 'dispatchedStockHistory.issuedTo',  // Populate revisedBy inside revisedStockHistory
+                path: 'dispatchedStockHistory.issuedTo',  
                
             })
             .populate({
-                path: 'dispatchedStockHistory.issuedBy',  // Populate issuedBy inside dispatchedStockHistory
+                path: 'dispatchedStockHistory.issuedBy',  
                
             });
 

@@ -23,7 +23,8 @@ const AddInventory = () => {
     const [editingIndex, setEditingIndex] = useState(null);
     const [message, setMessage] = useState('');
     const [isError, setIsError] = useState(false);
-    const [orderId, setOrderId] = useState();
+    const [orderId, setOrderId] = useState("");
+    
 
     const BASE_URL = import.meta.env.VITE_API_URL;
 
@@ -110,6 +111,11 @@ const AddInventory = () => {
             return;
         }
 
+        if (!orderId || orderId.length !== 12) {
+            Swal.fire("Error", "Order ID must be exactly 12 characters!", "error");
+            return;
+        }
+
         const confirm = await Swal.fire({
             title: "Are you sure?",
             text: "Do you want to update the inventory?",
@@ -122,15 +128,14 @@ const AddInventory = () => {
         if (!confirm.isConfirmed) return;
 
         try {
-            await axios.post(`${BASE_URL}/api/subAdmin/inventory/add-inventory`, {
+            await axios.post(`${BASE_URL}/api/${role}/inventory/add-inventory`, {
                 userId: currentUserId,
-                revisedBy: currentUserId || '',
-
+                revisedDate:revisedDate,
+                orderId: orderId,
                 products: inventoryItems.map(item => ({
                     productId: item.productId,
                     quantity: item.quantity,
-                    revisedBy: item.revisedBy,
-                    revisedDate: item.revisedDate.toISOString().split('T')[0]
+                   
                 }))
             });
 
@@ -146,7 +151,7 @@ const AddInventory = () => {
     return (
         <div className="flex gap-6 min-h-screen w-full">
             <div className="min-h-screen lg:block hidden">
-            {
+                {
                     role === "cnf" ? (
                         <CNFSidebar />
                     ) : role === "superstockist" ? (
@@ -169,15 +174,15 @@ const AddInventory = () => {
                         </div>
                     )}
                     <div className="lg:hidden block">
-                      {
-                                                  role === "cnf" ? (
-                                                      <CNFSideBarModal />
-                                                  ) ? role === "superstockist" : (
-                                                      <SuperStockistBarModal />
-                                                  ) : (
-                                                      <DistributorBarModal />
-                                                  )
-                                              }
+                        {
+                            role === "cnf" ? (
+                                <CNFSideBarModal />
+                            ) ? role === "superstockist" : (
+                                <SuperStockistBarModal />
+                            ) : (
+                                <DistributorBarModal />
+                            )
+                        }
                     </div>
                 </div>
 
@@ -189,6 +194,23 @@ const AddInventory = () => {
                             {message}
                         </div>
                     )}
+
+
+                    <div className="mb-4">
+                        <label className="block text-sm font-medium text-gray-700">
+                            Order ID <span className="text-red-500">*</span>
+                        </label>
+                        <input
+                            type="text"
+                            value={orderId}
+                            onChange={(e) => setOrderId(e.target.value)}
+                            className="mt-1 p-2 border border-gray-300 rounded-md w-full"
+                            placeholder="Enter 12-character Order ID"
+                            maxLength={12}
+                            required
+                        />
+                    </div>
+
 
                     <div className="flex justify-center items-center content-center flex-wrap gap-4 mb-4">
                         <select

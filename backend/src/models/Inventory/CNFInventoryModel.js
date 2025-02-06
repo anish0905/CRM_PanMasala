@@ -43,7 +43,7 @@ const CNFInventorySchema = new mongoose.Schema({
   dispatchedStockHistory: [
     {
       issuedTo: { type: mongoose.Schema.Types.ObjectId, ref: 'CNFAgent', required: true },
-      issuedBy: { type: mongoose.Schema.Types.ObjectId, ref: 'CNF'|| 'SuperStockist', required: true },
+      issuedBy: { type: mongoose.Schema.Types.ObjectId, ref: 'CNFAgent'|| 'SuperStockist', required: true },
       transactionDate: { type: Date, default: Date.now },
       products: [
         {
@@ -84,5 +84,7 @@ const CNFInventorySchema = new mongoose.Schema({
   ]
 }, { timestamps: true });
 
+
 const CNFInventory = mongoose.model('CNFInventory', CNFInventorySchema);
+
 module.exports = CNFInventory;

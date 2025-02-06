@@ -31,7 +31,7 @@ const MyInventory = () => {
 
     const fetchInventory = async () => {
         try {
-            const response = await axios.get(`${BASE_URL}/api/subAdmin/inventory/inventory/${currentUserId}`)
+            const response = await axios.get(`${BASE_URL}/api/${role}/inventory/inventory/${currentUserId}`)
 
             setInventory(response.data.data);
         } catch (error) {
