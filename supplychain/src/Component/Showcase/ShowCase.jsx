@@ -5,7 +5,6 @@ import axios from "axios";
 import SMSDrawer from "../SMS_Drawer";
 import { FcSearch } from "react-icons/fc";
 
-
 const ShowCase = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [productName, setProductName] = useState("");
@@ -80,7 +79,7 @@ const ShowCase = () => {
 
   useEffect(() => {
     fetchProducts();
-  }, [handleSubmit]);
+  }, []);
 
   // Filter products based on search query
   const filteredProducts = products.filter(

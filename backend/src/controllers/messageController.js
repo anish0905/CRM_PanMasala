@@ -8,6 +8,7 @@ exports.sendMessage = async (req, res) => {
     const {
       sender,
       senderName,
+      subject,
       recipient,
       text,
       originalMessage,
@@ -30,7 +31,9 @@ exports.sendMessage = async (req, res) => {
     const newMessage = new Message({
       sender,
       senderName,
+
       recipient,
+      subject,
       content: {
         text,
         originalMessage,

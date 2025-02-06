@@ -15,7 +15,7 @@ const Login = () => {
   useEffect(() => {
     const roles = {
       CNF: "Welcome CNF!",
-      "SuperStockist": "Welcome Super Stockist!",
+      SuperStockist: "Welcome Super Stockist!",
       Distributor: "Welcome Distributor!",
     };
 
@@ -94,10 +94,13 @@ const Login = () => {
       });
 
       if (response.ok) {
-        const { accessToken, userId, cnf } = await response.json();
+        const { accessToken, userId, cnf, subAdmin } = await response.json();
         localStorage.setItem("email", email);
         localStorage.setItem("token", accessToken);
         localStorage.setItem("userId", userId);
+        if (role === "CNF") {
+          localStorage.setItem("subAdmin", subAdmin);
+        }
         if (role === "SuperStockist") {
           localStorage.setItem("cnfId", cnf);
         }
@@ -169,7 +172,6 @@ const Login = () => {
                 : role === "Distributor"
                 ? "Distributor Login"
                 : "Select Role and Login"}
-                
             </h1>
 
             <h3 className="text-lg text-gray-700 mb-4">

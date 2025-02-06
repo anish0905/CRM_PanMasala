@@ -2,6 +2,10 @@ const mongoose = require("mongoose");
 
 const messageSchema = new mongoose.Schema(
   {
+    isRead: {
+      type: Boolean,
+      default: false,
+    },
     sender: {
       type: mongoose.Schema.Types.ObjectId,
       ref: " admin || CNFAgent || SuperStockist || subAdmin || FieldManagerLogin  || Distributor ",
@@ -9,6 +13,9 @@ const messageSchema = new mongoose.Schema(
       index: true, // Indexing for faster queries
     },
     senderName: {
+      type: String,
+    },
+    subject: {
       type: String,
     },
     recipient: [

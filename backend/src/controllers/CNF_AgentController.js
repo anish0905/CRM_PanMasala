@@ -118,6 +118,7 @@ const loginUser = asyncHandler(async (req, resp) => {
     resp.status(200).json({
       accessToken,
       userId: user.id,
+      subAdmin: user.subAdmin,
     });
   } else {
     resp.status(401);
@@ -279,9 +280,6 @@ const DistributorDetailsBySuperstockist = async (req, res) => {
   }
 };
 
-
-
-
 module.exports = {
   registerUser,
   loginUser,
@@ -291,5 +289,4 @@ module.exports = {
   deleteUser,
 
   DistributorDetailsBySuperstockist,
-
 };
