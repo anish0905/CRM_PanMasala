@@ -170,6 +170,7 @@ const sendNotification = async (senderId, senderName, recipient, content) => {
             sender: senderId,
             senderName: senderName,
             recipient: recipient,
+            subject:"inventory",
             content: { text: content }  // Correct way to structure the content object
         });
         await message.save(); // Ensure it's saved properly
