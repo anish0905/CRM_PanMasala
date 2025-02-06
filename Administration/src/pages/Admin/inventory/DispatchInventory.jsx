@@ -114,12 +114,15 @@ const DispatchInventory = () => {
             return;
         }
 
+        console.log(productDetails)
+
         if (editingIndex !== null) {
             // Edit existing item
             const updatedItems = [...inventoryItems];
             updatedItems[editingIndex] = {
                 productId: selectedProduct,
-                productName: productDetails.title,
+                productName: productDetails.title
+                ,
                 quantity,
                 revisedDate
             };
@@ -171,7 +174,7 @@ const DispatchInventory = () => {
             return;
         }
 
-        console.log(inventory.products);
+        
 
         for (const item of inventoryItems) {
             const productInStock = inventory.products.find(product => product.
@@ -214,6 +217,7 @@ const DispatchInventory = () => {
                 products: inventoryItems.map(item => ({
                     productId: item.productId,
                     quantity: item.quantity,
+                    productName: item.productName,
 
 
                 }))
