@@ -21,6 +21,11 @@ import ShowcaseProductReport from "./Component/Showcase/ShowcaseProductReport";
 import ShowCase from "./Component/Showcase/ShowCase";
 import AttendanceRecord from "./pages/Attendance/attendanceRecord/AttendanceRecord";
 import UserProfile from "./pages/UserProfile/userProfile";
+import AddInventory from "./pages/inventory/Addinventory";
+import MyInventory from "./pages/inventory/MyInventory";
+import StockHistory from "./pages/inventory/StockHistory";
+import DispatchInventory from "./pages/inventory/DispatchInventory";
+import DispatchHistory from "./pages/inventory/DispatchHistory";
 
 function App() {
   const navigate = useNavigate();
@@ -71,6 +76,31 @@ function App() {
         element={<DistributorsDetails />}
       />
       <Route path="/manage/userProfile/:role" element={<UserProfile />} />
+
+
+      <Route
+        path="/add-inventory/:role"
+        element={<AddInventory />}
+      />
+      <Route
+        path="/my-inventory/:role"
+        element={<MyInventory />}
+      />
+
+      <Route
+        path="/Stock-History/:role"
+        element={<StockHistory />}
+      />
+
+      <Route
+        path="/Dispatch-Inventory/:role"
+        element={<DispatchInventory />}
+      />
+
+      <Route
+        path="/Dispatch-History/:role"
+        element={<DispatchHistory />}
+      />
     </Routes>
   );
 }
