@@ -98,6 +98,11 @@ const registerUser = asyncHandler(async (req, resp) => {
       message: "distributor registered successfully",
       _id: distributor.id,
       email: distributor.email,
+      cnf: distributor.cnf,
+      superstockist: distributor.superstockist,
+      username: distributor.username,
+      country: distributor.country,
+      state: distributor.state,
     });
   } else {
     resp.status(400);
@@ -143,6 +148,11 @@ const loginUser = asyncHandler(async (req, resp) => {
     resp.status(200).json({
       accessToken,
       userId: distributor._id,
+      cnf: distributor.cnf,
+      superstockist: distributor.superstockist,
+      username: distributor.username,
+      country: distributor.country,
+      state: distributor.state,
     });
   } else {
     resp.status(401);

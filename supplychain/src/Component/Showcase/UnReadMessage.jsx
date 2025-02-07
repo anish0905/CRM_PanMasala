@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { MdClose } from "react-icons/md";
+import { IoMdCloseCircle } from "react-icons/io";
 import axios from "axios";
 
 const UnReadMessage = ({ messages }) => {
@@ -52,7 +53,7 @@ const UnReadMessage = ({ messages }) => {
                         className="absolute top-1 right-2 text-gray-600 hover:text-red-500 transition"
                         onClick={() => handleRemoveMessage(msg._id)}
                       >
-                        <MdClose className="text-2xl sm:text-3xl" />
+                        <IoMdCloseCircle className="text-2xl sm:text-3xl" />
                       </button>
                       <div className="flex items-center justify-between mb-2">
                         <div className="flex items-center">
@@ -111,7 +112,7 @@ const UnReadMessage = ({ messages }) => {
                         className="absolute top-1 right-2 text-gray-600 hover:text-red-500 transition"
                         onClick={() => handleRemoveMessage(msg._id)}
                       >
-                        <MdClose className="text-2xl sm:text-3xl" />
+                        <IoMdCloseCircle className="text-2xl sm:text-3xl" />
                       </button>
                       <div className="flex items-center justify-between mb-2">
                         <div className="flex items-center">
@@ -155,7 +156,7 @@ const UnReadMessage = ({ messages }) => {
                     className="absolute top-2 right-2 text-gray-600 hover:text-red-500 transition"
                     onClick={() => handleRemoveMessage(msg._id)}
                   >
-                    <MdClose className="text-2xl sm:text-3xl" />
+                    <IoMdCloseCircle className="text-2xl sm:text-3xl" />
                   </button>
                   <div className="flex items-center justify-between mb-2">
                     <div className="flex items-center">
