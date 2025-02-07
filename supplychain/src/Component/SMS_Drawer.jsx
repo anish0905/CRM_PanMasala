@@ -10,12 +10,18 @@ const SMSDrawer = () => {
   const [activeTooltip, setActiveTooltip] = useState(null);
   const [messageCount, setMessageCount] = useState(0);
   const [messages, setMessages] = useState([]);
+  const [newMessage, setNewMessage] = useState(""); // State for new message input
+  console.log(messages);
 
   console.log("SMSDrawer", messages);
 
   // Get senderId from localStorage (subAdmin) and recipientId (userId)
-  const senderId = localStorage.getItem("subAdmin");
+  const senderId =
+    localStorage.getItem("subAdmin") ||
+    localStorage.getItem("cnfId") ||
+    localStorage.getItem("superstockist");
   const recipientId = localStorage.getItem("userId");
+  const name = localStorage.getItem("email"); //
 
   const fetchMessages = async () => {
     if (!senderId || !recipientId) return;
@@ -43,6 +49,32 @@ const SMSDrawer = () => {
   const toggleTooltip = (id) => {
     if (window.innerWidth <= 768) {
       setActiveTooltip(activeTooltip === id ? null : id);
+    }
+  };
+
+  const sendMessage = async () => {
+    if (!newMessage.trim()) return; // Empty message send na ho
+
+    const messageData = {
+      sender: recipientId,
+      senderName: name, // Isko dynamically set kar sakte hain
+      recipient: senderId,
+      text: newMessage,
+      originalMessage: null,
+      replyMsg: null, // Agar reply hai toh isko set karein
+      attachments: [], // Agar attachments hai toh yahan add karein
+    };
+
+    try {
+      const response = await axios.post(
+        "http://localhost:5002/api/message/send",
+        messageData
+      );
+
+      console.log("Message sent:", response.data);
+      setNewMessage(""); // Message bhejne ke baad input clear karein
+    } catch (error) {
+      console.error("Error sending message:", error);
     }
   };
 
@@ -145,10 +177,28 @@ const SMSDrawer = () => {
               </li>
             </ul>
           </nav>
-          <div className="flex-1  overflow-y-auto max-h-[800px]">
+
+          {/* Messages List */}
+          <div className="flex-1 overflow-y-auto max-h-[800px]">
             {isOpen && <UnReadMessage messages={messages} />}
           </div>
 
+          {/* Reply Message Input */}
+          {/* <div className="p-2 bg-white flex items-center border-t">
+            <input
+              type="text"
+              value={newMessage}
+              onChange={(e) => setNewMessage(e.target.value)}
+              placeholder="Type a message..."
+              className="flex-1 border rounded-lg px-3 py-2 focus:outline-none"
+            />
+            <button
+              onClick={sendMessage}
+              className="ml-2 bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition-all"
+            >
+              Send
+            </button>
+          </div> */}
           {/* Close Drawer Button */}
           <button
             onClick={toggleDrawer}

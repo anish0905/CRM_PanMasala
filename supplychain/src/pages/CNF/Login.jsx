@@ -94,7 +94,8 @@ const Login = () => {
       });
 
       if (response.ok) {
-        const { accessToken, userId, cnf, subAdmin } = await response.json();
+        const { accessToken, userId, cnf, subAdmin, superstockist } =
+          await response.json();
         localStorage.setItem("email", email);
         localStorage.setItem("token", accessToken);
         localStorage.setItem("userId", userId);
@@ -103,6 +104,10 @@ const Login = () => {
         }
         if (role === "SuperStockist") {
           localStorage.setItem("cnfId", cnf);
+        }
+
+        if (role === "Distributor") {
+          localStorage.setItem("superstockist", superstockist);
         }
 
         toast.success("Login successful!", {
