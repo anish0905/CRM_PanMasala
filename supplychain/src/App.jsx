@@ -26,6 +26,7 @@ import MyInventory from "./pages/inventory/MyInventory";
 import StockHistory from "./pages/inventory/StockHistory";
 import DispatchInventory from "./pages/inventory/DispatchInventory";
 import DispatchHistory from "./pages/inventory/DispatchHistory";
+import AllUserInventoryDashbord from "./pages/inventory/AllUserInventoryDashbord";
 
 function App() {
   const navigate = useNavigate();
@@ -99,6 +100,13 @@ function App() {
       <Route
         path="/Dispatch-History/:role"
         element={<DispatchHistory />}
+      />
+
+
+      <Route
+        path="/manage/Inventory/:id/:role/:currentUser"
+        element={<AllUserInventoryDashbord />}
+
       />
     </Routes>
   );

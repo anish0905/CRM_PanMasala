@@ -184,7 +184,7 @@ const FE = () => {
           </div>
         )}
 
-        <div className="container mx-auto py-8">
+        <div className="  py-8">
           <div className="bg-[#1e40af] text-black rounded-xl p-4">
             <h2 className="2xl:text-2xl xl:text-xl md:text-lg text-sm text-white font-bold p-1 mt-1">
               {name === "Admin"

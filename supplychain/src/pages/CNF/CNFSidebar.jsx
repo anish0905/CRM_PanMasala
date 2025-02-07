@@ -137,18 +137,17 @@ const CNFSidebar = ({ onClose }) => {
                 onClick={() => handleItemClick("/Dispatch-History/cnf")}
               />
 
-
-
               <DropdownItem
                 text="Super Stockist Inventory"
                 onClick={() =>
-                  handleItemClick("/manage/superStockit/Inventory")
+                  handleItemClick("/manage/superstockist/inventory/CNF")
                 }
               />
+
               <DropdownItem
-                text="Stockist Inventory"
+                text="Distributor Inventory"
                 onClick={() =>
-                  handleItemClick("/manage/stockist/stock/management")
+                  handleItemClick("/manage/superstockist/Super-Stockist/CNF")
                 }
               />
             </div>
@@ -174,6 +173,12 @@ const CNFSidebar = ({ onClose }) => {
                 text="superStockist details"
                 onClick={() =>
                   handleItemClick("/manage/superstockist/Super-Stockist/CNF")
+                }
+              />
+               <DropdownItem
+                text="Super Stockist Inventory"
+                onClick={() =>
+                  handleItemClick("/manage/superstockist/inventory/CNF")
                 }
               />
             </div>

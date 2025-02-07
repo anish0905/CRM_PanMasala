@@ -155,7 +155,7 @@ const FEA = () => {
       </div>
 
       {/* Main content */}
-      <div className="flex-1 w-full lg:ml-80 font-serif lg:p-5 md:p-5 p-4">
+      <div className="flex-1 w-full lg:ml-80 font-serif lg:p-10 md:p-5 p-4">
         <div className="bg-[#93c5fd] w-full rounded-md shadow p-4 flex flex-wrap gap-4 items-center justify-between">
           <h1 className="flex-grow text-start text-xs sm:text-sm md:text-lg lg:text-xl font-bold text-gray-800">
             Field Executive Approval
@@ -199,7 +199,7 @@ const FEA = () => {
         )}
 
         {/* Main content container */}
-        <div className="container mx-auto py-8">
+        <div className=" py-8">
           <div className="bg-[#1e40af] text-black rounded-xl p-4">
             <h2 className="2xl:text-2xl xl:text-xl md:text-lg text-sm text-white font-bold p-1 mt-1">
               {name === "fea" ? "Field Executive Approval" : " Field Executive"}{" "}
