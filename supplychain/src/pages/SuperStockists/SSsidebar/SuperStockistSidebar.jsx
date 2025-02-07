@@ -118,9 +118,30 @@ const SuperStockistSidebar = ({ onClose }) => {
           {manageInventory && (
             <div className="flex justify-start ml-10 flex-col font-semibold text-xl text-black">
               <DropdownItem
-                text="My Inventory"
-                onClick={() => handleItemClick("/manage/Inventory")}
+                text="Add Inventory"
+                onClick={() => handleItemClick("/add-inventory/superstockist")}
               />
+              <DropdownItem
+                text="My Inventory"
+                onClick={() => handleItemClick("/my-inventory/superstockist")}
+              />
+
+
+              <DropdownItem
+                text="Stock History"
+                onClick={() => handleItemClick("/Stock-History/superstockist")}
+              />
+
+              <DropdownItem
+                text="Dispatch Inventory"
+                onClick={() => handleItemClick("/Dispatch-Inventory/superstockist")}
+              />
+
+              <DropdownItem
+                text="Dispatch History"
+                onClick={() => handleItemClick("/Dispatch-History/superstockist")}
+              />
+
 
               <DropdownItem
                 text="Distributor Inventory"
@@ -182,7 +203,7 @@ const SuperStockistSidebar = ({ onClose }) => {
 
         {/* Manage Attendance Record */}
 
-        <div className="relative">
+        {/* <div className="relative">
           <span
             className="nav-item nav-item-dropdown flex items-center gap-4 cursor-pointer p-4 transition duration-300 ease-in-out transform rounded-full mb-2"
             onClick={toggleAttendanceDropdown}
@@ -220,7 +241,7 @@ const SuperStockistSidebar = ({ onClose }) => {
               />
             </div>
           )}
-        </div>
+        </div> */}
 
         <div className="relative">
           <span

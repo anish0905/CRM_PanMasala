@@ -42,6 +42,8 @@ const subAdminInventoryRoute = require("./src/routes/Inventory/subAdminInventory
 
 const cnfInventoryRoute = require("./src/routes/Inventory/cnfInventoryRoute");
 
+const superstockistInventoryRoute = require("./src/routes/Inventory/superstockistInventoryRoute");
+
 const messageRoutes = require("./src/routes/messageRoutes");
 
 // Connect to Database
@@ -96,6 +98,8 @@ app.use("/api/panShop", panShopOwnerRoutes);
 app.use("/api/subAdmin/inventory", subAdminInventoryRoute);
 
 app.use("/api/cnf/inventory", cnfInventoryRoute);
+
+app.use("/api/superstockist/inventory", superstockistInventoryRoute);
 
 app.use("/api/message", messageRoutes);
 
