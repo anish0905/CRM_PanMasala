@@ -226,7 +226,8 @@ const getDistributorBySuperByID = asyncHandler(async (req, res) => {
 
     // Fetch Distributors based on superDistributorId
     const Distributors = await Distributor.find({
-      superDistributor: new ObjectId(superDistributorId),
+
+      superstockist: new ObjectId(superDistributorId),
     });
 
     // Check if Distributors exist for the given ID

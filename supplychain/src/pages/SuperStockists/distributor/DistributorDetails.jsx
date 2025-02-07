@@ -16,7 +16,7 @@ const DistributorDetails = () => {
   const [sortDirection, setSortDirection] = useState("asc");
   const [selectedDistributor, setSelectedDistributor] = useState();
   const email = localStorage.getItem("email");
-  const currentUserId = localStorage.getItem("currentUserId");
+  const currentUserId = localStorage.getItem("userId");
   const { name, role } = useParams();
   const navigate = useNavigate();
   const location = useLocation();
@@ -32,14 +32,14 @@ const DistributorDetails = () => {
     fetchDistributors();
   }, []);
 
+  
+
   const fetchDistributors = async () => {
     try {
       const response =
-        location.pathname ===
-          "/manage/distributor/Registration/superStockist" ||
-        location.pathname === "/manage/Distributor/user/Admin"
-          ? await fetch(`${URI}/api/Distributor/getAlluser`)
-          : await fetch(`${URI}/api/Distributor/getAlluser/${currentUserId}`);
+        
+           await fetch(`${URI}/api/distributor/superStockist/${currentUserId}`)
+          
 
       if (!response.ok) {
         throw new Error("Failed to fetch Distributors");

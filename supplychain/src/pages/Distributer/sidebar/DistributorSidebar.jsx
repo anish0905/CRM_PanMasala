@@ -118,9 +118,29 @@ const DistributorSidebar = ({ onClose }) => {
           </span>
           {manageInventory && (
             <div className="flex justify-start ml-10 flex-col font-semibold text-xl text-black">
+             <DropdownItem
+                text="Add Inventory"
+                onClick={() => handleItemClick("/add-inventory/distributor")}
+              />
               <DropdownItem
                 text="My Inventory"
-                onClick={() => handleItemClick("/manage/Inventory")}
+                onClick={() => handleItemClick("/my-inventory/distributor")}
+              />
+
+
+              <DropdownItem
+                text="Stock History"
+                onClick={() => handleItemClick("/Stock-History/distributor")}
+              />
+
+              <DropdownItem
+                text="Dispatch Inventory"
+                onClick={() => handleItemClick("/Dispatch-Inventory/distributor")}
+              />
+
+              <DropdownItem
+                text="Dispatch History"
+                onClick={() => handleItemClick("/Dispatch-History/distributor")}
               />
 
               <DropdownItem
