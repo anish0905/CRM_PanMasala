@@ -126,7 +126,7 @@ const superstockistDetails = () => {
   };
 
   const handleInventory = (user) => {
-    navigate(`/manage/Inventory/${user._id}/${role}/superstockist`, {
+    navigate(`/manage/Inventory/${user._id}/superstockist/${role}`, {
       state: {
         user: user,
       },
@@ -151,8 +151,8 @@ const superstockistDetails = () => {
           <h1 className="flex-grow text-start text-xs sm:text-sm md:text-lg lg:text-xl font-bold text-gray-800">
             {name === "user"
               ? "Manage Super Stockist"
-              : name === "stock"
-              ? "Super Stockist Inventory"
+              : name === "inventory"
+              ? " Manage Super Stockist Inventory"
               : "Super Stockist Registration"}
           </h1>
           <RightSideDrawer/>
@@ -274,7 +274,7 @@ const superstockistDetails = () => {
                         {superstockist.pinCode}
                       </td>
                       <td className="px-2 py-4 md:text-lg text-xs  whitespace-nowrap overflow-hidden overflow-ellipsis border-r-2 border-white">
-                        {name != "stock" && (
+                        {name != "inventory" && (
                           <>
                             <button
                               onClick={() => handleUpdate(superstockist)}
@@ -290,7 +290,7 @@ const superstockistDetails = () => {
                             </button>
                           </>
                         )}
-                        {name === "stock" && (
+                        {name === "inventory" && (
                           <button
                             onClick={() => handleInventory(superstockist)}
                             className="bg-yellow-500 text-white p-2 rounded ml-2 cursor-pointer"

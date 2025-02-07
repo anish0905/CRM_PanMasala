@@ -109,18 +109,18 @@ const AdminSidebar = ({ onClose }) => {
               
               <DropdownItem
                 text="CNF Inventory"
-                onClick={() => handleItemClick("/manage/superStockit/Inventory")}
+                onClick={() => handleItemClick("/manage/CNF/inventory/Admin")}
               />
 
               <DropdownItem
                 text="Super Stockist Inventory"
-                onClick={() => handleItemClick("/manage/superStockit/Inventory")}
+                onClick={() => handleItemClick("/manage/superstockist/inventory/Admin")}
               />
 
 
               <DropdownItem
                 text="Distributor Inventory"
-                onClick={() => handleItemClick("/manage/distributor/inventory")}
+                onClick={() => handleItemClick("/manage/Distributor/inventory/Admin")}
               />
 
 
@@ -211,11 +211,11 @@ const AdminSidebar = ({ onClose }) => {
               />
               <DropdownItem
                 text="Field Executive Approval"
-                onClick={() => handleItemClick("/Field-Executive-Approval/Admin/user")}
+                onClick={() => handleItemClick("/Field-Executive-Approval/fea/user")}
               />
               <DropdownItem
                 text="Field Executive "
-                onClick={() => handleItemClick("/Field-Executive-Approval/FieldManager/user")}
+                onClick={() => handleItemClick("/Field-Executive-Approval/fieldExecutive/user")}
               />
               <DropdownItem
                 text="Delivery Boy"
@@ -282,7 +282,7 @@ const AdminSidebar = ({ onClose }) => {
                     Field Executive
                   </>
                 }
-                onClick={() => handleItemClick("/Field-Executive-Approval/FieldManager/Attendance")}
+                onClick={() => handleItemClick("/Field-Executive-Approval/fieldExecutive/Attendance")}
               />
               <DropdownItem
                 text={
@@ -290,7 +290,7 @@ const AdminSidebar = ({ onClose }) => {
                     Field Executive Approval
                   </>
                 }
-                onClick={() => handleItemClick("/Field-Executive-Approval/Admin/Attendance")}
+                onClick={() => handleItemClick("/Field-Executive-Approval/fea/Attendance")}
               />
             </div>
           )}

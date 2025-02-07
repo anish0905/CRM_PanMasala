@@ -6,6 +6,8 @@ import DistributorRegistionForm from './DistributorRegistionForm';
 import AdminSideBarModal from '../AdminSideBarModal';
 import AdminSidebar from '../AdminSideBar';
 import RightSideDrawer from '../../../components/RightSideDrawer';
+import Sidebar from '../../SubAdmin/sidebar/Sidebar';
+import SidebarModel from '../../SubAdmin/sidebar/SidebarModel';
 
 const DistributorDetails = () => {
   const [Distributors, setDistributors] = useState([]);
@@ -34,9 +36,9 @@ const DistributorDetails = () => {
   const fetchDistributors = async () => {
     try {
       const response =
-        location.pathname === "/manage/Distributor/Registration/Admin" || location.pathname === "/manage/Distributor/user/Admin"
-          ? await fetch(`${URI}/api/Distributor/getAlluser`)
-          : await fetch(`${URI}/api/Distributor/getAlluser/${currentUserId}`);
+
+        await fetch(`${URI}/api/Distributor/getAlluser`)
+
 
       if (!response.ok) {
         throw new Error("Failed to fetch Distributors");
@@ -128,7 +130,7 @@ const DistributorDetails = () => {
   };
 
   const handleInventory = (user) => {
-    navigate(`/manage/Inventory/${user._id}/${role}/Distributor`, {
+    navigate(`/manage/Inventory/${user._id}/distributor/${role}`, {
       state: {
         user: user,
       },
@@ -150,47 +152,55 @@ const DistributorDetails = () => {
 
   return (
     <div className="flex gap-6 min-h-sreen w-full">
-      {role === "Admin" && (
-        <div className="min-h-screen lg:block hidden">
-          <AdminSidebar />
-        </div>
-      )}
-      {role === "superDistributor" && (
-        <div className="lg:p-5 xl:p-5 ml-0 p-0 h-screen">
-          {/* <SuperDistributorSideBar /> */}
-        </div>
-      )}
+
+      <div className="min-h-screen lg:block hidden">
+        {
+          role === "Admin" ? (
+            <AdminSidebar />
+          ) : (
+            <Sidebar />
+          )
+        }
+      </div>
+
+
 
       <div className="lg:ml-80 font-serif w-full md:p-5 p-4">
         <div className="bg-[#93c5fd] rounded-md shadow p-4 flex gap-4 items-center justify-between">
           <h1 className="flex-grow text-start text-xs sm:text-sm md:text-lg lg:text-xl font-bold text-gray-800">
             {name === "user"
               ? "Manage Distributor"
-              : name === "stock"
-                ? "Distributor Inventory"
+              : name === "inventory"
+                ? "Manage Distributor Inventory"
                 : "Distributor Registration"}
           </h1>
-          <RightSideDrawer/>
+          <RightSideDrawer />
           {name === "Registration" && (
             <button
               color="blue"
               onClick={handleRegisterButtonClick}
-               className="lg:mr-12 lg:-ml-2 md:mr-8 mr-2 lg:text-xl md:text-lg  lg:p-3 bg-[#1e40af] rounded-md text-white p-2 text-xs  font-semibold cursor-pointer"
+              className="lg:mr-12 lg:-ml-2 md:mr-8 mr-2 lg:text-xl md:text-lg  lg:p-3 bg-[#1e40af] rounded-md text-white p-2 text-xs  font-semibold cursor-pointer"
             >
               Register
             </button>
           )}
-         
+
           {email && (
             <div className="hidden sm:flex items-center lg:text-2xl md:text-xl text-sm font-bold text-white border-4 border-[#1e40af] p-2 rounded-lg bg-[rgb(42,108,194)] hover:bg-blue-800 transition-colors duration-300 ease-in-out">
               {email}
             </div>
           )}
-          {role === "Admin" && (
-            <div className="lg:hidden block">
-              <AdminSideBarModal />
-            </div>
-          )}
+
+          <div className="lg:hidden block">
+            {
+              role === "Admin" ? (
+                <AdminSideBarModal />
+              ) : (
+                <SidebarModel />
+              )
+            }
+          </div>
+
         </div>
 
         {showModal && (
@@ -241,7 +251,7 @@ const DistributorDetails = () => {
                       <td className="px-2 py-4 md:text-lg text-xs whitespace-nowrap overflow-hidden overflow-ellipsis border-r-2 border-white">{Distributor.address}</td>
                       <td className="px-2 py-4 md:text-lg text-xs whitespace-nowrap overflow-hidden overflow-ellipsis  border-r-2 border-white">{Distributor.pinCode}</td>
                       <td className="px-2 py-4 md:text-lg text-xs whitespace-nowrap overflow-hidden overflow-ellipsis border-r-2 border-white">
-                        {name !== "stock" && (
+                        {name !== "inventory" && (
                           <>
                             <button onClick={() => handleUpdate(Distributor)} className="bg-blue-500 text-white p-2 rounded cursor-pointer">
                               Update
@@ -254,7 +264,7 @@ const DistributorDetails = () => {
                             </button>
                           </>
                         )}
-                        {name === "stock" && (
+                        {name === "inventory" && (
                           <button
                             onClick={() => handleInventory(Distributor)}
                             className="bg-yellow-500 text-white p-2 rounded ml-2 cursor-pointer"

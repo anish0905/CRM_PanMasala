@@ -126,29 +126,27 @@ const Sidebar = ({ onClose }) => {
                 text="Dispatch Inventory"
                 onClick={() => handleItemClick("/Dispatch-Inventory/subAdmin")}
               />
-               <DropdownItem
+              <DropdownItem
                 text="Dispatch History"
                 onClick={() => handleItemClick("/Dispatch-History/subAdmin")}
               />
 
               <DropdownItem
                 text="CNF Inventory"
-                onClick={() =>
-                  handleItemClick("/manage/superStockit/Inventory")
-                }
+                onClick={() => handleItemClick("/manage/CNF/inventory/sub-Admin")}
               />
 
               <DropdownItem
                 text="Super Stockist Inventory"
-                onClick={() =>
-                  handleItemClick("/manage/superStockit/Inventory")
-                }
+                onClick={() => handleItemClick("/manage/superstockist/inventory/Sub-Admin")}
               />
+
 
               <DropdownItem
                 text="Distributor Inventory"
-                onClick={() => handleItemClick("/manage/distributor/inventory")}
+                onClick={() => handleItemClick("/manage/Distributor/inventory/Sub-Admin")}
               />
+
             </div>
           )}
         </div>
@@ -228,7 +226,7 @@ const Sidebar = ({ onClose }) => {
                 text="Vendor Not Intrested"
                 onClick={() => handleItemClick("/mange/vendor/Not-intrested")}
 
-                // onClick={() => handleItemClick("/mange/vendors/pending")}
+              // onClick={() => handleItemClick("/mange/vendors/pending")}
               />
               <DropdownItem
                 text="Re-verification vendor"

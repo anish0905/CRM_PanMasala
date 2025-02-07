@@ -137,7 +137,7 @@ const FEADetails = () => {
       </div>
 
       {/* Main Content */}
-      <div className="w-full lg:ml-80 font-serif lg:p-5 md:p-5 p-4 justify-center">
+      <div className="w-full lg:ml-80 font-serif lg:p-5 md:p-5 p-4 flex flex-col justify-center">
         <div className="bg-[#93c5fd] rounded-md shadow p-4 flex gap-4 items-center justify-between">
           <h1 className="flex-grow text-start text-xs sm:text-sm md:text-lg lg:text-xl font-bold text-gray-800">
             {name==="Admin"?"Field Executive Approval":" Field Executive"}
@@ -168,7 +168,7 @@ const FEADetails = () => {
           </div>
         )}
 
-        <div className="container mx-auto py-8">
+        <div className=" w-full  py-8">
           <div className="bg-[#1e40af] text-black rounded-xl p-4">
             <h2 className="2xl:text-2xl xl:text-xl md:text-lg text-sm text-white font-bold p-1 mt-1">
             {name==="Admin"?"Field Executive Approval":" Field Executive"} List ({filedManagers.length||"0"})
