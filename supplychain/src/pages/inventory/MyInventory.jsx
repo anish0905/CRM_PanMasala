@@ -63,21 +63,21 @@ const MyInventory = () => {
                     </h1>
                     <RightSideDrawer />
                     <div className="flex justify-between items-center content-center gap-4">
-                        {role === "admin" ? (
+                        
                             <button
                                 className="bg-[#FFA500] hover:bg-[#ff7f00] text-white font-bold py-2 px-4 rounded-md transition duration-300 ease-in-out cursor-pointer"
-                                onClick={() => navigate("/add-inventory/admin")}
+                                onClick={() => navigate(`/add-inventory/${role}`)}
                             >
                                 Add inventory
                             </button>
-                        ) : (
+                      
                             <button
-                                className="bg-[#FFA500] hover:bg-[#ff7f00] text-white font-bold py-2 px-4 rounded-md transition duration-300 ease-in-out cursor-pointer"
-                                onClick={() => navigate("/Dispatch-History/subAdmin")}
+                                className="bg-[#1410fd] hover:bg-[#1410fdc5] text-white font-bold py-2 px-4 rounded-md transition duration-300 ease-in-out cursor-pointer"
+                                onClick={() => navigate(`/Dispatch-Inventory/${role}`)}
                             >
                                 Dispatch inventory
                             </button>
-                        )}
+                       
 
 
 

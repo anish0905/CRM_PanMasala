@@ -16,7 +16,7 @@ const SuperStockistDetails = () => {
   const [sortDirection, setSortDirection] = useState("asc");
   const [selectedSuperStockist, setSelectedSuperStockist] = useState();
   const email = localStorage.getItem("email");
-  const currentUserId = localStorage.getItem("currentUserId");
+  const currentUserId = localStorage.getItem("userId");
   const { name, role } = useParams();
   const navigate = useNavigate();
   const location = useLocation();
@@ -29,14 +29,16 @@ const SuperStockistDetails = () => {
 
   useEffect(() => {
     fetchSuperStockists();
-  }, []);
+  }, []);     
+
+ 
 
   const fetchSuperStockists = async () => {
     try {
       const response =
         location.pathname === "/manage/superstockist/Registration/CNF" ||
         location.pathname === "/manage/superstockist/Super-Stockist/CNF"
-          ? await fetch(`${BASE_URL}/api/superstockist/getAlluser`)
+          ? await fetch(`${BASE_URL}/api/superstockist/getAllUserByCnfId/${currentUserId}`)
           : await fetch(
               `${BASE_URL}/api/superstockist/getAlluser/${currentUserId}`
             );

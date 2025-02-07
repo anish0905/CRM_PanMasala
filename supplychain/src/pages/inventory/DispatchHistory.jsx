@@ -19,9 +19,8 @@ const DispatchHistory = () => {
     const navigate = useNavigate();
     const { role } = useParams();
 
-    let currentUserId = role === "admin"
-        ? localStorage.getItem("userId")
-        : localStorage.getItem("admin");
+    let currentUserId = localStorage.getItem("userId")
+        
 
     useEffect(() => {
         fetchInventory();
@@ -30,7 +29,7 @@ const DispatchHistory = () => {
     const fetchInventory = async () => {
         try {
             const response = await axios.get(
-                `${BASE_URL}/api/subAdmin/inventory/inventory/${currentUserId}`
+                `${BASE_URL}/api/${role}/inventory/inventory/${currentUserId}`
             );
             setInventory(response.data.data);
         } catch (error) {

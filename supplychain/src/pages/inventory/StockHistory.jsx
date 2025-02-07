@@ -200,16 +200,16 @@ const StockHistory = () => {
                 {inventory ? (
                     filteredRevisions.length > 0 ? (
                         <div className="overflow-x-auto">
-                            <div className="border border-gray-300 shadow-lg rounded-lg overflow-hidden overflow-x-auto overflow-y-auto">
+                            <div className="border border-gray-300 shadow-lg rounded-lg  overflow-hidden overflow-x-auto overflow-y-auto">
                                 <table className="w-full table-auto border-collapse">
                                     <thead className="bg-gradient-to-r from-blue-600 to-indigo-700 text-white text-sm uppercase tracking-wider">
                                         <tr>
                                             <th className="px-6 py-3 text-left">Order ID</th>
+                                            <th className="px-6 py-3 text-center">Revised By</th>
                                             <th className="px-6 py-3 text-left">Product Name</th>
                                             <th className="px-6 py-3 text-center">Previous Stock</th>
                                             <th className="px-6 py-3 text-center">Quantity Added</th>
                                             <th className="px-6 py-3 text-center">New Stock</th>
-                                            <th className="px-6 py-3 text-center">Revised From</th>
                                             <th className="px-6 py-3 text-center">Revised Date</th>
                                             <th className="px-6 py-3 text-center">Last Update</th>
                                         </tr>
@@ -220,29 +220,55 @@ const StockHistory = () => {
                                             revision.products.map((product, subIndex) => (
                                                 <tr
                                                     key={`${index}-${subIndex}`}
-                                                    className={`border border-gray-300 ${((index + subIndex) % 2 === 0 ? "bg-blue-100" : "bg-blue-50")} hover:bg-blue-200 transition-all duration-200`}
+                                                    className={`border border-gray-300 ${((index ) % 2 === 0 ? "bg-blue-100" : "bg-blue-50")} `}
                                                 >
-                                                    <td className="px-6 py-4 text-left font-medium">{revision.orderId}</td>
+                                                    {/* Only show Order ID and Revised By in the first row */}
+                                                    {subIndex === 0 && (
+                                                        <>
+                                                            <td rowSpan={revision.products.length} className="px-6 py-4 text-center font-medium">
+                                                                {revision.orderId || "N/A"}
+                                                            </td>
+                                                            <td rowSpan={revision.products.length} className="px-6 py-4 text-center">
+                                                                {revision.revisedBy?.username || "N/A"}
+                                                            </td>
+                                                        </>
+                                                    )}
+
+                                                    {/* Product Name */}
                                                     <td className="px-6 py-4 text-left font-medium">
                                                         {inventory.products.find(p => p.productId._id === product.productId)?.productId?.title || "N/A"}
                                                     </td>
-                                                    <td className="px-6 py-4 text-center">{product.previousStock}</td>
-                                                    <td className="px-6 py-4 text-center">{product.quantityAdded}</td>
-                                                    <td className="px-6 py-4 text-center">{product.newStock}</td>
-                                                    <td className="px-6 py-4 text-center">{revision.revisedBy.username}</td>
-                                                    <td className="px-6 py-4 text-center">{new Date(revision.revisedDate).toLocaleString()}</td>
-                                                    <td className="px-6 py-4 text-center">{new Date(revision.updateDate).toLocaleString()}</td>
+
+                                                    {/* Stock Information */}
+                                                    <td className="px-6 py-4 text-center">{product.previousStock || "0"}</td>
+                                                    <td className="px-6 py-4 text-center">{product.quantityAdded || "0"}</td>
+                                                    <td className="px-6 py-4 text-center">{product.newStock || "0"}</td>
+
+                                                    {/* Dates */}
+                                                    {subIndex === 0 && (
+                                                        <>
+                                                            <td rowSpan={revision.products.length} className="px-6 py-4 text-center">
+                                                                {new Date(revision.revisedDate).toLocaleString()}
+                                                            </td>
+                                                            <td rowSpan={revision.products.length} className="px-6 py-4 text-center">
+                                                                {new Date(revision.updateDate).toLocaleString()}
+                                                            </td>
+                                                        </>
+                                                    )}
                                                 </tr>
                                             ))
                                         )}
                                     </tbody>
 
+                                    {/* Footer with Total Stock Info */}
                                     <tfoot>
                                         <tr className="bg-gradient-to-r from-indigo-500 to-indigo-700 text-white font-semibold">
                                             <td className="px-6 py-4 text-left">Total Stock</td>
                                             <td className="px-6 py-4 text-center">{inventory.remainingStock || 0}</td>
                                             <td className="px-6 py-4 text-center">Total Dispatched: {inventory.dispatchedStock || 0}</td>
-                                            <td colSpan="5" className="px-6 py-4 text-right">Last Inventory Update: {new Date(inventory.updatedAt).toLocaleString()}</td>
+                                            <td colSpan="5" className="px-6 py-4 text-right">
+                                                Last Inventory Update: {new Date(inventory.updatedAt).toLocaleString()}
+                                            </td>
                                         </tr>
                                     </tfoot>
                                 </table>
@@ -256,6 +282,7 @@ const StockHistory = () => {
                 ) : (
                     <p className="text-center text-gray-600 font-semibold mt-5">Loading inventory...</p>
                 )}
+
             </div>
         </div>
     );

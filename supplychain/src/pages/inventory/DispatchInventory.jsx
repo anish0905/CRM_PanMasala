@@ -16,7 +16,6 @@ import DistributorSidebar from '../Distributer/sidebar/DistributorSidebar';
 const DispatchInventory = () => {
     const email = localStorage.getItem("email");
     const currentUserId = localStorage.getItem("userId");
-    const adminId = localStorage.getItem("admin");
     const [inventory, setInventory] = useState(null);
     const [products, setProducts] = useState([]);
     const [selectedProduct, setSelectedProduct] = useState("");
@@ -26,8 +25,8 @@ const DispatchInventory = () => {
     const [editingIndex, setEditingIndex] = useState(null);
     const [message, setMessage] = useState('');
     const [isError, setIsError] = useState(false);
-    const [CNFs, setCNFs] = useState([]);
-    const [selectedCnfId, setSelectCnfId] = useState();
+    const [Users, setUsers] = useState([]);
+    const [selectedUserId, setSelectUserId] = useState();
 
     const BASE_URL = import.meta.env.VITE_API_URL;
 
@@ -35,7 +34,7 @@ const DispatchInventory = () => {
 
     useEffect(() => {
         fetchProducts();
-        fetchCNFs();
+        fetchUsers();
         fetchInventory();
     }, []);
 
@@ -59,29 +58,36 @@ const DispatchInventory = () => {
         }
     };
 
-    const fetchCNFs = async () => {
+    const fetchUsers = async () => {
         try {
-            const response = await fetch(`${BASE_URL}/api/subAdmin/cnf/${currentUserId}`)
+            const url =
+                role === "cnf" ? `${BASE_URL}/api/superstockist/getAllUserByCnfId/${currentUserId}` :
+                    role === "superstockist" ? `${BASE_URL}/api/distributor/superStockist/${currentUserId}` :
+                        role === "distributor" ? `${BASE_URL}/api/distributor/getAllUser/${currentUserId}` :
+                            null; // Handle cases where role is invalid
+
+            if (!url) {
+                throw new Error("Invalid role provided");
+            }
+
+            const response = await fetch(url);
 
             if (!response.ok) {
-                throw new Error("Failed to fetch CNFs");
+                throw new Error("Failed to fetch users");
             }
 
-            else {
-                const data = await response.json();
-                setCNFs(data.data);
-            }
-
-
+            const data = await response.json();
+            setUsers(data);
 
         } catch (error) {
-            console.error("Error fetching CNFs:", error);
+            console.error("Error fetching Users:", error);
         }
     };
 
+
     const fetchInventory = async () => {
         try {
-            const response = await axios.get(`${BASE_URL}/api/subAdmin/inventory/inventory/${adminId}`)
+            const response = await axios.get(`${BASE_URL}/api/${role}/inventory/inventory/${currentUserId}`)
 
             setInventory(response.data.data);
         } catch (error) {
@@ -94,8 +100,8 @@ const DispatchInventory = () => {
         setSelectedProduct(productId);
     };
 
-    const handleCnfSelection = (cnfId) => {
-        setSelectCnfId(cnfId);
+    const handleUserSelection = (cnfId) => {
+        setSelectUserId(cnfId);
     };
 
 
@@ -117,7 +123,7 @@ const DispatchInventory = () => {
             return;
         }
 
-        console.log(productDetails)
+
 
         if (editingIndex !== null) {
             // Edit existing item
@@ -161,7 +167,7 @@ const DispatchInventory = () => {
         setIsError(false);
         setMessage('');
 
-        if (!selectedCnfId) {
+        if (!selectedUserId) {
             Swal.fire("Error", "Please select a CNF!", "error");
             return;
         }
@@ -210,9 +216,9 @@ const DispatchInventory = () => {
         if (!confirm.isConfirmed) return;
 
         try {
-            await axios.post(`${BASE_URL}/api/subAdmin/inventory/dispatch-inventory`, {
-                userId: adminId,
-                issuedTo: selectedCnfId,
+            await axios.post(`${BASE_URL}/api/${role}/inventory/dispatch-inventory`, {
+                userId: currentUserId,
+                issuedTo: selectedUserId,
                 issuedBy: currentUserId,
                 otp,
                 orderId,
@@ -238,7 +244,7 @@ const DispatchInventory = () => {
     return (
         <div className="flex gap-6 min-h-screen w-full">
             <div className="min-h-screen lg:block hidden">
-            {
+                {
                     role === "cnf" ? (
                         <CNFSidebar />
                     ) : role === "superstockist" ? (
@@ -286,16 +292,25 @@ const DispatchInventory = () => {
 
                     {/* Select CNF */}
                     <div className="space-y-4">
-                        <h2 className="text-xl font-bold text-gray-800">Select CNF</h2>
+                        <h2 className="text-xl font-bold text-gray-800">
+                            {role === "CNF"
+                                ? "superstockist"
+                                : role === "superstockist"
+                                    ? "Distributor"
+                                    : role === "Distributor"
+                                        ? "Some Value"
+                                        : "OrderID"}
+                        </h2>
+
                         <select
-                            value={selectedCnfId}
-                            onChange={(e) => handleCnfSelection(e.target.value)}
+                            value={selectedUserId}
+                            onChange={(e) => handleUserSelection(e.target.value)}
                             className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
                         >
-                            <option value="">Select a CNF</option>
-                            {CNFs.map(cnf => (
-                                <option key={cnf._id} value={cnf._id}>
-                                    {cnf.username}( {cnf.state}) ({cnf.region})
+                            <option value="">Select User </option>
+                            {Users.map(user => (
+                                <option key={user._id} value={user._id}>
+                                    {user.username}( {user.state}) ({user.city}-{user.pinCode})
                                 </option>
                             ))}
                         </select>

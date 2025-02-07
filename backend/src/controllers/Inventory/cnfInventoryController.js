@@ -5,17 +5,17 @@ const SubAdminInventory = require('../../models/Inventory/SubAdminInventoryModel
 
 exports.addInventory = async (req, res, next) => {
     try {
-        const { userId, products, revisedDate, orderId } = req.body;
+        const { userId, revisedDate, orderId } = req.body;
 
-        // Validate products array
-        if (!Array.isArray(products) || products.length === 0) {
-            return res.status(400).json({ message: 'Products array is required' });
+        // Validate input
+        if (!userId || !orderId) {
+            return res.status(400).json({ message: 'User ID and Order ID are required' });
         }
 
-        // Corrected MongoDB query using `$elemMatch`
+        // Find the dispatched stock history from SubAdminInventory
         const verification = await SubAdminInventory.findOne({
-            dispatchedStockHistory: { 
-                $elemMatch: { issuedTo: userId, orderId: orderId } 
+            "dispatchedStockHistory": {
+                $elemMatch: { issuedTo: userId, orderId: orderId }
             }
         });
 
@@ -27,11 +27,17 @@ exports.addInventory = async (req, res, next) => {
             history => history.orderId === orderId && history.issuedTo.toString() === userId
         );
 
-        const revisedBy = matchedHistory ? matchedHistory.issuedBy : "Unknown";
+        if (!matchedHistory) {
+            return res.status(400).json({ message: 'No matching dispatched stock history found' });
+        }
+
+        const revisedBy = matchedHistory.issuedBy;
+        const dispatchedProducts = matchedHistory.products;
+        
 
         let cnfInventory = await CNFInventory.findOne({ userId });
 
-        // Create a new inventory record if it does not exist
+        // If CNF Inventory does not exist, create a new record
         if (!cnfInventory) {
             cnfInventory = new CNFInventory({
                 userId,
@@ -43,30 +49,39 @@ exports.addInventory = async (req, res, next) => {
             });
         }
 
+        // **Check if orderId already exists in revisedStockHistory**
+        const existingOrder = cnfInventory.revisedStockHistory.find(history => history.orderId === orderId);
+        if (existingOrder) {
+            return res.status(400).json({ message: 'Order ID already exists. Inventory update not allowed.' });
+        }
+
         const updateDate = new Date();
         let totalAddedStock = 0;
 
-        const productUpdates = products.map(({ productId, productName, quantity }) => {
-            let qty = Number(quantity);
+        // Process dispatched products
+        const productUpdates = dispatchedProducts.map(({ productId, quantityDispatched }) => {
+            let qty = Number(quantityDispatched);
 
             if (qty <= 0) {
-                throw new Error(`Quantity for product ${productName} must be greater than zero`);
+                throw new Error(`Quantity for product ${productId} must be greater than zero`);
             }
 
-            let existingProduct = cnfInventory.products.find(p => p.productId.toString() === productId);
+            // Check if product already exists in inventory
+            let existingProduct = cnfInventory.products.find(p => p.productId.toString() === productId.toString());
             let previousStock = existingProduct ? existingProduct.quantity : 0;
 
             if (existingProduct) {
+                // If product exists, update quantity
                 existingProduct.quantity += qty;
             } else {
-                cnfInventory.products.push({ productId, productName, quantity: qty });
+                // If product does not exist, add as new
+                cnfInventory.products.push({ productId, quantity: qty });
             }
 
             totalAddedStock += qty;
 
             return {
                 productId,
-                productName,
                 previousStock,
                 newStock: previousStock + qty,
                 quantityAdded: qty
@@ -88,12 +103,14 @@ exports.addInventory = async (req, res, next) => {
         // Save inventory
         await cnfInventory.save();
         res.status(200).json({ message: 'Inventory updated successfully with revision history' });
-
     } catch (error) {
         console.error("Error adding inventory:", error);
         return res.status(500).json({ message: "Failed to add inventory", error: error.message });
     }
 };
+
+
+
 
 
 

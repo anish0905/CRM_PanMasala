@@ -28,8 +28,7 @@ const cnfAgentRoutes = require("./src/routes/CNF_AgentRouter");
 // Super Stockist Routes
 const superStockistSignupRoutes = require("./src/routes/superStockist/superStockist.Routes");
 const superStockistDeliveryBoyRoutes = require("./src/routes/superStockist/SuperStockistDeveliveyBoy.Routes");
-const superStockistProductDetailsRoutes = require("./src/routes/superStockist/superStockistProductDetails.Routes");
-const superStockistInventoryRoutes = require("./src/routes/superStockist/SuperStockistInvertory.Routes");
+
 
 //Distributor variables
 // const DistributorOrderRoutes = require("./src/routes/Distributor/Router.Routes");
@@ -67,8 +66,7 @@ app.use("/api/subAdmin", subAdminRoutes);
 // Super Stockist Routes
 app.use("/api/superstockist", superStockistSignupRoutes);
 app.use("/api/superstockist/deliveryBoy", superStockistDeliveryBoyRoutes);
-app.use("/api/superstockist/productDetails", superStockistProductDetailsRoutes);
-app.use("/api/superstockist/inventory", superStockistInventoryRoutes);
+
 
 // Field Management Routes
 app.use("/api/fieldManager", fieldManagerLogin);

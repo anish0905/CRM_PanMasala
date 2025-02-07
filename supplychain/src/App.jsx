@@ -86,7 +86,6 @@ function App() {
         path="/my-inventory/:role"
         element={<MyInventory />}
       />
-
       <Route
         path="/Stock-History/:role"
         element={<StockHistory />}

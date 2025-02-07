@@ -14,13 +14,7 @@ import DistributorBarModal from '../Distributer/sidebar/DistributorBarModal';
 const AddInventory = () => {
     const email = localStorage.getItem("email");
     const currentUserId = localStorage.getItem("userId");
-
-    const [products, setProducts] = useState([]);
-    const [selectedProduct, setSelectedProduct] = useState("");
-    const [quantity, setQuantity] = useState("");
     const [revisedDate, setRevisedDate] = useState(new Date());
-    const [inventoryItems, setInventoryItems] = useState([]);
-    const [editingIndex, setEditingIndex] = useState(null);
     const [message, setMessage] = useState('');
     const [isError, setIsError] = useState(false);
     const [orderId, setOrderId] = useState("");
@@ -30,87 +24,19 @@ const AddInventory = () => {
 
     const { role } = useParams()
 
-    useEffect(() => {
-        fetchProducts();
-    }, []);
 
-    const fetchProducts = async () => {
-        try {
-            const response = await axios.get(`${BASE_URL}/api/e-commerce/`);
-            setProducts(response.data.products);
-        } catch (error) {
-            console.error("Error fetching products:", error);
-        }
-    };
-
-    const handleProductSelection = (productId) => {
-        setSelectedProduct(productId);
-    };
 
     const handleDateChange = (date) => {
         setRevisedDate(date);
     };
 
-    const handleAddProduct = () => {
-        if (!selectedProduct || !quantity) {
-            Swal.fire("Error", "Please select a product and enter quantity!", "error");
-            return;
-        }
-
-        const productDetails = products.find(product => product._id === selectedProduct);
-        if (!productDetails) return;
-
-        if (inventoryItems.some(item => item.productId === selectedProduct) && editingIndex === null) {
-            Swal.fire("Warning", "This product is already added!", "warning");
-            return;
-        }
-
-        if (editingIndex !== null) {
-            // Edit existing item
-            const updatedItems = [...inventoryItems];
-            updatedItems[editingIndex] = {
-                productId: selectedProduct,
-                productName: productDetails.title,
-                quantity,
-                revisedDate
-            };
-            setInventoryItems(updatedItems);
-            setEditingIndex(null);
-        } else {
-            // Add new item
-            setInventoryItems([...inventoryItems, {
-                productId: selectedProduct,
-                productName: productDetails.title,
-                quantity,
-                revisedDate
-            }]);
-        }
-
-        setSelectedProduct("");
-        setQuantity("");
-    };
-
-    const handleEditProduct = (index) => {
-        const item = inventoryItems[index];
-        setSelectedProduct(item.productId);
-        setQuantity(item.quantity);
-        setEditingIndex(index);
-    };
-
-    const handleRemoveProduct = (index) => {
-        setInventoryItems(inventoryItems.filter((_, i) => i !== index));
-    };
-
+ 
     const handleSubmit = async (e) => {
         e.preventDefault();
         setIsError(false);
         setMessage('');
 
-        if (inventoryItems.length === 0) {
-            Swal.fire("Error", "Please add at least one product!", "error");
-            return;
-        }
-
+      
         if (!orderId || orderId.length !== 12) {
             Swal.fire("Error", "Order ID must be exactly 12 characters!", "error");
             return;
@@ -132,15 +58,11 @@ const AddInventory = () => {
                 userId: currentUserId,
                 revisedDate:revisedDate,
                 orderId: orderId,
-                products: inventoryItems.map(item => ({
-                    productId: item.productId,
-                    quantity: item.quantity,
-                   
-                }))
+                
             });
 
             setMessage('Inventory updated successfully!');
-            setInventoryItems([]);
+            
         } catch (error) {
             setIsError(true);
             setMessage('Error updating inventory. Please try again.');
@@ -175,9 +97,9 @@ const AddInventory = () => {
                     )}
                     <div className="lg:hidden block">
                         {
-                            role === "cnf" ? (
+                            role == "cnf" ? (
                                 <CNFSideBarModal />
-                            ) ? role === "superstockist" : (
+                            ) ? role == "superstockist" : (
                                 <SuperStockistBarModal />
                             ) : (
                                 <DistributorBarModal />
@@ -205,7 +127,7 @@ const AddInventory = () => {
                             value={orderId}
                             onChange={(e) => setOrderId(e.target.value)}
                             className="mt-1 p-2 border border-gray-300 rounded-md w-full"
-                            placeholder="Enter 12-character Order ID"
+                            placeholder="Enter  Order ID"
                             maxLength={12}
                             required
                         />
@@ -213,34 +135,9 @@ const AddInventory = () => {
 
 
                     <div className="flex justify-center items-center content-center flex-wrap gap-4 mb-4">
-                        <select
-                            value={selectedProduct}
-                            onChange={(e) => handleProductSelection(e.target.value)}
-                            className="p-2 border border-gray-300 rounded-md flex-grow"
-                        >
-                            <option value="">Select a product</option>
-                            {products.map(product => (
-                                <option key={product._id} value={product._id}>
-                                    {product.title}
-                                </option>
-                            ))}
-                        </select>
+                        
 
-                        <input
-                            type="number"
-                            value={quantity}
-                            onChange={(e) => setQuantity(e.target.value)}
-                            className="p-2 border border-gray-300 rounded-md w-32"
-                            placeholder="Quantity"
-                            min="1"
-                        />
-
-                        <button
-                            onClick={handleAddProduct}
-                            className={`text-white px-4 py-2 rounded-md transition ${editingIndex !== null ? "bg-yellow-600 hover:bg-yellow-700" : "bg-blue-600 hover:bg-blue-700"}`}
-                        >
-                            {editingIndex !== null ? "Update" : "Add Product"}
-                        </button>
+                        
                     </div>
 
                     <div className="mb-4">
@@ -255,32 +152,8 @@ const AddInventory = () => {
                         />
                     </div>
 
-                    <h3 className="text-lg font-semibold mt-6">Inventory List</h3>
-                    {inventoryItems.length > 0 ? (
-                        <ul className="mt-3 space-y-2">
-                            {inventoryItems.map((item, index) => (
-                                <li key={index} className="flex justify-between items-center bg-white p-3 rounded-md shadow">
-                                    <span>{item.productName} - {item.quantity}</span>
-                                    <div className='flex justify-center items-center content-center flex-wrap gap-2'>
-                                        <button
-                                            onClick={() => handleEditProduct(index)}
-                                            className="bg-yellow-600 text-white px-3 py-1 rounded-md mr-2 hover:bg-yellow-700"
-                                        >
-                                            Edit
-                                        </button>
-                                        <button
-                                            onClick={() => handleRemoveProduct(index)}
-                                            className="bg-red-600 text-white px-3 py-1 rounded-md hover:bg-red-700"
-                                        >
-                                            Remove
-                                        </button>
-                                    </div>
-                                </li>
-                            ))}
-                        </ul>
-                    ) : (
-                        <p className="text-gray-500">No products added yet.</p>
-                    )}
+                   
+                    
 
                     <button onClick={handleSubmit} className="w-full bg-green-600 text-white py-2 px-4 mt-6 rounded-md hover:bg-green-700 transition">
                         Submit Inventory

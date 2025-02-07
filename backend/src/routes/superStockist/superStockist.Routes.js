@@ -13,6 +13,7 @@ const {
   updateUser,
   getUserByEmail,
   updateLocation,
+  getAllUserByCnfId
 } = require("../../controllers/superStockist/superStockistControllers");
 
 //Register
@@ -39,6 +40,8 @@ router.post("/", getUserByEmail);
 //update location
 
 router.put("/update-location/:id", updateLocation);
+
+router.get("/getAllUserByCnfId/:cnfId", getAllUserByCnfId);
 
 // Current user information
 

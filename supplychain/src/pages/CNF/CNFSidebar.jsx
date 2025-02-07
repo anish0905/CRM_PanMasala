@@ -57,26 +57,26 @@ const CNFSidebar = ({ onClose }) => {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-   const handleLogout = () => {
-      Swal.fire({
-        title: 'Are you sure?',
-        text: 'Do you want to log out? Make sure to finish your tasks before logging out.',
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonColor: '#3085d6',
-        cancelButtonColor: '#d33',
-        confirmButtonText: 'Yes, log out!',
-        cancelButtonText: 'Causal logout!',
-      }).then((result) => {
-        if (result.isConfirmed) {
-          
-          navigate('/Attendance/CNF/logout'); // Navigate to logout route
-        } else if (result.isDismissed) {
-          localStorage.clear(); 
-          navigate('/'); // Navigate to home page
-        }
-      });
-    };
+  const handleLogout = () => {
+    Swal.fire({
+      title: 'Are you sure?',
+      text: 'Do you want to log out? Make sure to finish your tasks before logging out.',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Yes, log out!',
+      cancelButtonText: 'Causal logout!',
+    }).then((result) => {
+      if (result.isConfirmed) {
+
+        navigate('/Attendance/CNF/logout'); // Navigate to logout route
+      } else if (result.isDismissed) {
+        localStorage.clear();
+        navigate('/'); // Navigate to home page
+      }
+    });
+  };
 
   return (
     <div className="sidebar flex flex-col h-full w-64 bg-gray-800 text-black shadow-lg">
@@ -112,7 +112,7 @@ const CNFSidebar = ({ onClose }) => {
           </span>
           {manageInventory && (
             <div className="flex justify-start ml-10 flex-col font-semibold text-xl text-black">
-             <DropdownItem
+              <DropdownItem
                 text="Add Inventory"
                 onClick={() => handleItemClick("/add-inventory/cnf")}
               />
@@ -121,15 +121,23 @@ const CNFSidebar = ({ onClose }) => {
                 onClick={() => handleItemClick("/my-inventory/cnf")}
               />
 
-            
+
               <DropdownItem
                 text="Stock History"
                 onClick={() => handleItemClick("/Stock-History/cnf")}
               />
+
+              <DropdownItem
+                text="Dispatch Inventory"
+                onClick={() => handleItemClick("/Dispatch-Inventory/cnf")}
+              />
+
               <DropdownItem
                 text="Dispatch History"
                 onClick={() => handleItemClick("/Dispatch-History/cnf")}
               />
+
+
 
               <DropdownItem
                 text="Super Stockist Inventory"
@@ -199,12 +207,12 @@ const CNFSidebar = ({ onClose }) => {
         <NavItem
           icon={
             <CgProfile style={{ color: "#047857", fontSize: "2rem" }} />
-           
+
           }
           text="My Profile"
           onClick={() =>
             handleItemClick("/manage/userProfile/cnf")
-           
+
           }
         />
         <LogoutItem

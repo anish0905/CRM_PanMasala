@@ -400,6 +400,14 @@ const updateLocation = asyncHandler(async (req, res) => {
   });
 });
 
+
+const getAllUserByCnfId = asyncHandler(async(req,res)=>{
+  const { cnfId } = req.params;
+  const user = await SuperStockistRegistered.find({ cnf:cnfId });
+  res.status(200).json(user);
+
+} )
+
 module.exports = {
   registerUser,
   loginUser,
@@ -410,4 +418,5 @@ module.exports = {
   updateUser,
   getUserByEmail,
   updateLocation,
+  getAllUserByCnfId
 };
