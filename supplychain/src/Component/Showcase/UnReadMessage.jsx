@@ -30,7 +30,7 @@ const UnReadMessage = ({ messages }) => {
 
   return (
     <div className="p-4">
-      <h2 className="text-lg font-semibold mb-2">Dispatched Products</h2>
+      <h2 className="text-lg font-semibold mb-2">Notification</h2>
 
       {sortedMessages.length > 0 ? (
         sortedMessages.map((msg, index) => {
@@ -45,7 +45,7 @@ const UnReadMessage = ({ messages }) => {
           return (
             <div key={msg._id} className="mb-6">
               {validLines.length > 0 ? (
-                <div className="overflow-x-auto">
+                <div className="overflow-x-auto scroller">
                   {msg.subject === "inventory" ? (
                     // Table format for inventory messages
                     <div className="bg-white shadow-md rounded-lg p-4 mb-4 w-full max-w-full relative">

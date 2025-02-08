@@ -3,26 +3,22 @@ import axios from "axios";
 import { MdSms, MdNotifications, MdHistory, MdClose } from "react-icons/md";
 import { VscGitPullRequestGoToChanges } from "react-icons/vsc";
 import UnReadMessage from "./Showcase/UnReadMessage";
+import HistoryTab from "./HistoryTab";
 
 const SMSDrawer = () => {
   const BASE_URL = import.meta.env.VITE_API_URL;
   const [isOpen, setIsOpen] = useState(false);
-  const [activeTooltip, setActiveTooltip] = useState(null);
   const [messageCount, setMessageCount] = useState(0);
   const [messages, setMessages] = useState([]);
-  const [newMessage, setNewMessage] = useState(""); // State for new message input
-  console.log(messages);
+  const [activeTab, setActiveTab] = useState("notifications"); // Default tab
 
-  console.log("SMSDrawer", messages);
-
-  // Get senderId from localStorage (subAdmin) and recipientId (userId)
   const senderId =
     localStorage.getItem("subAdmin") ||
     localStorage.getItem("cnfId") ||
     localStorage.getItem("superstockist");
   const recipientId = localStorage.getItem("userId");
-  const name = localStorage.getItem("email"); //
 
+  // Fetch messages
   const fetchMessages = async () => {
     if (!senderId || !recipientId) return;
 
@@ -30,59 +26,32 @@ const SMSDrawer = () => {
       const response = await axios.get(
         `${BASE_URL}/api/message/get/${senderId}/${recipientId}`
       );
-      setMessages(response.data); // Store messages in state
-      const UnReadMessage = response.data.filter((msg) => !msg.isRead);
-      setMessageCount(UnReadMessage.length); // Set message count
+
+      setMessages(response.data);
+
+      // Count unread messages
+      const unReadMessages = response.data.filter((msg) => !msg.isRead);
+      setMessageCount(unReadMessages.length);
     } catch (error) {
       console.error("Error fetching messages:", error);
     }
   };
 
   useEffect(() => {
-    fetchMessages();
-  }, [isOpen]);
+    fetchMessages(); // Fetch initially
 
-  const toggleDrawer = () => {
-    setIsOpen(!isOpen);
-  };
+    const interval = setInterval(() => {
+      fetchMessages();
+    }, 10000); // Fetch every 10 seconds
 
-  const toggleTooltip = (id) => {
-    if (window.innerWidth <= 768) {
-      setActiveTooltip(activeTooltip === id ? null : id);
-    }
-  };
-
-  const sendMessage = async () => {
-    if (!newMessage.trim()) return; // Empty message send na ho
-
-    const messageData = {
-      sender: recipientId,
-      senderName: name, // Isko dynamically set kar sakte hain
-      recipient: senderId,
-      text: newMessage,
-      originalMessage: null,
-      replyMsg: null, // Agar reply hai toh isko set karein
-      attachments: [], // Agar attachments hai toh yahan add karein
-    };
-
-    try {
-      const response = await axios.post(
-        "http://localhost:5002/api/message/send",
-        messageData
-      );
-
-      console.log("Message sent:", response.data);
-      setNewMessage(""); // Message bhejne ke baad input clear karein
-    } catch (error) {
-      console.error("Error sending message:", error);
-    }
-  };
+    return () => clearInterval(interval); // Cleanup on unmount
+  }, []);
 
   return (
     <div className="relative">
       {/* Floating SMS Icon Button */}
       <button
-        onClick={toggleDrawer}
+        onClick={() => setIsOpen(!isOpen)}
         className="fixed bottom-6 right-6 bg-teal-900 text-white p-3 rounded-full shadow-lg hover:bg-blue-700 transition-all sm:bottom-4 sm:right-4"
       >
         <MdSms className="text-4xl sm:text-3xl" />
@@ -105,103 +74,66 @@ const SMSDrawer = () => {
               Messages
             </h2>
             <button
-              onClick={toggleDrawer}
+              onClick={() => setIsOpen(false)}
               className="text-gray-600 hover:text-red-500 transition"
             >
               <MdClose className="text-2xl sm:text-3xl" />
             </button>
           </div>
+
+          {/* Navigation Tabs */}
           <nav>
             <ul className="list-none flex space-x-6 sm:space-x-8 justify-center">
-              {/* Notifications Icon with Message Count */}
+              {/* Notifications Icon */}
               <li key="notifications" className="relative">
                 <span
-                  className="text-gray-600 text-4xl sm:text-3xl cursor-pointer hover:text-blue-500 transition relative"
-                  onMouseEnter={() =>
-                    window.innerWidth > 768 && setActiveTooltip("notifications")
-                  }
-                  onMouseLeave={() =>
-                    window.innerWidth > 768 && setActiveTooltip(null)
-                  }
+                  className={`text-gray-600 text-4xl sm:text-3xl cursor-pointer hover:text-blue-500 transition ${
+                    activeTab === "notifications" ? "text-blue-500" : ""
+                  }`}
+                  onClick={() => setActiveTab("notifications")}
                 >
                   <MdNotifications />
-
-                  {activeTooltip === "notifications" && (
-                    <span className="absolute left-1/2 transform -translate-x-1/2 mt-2 px-2 py-1 bg-gray-900 text-white text-xs rounded shadow-md whitespace-nowrap">
-                      Notifications
-                    </span>
-                  )}
                 </span>
+                {messageCount > 0 && (
+                  <span className="absolute -top-3 right-1/4 bg-red-500 text-white text-xs px-2 py-1 rounded-full">
+                    {messageCount}
+                  </span>
+                )}
               </li>
 
               {/* Approval Request Icon */}
               <li key="approval" className="relative">
-                <span
-                  className="text-gray-600 text-4xl sm:text-3xl cursor-pointer hover:text-blue-500 transition relative"
-                  onMouseEnter={() =>
-                    window.innerWidth > 768 && setActiveTooltip("approval")
-                  }
-                  onMouseLeave={() =>
-                    window.innerWidth > 768 && setActiveTooltip(null)
-                  }
-                  onClick={() => toggleTooltip("approval")}
-                >
+                <span className="text-gray-600 text-4xl sm:text-3xl cursor-pointer hover:text-blue-500 transition">
                   <VscGitPullRequestGoToChanges />
-                  {activeTooltip === "approval" && (
-                    <span className="absolute left-1/2 transform -translate-x-1/2 mt-2 px-2 py-1 bg-gray-900 text-white text-xs rounded shadow-md whitespace-nowrap">
-                      Approval Request
-                    </span>
-                  )}
                 </span>
               </li>
 
               {/* History Icon */}
               <li key="history" className="relative">
                 <span
-                  className="text-gray-600 text-4xl sm:text-3xl cursor-pointer hover:text-blue-500 transition relative"
-                  onMouseEnter={() =>
-                    window.innerWidth > 768 && setActiveTooltip("history")
-                  }
-                  onMouseLeave={() =>
-                    window.innerWidth > 768 && setActiveTooltip(null)
-                  }
-                  onClick={() => toggleTooltip("history")}
+                  className={`text-gray-600 text-4xl sm:text-3xl cursor-pointer hover:text-blue-500 transition ${
+                    activeTab === "history" ? "text-blue-500" : ""
+                  }`}
+                  onClick={() => setActiveTab("history")}
                 >
                   <MdHistory />
-                  {activeTooltip === "history" && (
-                    <span className="absolute left-1/2 transform -translate-x-1/2 mt-2 px-2 py-1 bg-gray-900 text-white text-xs rounded shadow-md whitespace-nowrap">
-                      History
-                    </span>
-                  )}
                 </span>
               </li>
             </ul>
           </nav>
 
-          {/* Messages List */}
-          <div className="flex-1 overflow-y-auto max-h-[800px]">
-            {isOpen && <UnReadMessage messages={messages} />}
+          {/* Display UnReadMessage or HistoryTab Based on Active Tab */}
+          <div className="flex-1 overflow-y-auto scroller max-h-[800px]">
+            {activeTab === "notifications" && isOpen ? (
+              <UnReadMessage messages={messages} />
+            ) : (
+              <HistoryTab messages={messages} />
+            )}
           </div>
 
-          {/* Reply Message Input */}
-          {/* <div className="p-2 bg-white flex items-center border-t">
-            <input
-              type="text"
-              value={newMessage}
-              onChange={(e) => setNewMessage(e.target.value)}
-              placeholder="Type a message..."
-              className="flex-1 border rounded-lg px-3 py-2 focus:outline-none"
-            />
-            <button
-              onClick={sendMessage}
-              className="ml-2 bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition-all"
-            >
-              Send
-            </button>
-          </div> */}
           {/* Close Drawer Button */}
           <button
-            onClick={toggleDrawer}
+            onClick={() => setIsOpen(false)}
             className="mt-auto bg-yellow-500 text-black px-4 py-2 rounded-lg hover:bg-yellow-600 transition-all shadow-md"
           >
             Close Drawer
