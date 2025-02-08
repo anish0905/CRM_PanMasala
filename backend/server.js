@@ -44,6 +44,8 @@ const cnfInventoryRoute = require("./src/routes/Inventory/cnfInventoryRoute");
 
 const superstockistInventoryRoute = require("./src/routes/Inventory/superstockistInventoryRoute");
 
+const distributoryInventoryRoute = require("./src/routes/Inventory/distributoryInventoryRoute");
+
 const messageRoutes = require("./src/routes/messageRoutes");
 
 // Connect to Database
@@ -100,6 +102,8 @@ app.use("/api/subAdmin/inventory", subAdminInventoryRoute);
 app.use("/api/cnf/inventory", cnfInventoryRoute);
 
 app.use("/api/superstockist/inventory", superstockistInventoryRoute);
+
+app.use("/api/distributor/inventory", distributoryInventoryRoute);
 
 app.use("/api/message", messageRoutes);
 

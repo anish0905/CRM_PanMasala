@@ -4,13 +4,16 @@ import { useParams, useNavigate } from "react-router-dom";
 import CNFSidebar from "../../CNF/CNFSidebar";
 import CNFSideBarModal from "../../CNF/CNFSideBarModal";
 import SMSDrawer from "../../../Component/SMS_Drawer";
+import { FaArrowLeft } from "react-icons/fa";
+import { TbHomeStats } from "react-icons/tb";
 
 const DistributorsDetails = () => {
   const [SuperStockists, setSuperStockists] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage] = useState(8);
-  const { id, role, name } = useParams();
+  const { name, id } = useParams();
+
   const email = localStorage.getItem("email");
   const navigate = useNavigate();
 
@@ -22,9 +25,11 @@ const DistributorsDetails = () => {
 
   const fetchSuperStockists = async () => {
     try {
-      const response = await fetch(
-        `${BASE_URL}/api/cnfAgent/DistributorDetailsBySuperstockist/${id}`
-      );
+      const response =
+        name === "inventory" ? await fetch(`${BASE_URL}/api/cnfAgent/DistributorDetailsByCnfId/${id}`) :
+          await fetch(
+            `${BASE_URL}/api/cnfAgent/DistributorDetailsBySuperstockist/${id}`
+          );
       if (!response.ok) throw new Error("Failed to fetch SuperStockists");
       const data = await response.json();
       setSuperStockists(data.data);
@@ -46,8 +51,15 @@ const DistributorsDetails = () => {
 
   const totalPages = Math.ceil(filteredSuperStockists.length / itemsPerPage);
 
-  const handleBack = () => {
-    navigate(-1);
+
+
+  const handleInventory = (user) => {
+    
+    navigate(`/manage/Inventory/${user._id}/distributor/cnf`, {
+      state: {
+        user: user,
+      },
+    });
   };
 
   return (
@@ -57,26 +69,28 @@ const DistributorsDetails = () => {
       </div>
 
       <div className="lg:ml-80 font-serif w-full md:p-5 p-4">
-        <div className="bg-[#93c5fd] rounded-md shadow p-4 flex gap-4 items-center justify-between">
-          <button
-            className="text-xs sm:text-sm md:text-lg lg:text-xl font-bold text-white bg-blue-500 hover:bg-blue-700 px-4 py-2 rounded-lg shadow-md transition duration-300 ease-in-out"
-            onClick={handleBack}
-          >
-            Back
+        <header className="bg-[rgb(147,197,253)] rounded-md shadow p-4 flex gap-4 items-center justify-between">
+          <button onClick={() => navigate(-1)} className="text-gray-800 hover:text-gray-600  cursor-pointer">
+            <FaArrowLeft className="text-2xl" />
           </button>
-
+          <h1 className="flex-grow text-end lg:text-start text-xs sm:text-sm md:text-lg lg:text-xl font-bold text-gray-800">
+           
+            {
+              name === "inventory"? "Manage Distributor Inventory" : "Manage Distributor Details"
+            }
+          </h1>
+          <SMSDrawer />
           {email && (
-            <div className="hidden sm:flex items-center text-white border-4 border-[#1e40af] p-2 rounded-lg bg-[rgb(42,108,194)] hover:bg-blue-800">
+            <div className="hidden sm:flex items-center lg:text-2xl md:text-xl text-sm font-bold text-white border-4 border-[#1e40af] p-2 rounded-lg bg-[rgb(42,108,194)] hover:bg-blue-800 transition-colors duration-300 ease-in-out">
               {email}
             </div>
           )}
           <div className="lg:hidden block">
+
             <CNFSideBarModal />
+
           </div>
-          <div>
-            <SMSDrawer />
-          </div>
-        </div>
+        </header>
 
         <div className="py-8">
           <div className="bg-[#1e40af] rounded-xl p-4">
@@ -123,6 +137,13 @@ const DistributorsDetails = () => {
                     <th className="px-2 py-4 md:text-lg text-xs border-r-2 border-white">
                       Pincode
                     </th>
+                    {
+                      name === "inventory" && (
+                        <th className="px-2 py-4 md:text-lg text-xs border-r-2 border-white">
+                          Action
+                        </th>
+                      )
+                    }
                   </tr>
                 </thead>
                 <tbody>
@@ -156,6 +177,18 @@ const DistributorsDetails = () => {
                       <td className="px-2 py-4 md:text-lg text-xs  whitespace-nowrap overflow-hidden overflow-ellipsis border-r-2 border-white">
                         {stockist.pinCode}
                       </td>
+                      {
+                        name === "inventory" && (
+                          <td>
+                          <button
+                            onClick={() => handleInventory(stockist)}
+                            className="bg-yellow-500 text-white p-2 rounded ml-2 cursor-pointer"
+                          >
+                            <TbHomeStats />
+                          </button>
+                          </td>
+                        )
+                      }
                     </tr>
                   ))}
                 </tbody>
@@ -167,11 +200,10 @@ const DistributorsDetails = () => {
                 <button
                   key={index}
                   onClick={() => setCurrentPage(index + 1)}
-                  className={`px-3 py-1 mx-1 ${
-                    index + 1 === currentPage
-                      ? "bg-blue-500 text-white"
-                      : "bg-gray-300"
-                  } rounded`}
+                  className={`px-3 py-1 mx-1 ${index + 1 === currentPage
+                    ? "bg-blue-500 text-white"
+                    : "bg-gray-300"
+                    } rounded`}
                 >
                   {index + 1}
                 </button>

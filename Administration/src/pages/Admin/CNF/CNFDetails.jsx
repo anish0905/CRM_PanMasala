@@ -35,12 +35,12 @@ const CNFDetails = () => {
 
   useEffect(() => {
     fetchCNFs();
-  }, []);
+  }, [name]);
 
   const fetchCNFs = async () => {
     try {
       const response =
-        location.pathname === "/manage/CNF/Registration/Admin"|| location.pathname === "/manage/CNF/user/Admin" 
+        location.pathname === "/manage/CNF/Registration/Admin"|| location.pathname === "/manage/CNF/user/Admin" || location.pathname === "/manage/CNF/inventory/Admin" 
           ? await fetch(`${URI}/api/cnfAgent/users`)
           : await fetch(`${URI}/api/subAdmin/cnf/${currentUserId}`)
   
@@ -48,7 +48,7 @@ const CNFDetails = () => {
         throw new Error("Failed to fetch CNFs");
       }
 
-      if( location.pathname === "/manage/CNF/Registration/Admin"|| location.pathname === "/manage/CNF/user/Admin" ){
+      if( location.pathname === "/manage/CNF/Registration/Admin"|| location.pathname === "/manage/CNF/user/Admin"|| location.pathname === "/manage/CNF/inventory/Admin"  ){
         const data = await response.json();
         setCNFs(data);
         }
@@ -145,7 +145,7 @@ const CNFDetails = () => {
   };
 
   const handleInventory = (user) => {
-    navigate(`/manage/Inventory/${user._id}/${role}/CNF`, {
+    navigate(`/manage/Inventory/${user._id}/cnf/${role}`, {
       state: {
         user: user,
       },
@@ -169,8 +169,8 @@ const CNFDetails = () => {
           <h1 className="flex-grow text-start text-xs sm:text-sm md:text-lg lg:text-xl font-bold text-gray-800">
             {name === "user"
               ? "Manage CNF"
-              : name === "stock"
-                ? "CNF Inventory"
+              : name === "inventory"
+                ? "Manage CNF Inventory"
                 : "CNF Registration"}
           </h1>
           <RightSideDrawer/>
@@ -247,7 +247,7 @@ const CNFDetails = () => {
                       <td className="px-2 py-4 md:text-lg text-xs  whitespace-nowrap overflow-hidden overflow-ellipsis  border-r-2 border-white">{CNF.pinCode}</td>
                       <td className="px-2 py-4 md:text-lg text-xs  whitespace-nowrap overflow-hidden overflow-ellipsis  border-r-2 border-white">{CNF.region}</td>
                       <td className="px-2 py-4 md:text-lg text-xs  whitespace-nowrap overflow-hidden overflow-ellipsis border-r-2 border-white">
-                        {name != "stock" && (<><button onClick={() => handleUpdate(CNF)} className="bg-blue-500 text-white p-2 rounded cursor-pointer">
+                        {name != "inventory" && (<><button onClick={() => handleUpdate(CNF)} className="bg-blue-500 text-white p-2 rounded cursor-pointer">
                           Update
                         </button>
                           <button
@@ -258,7 +258,7 @@ const CNFDetails = () => {
                           </button>
                         </>
                         )}
-                        {name === "stock" && (
+                        {name === "inventory" && (
                           <button
                             onClick={() => handleInventory(CNF)}
                             className="bg-yellow-500 text-white p-2 rounded ml-2 cursor-pointer"

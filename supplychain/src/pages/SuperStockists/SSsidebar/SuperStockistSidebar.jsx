@@ -146,7 +146,7 @@ const SuperStockistSidebar = ({ onClose }) => {
               <DropdownItem
                 text="Distributor Inventory"
                 onClick={() =>
-                  handleItemClick("/manage/superStockit/Inventory")
+                  handleItemClick("/manage/distributor/inventory/superStockist")
                 }
               />
             </div>
@@ -172,11 +172,18 @@ const SuperStockistSidebar = ({ onClose }) => {
                   )
                 }
               />
+               <DropdownItem
+                text="Distributor Inventory"
+                onClick={() =>
+                  handleItemClick("/manage/distributor/inventory/superStockist")
+                }
+              />
               <DropdownItem
                 text="Distributor"
                 onClick={() => handleItemClick("")}
               />
               <DropdownItem text="Report" onClick={() => handleItemClick("")} />
+
             </div>
           )}
         </div>

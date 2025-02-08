@@ -21,6 +21,8 @@ const SuperStockistDetails = () => {
   const navigate = useNavigate();
   const location = useLocation();
 
+ 
+
   const BASE_URL = import.meta.env.VITE_API_URL;
 
   // Pagination state
@@ -36,12 +38,9 @@ const SuperStockistDetails = () => {
   const fetchSuperStockists = async () => {
     try {
       const response =
-        location.pathname === "/manage/superstockist/Registration/CNF" ||
-        location.pathname === "/manage/superstockist/Super-Stockist/CNF"
-          ? await fetch(`${BASE_URL}/api/superstockist/getAllUserByCnfId/${currentUserId}`)
-          : await fetch(
-              `${BASE_URL}/api/superstockist/getAlluser/${currentUserId}`
-            );
+       
+   await fetch(`${BASE_URL}/api/superstockist/getAllUserByCnfId/${currentUserId}`)
+        
 
       if (!response.ok) {
         throw new Error("Failed to fetch SuperStockists");
@@ -127,7 +126,8 @@ const SuperStockistDetails = () => {
   };
 
   const handleInventory = (user) => {
-    navigate(`/manage/Inventory/${user._id}/${role}/SuperStockist`, {
+    
+    navigate(`/manage/Inventory/${user._id}/superstockist/cnf`, {
       state: {
         user: user,
       },
@@ -149,8 +149,8 @@ const SuperStockistDetails = () => {
               ? "Manage Super Stockist"
               : name === "Super-Stockist"
               ? "Super Stockist List"
-              : name === "stock"
-              ? "Super Stockist Inventory"
+              : name === "inventory"
+              ? "Manage Super Stockist Inventory"
               : "Super Stockist Registration"}
           </h1>
 
@@ -236,7 +236,7 @@ const SuperStockistDetails = () => {
                     <th className="px-2 py-4 md:text-lg text-xs   border-r-2 border-white">
                       PinCode
                     </th>
-                    {name !== "stock" && name !== "Super-Stockist" && (
+                    { name !== "Super-Stockist" && (
                       <th className="px-2 py-4 md:text-lg text-xs">Actions</th>
                     )}
                   </tr>
@@ -271,8 +271,9 @@ const SuperStockistDetails = () => {
                       <td className="px-2 py-4 md:text-lg text-xs  whitespace-nowrap overflow-hidden overflow-ellipsis  border-r-2 border-white">
                         {SuperStockist.pinCode}
                       </td>
-                      {name != "stock" && name != "Super-Stockist" && (
+                     
                         <td className="px-2 py-4 md:text-lg text-xs  whitespace-nowrap overflow-hidden overflow-ellipsis ">
+                        {name != "inventory" && name != "Super-Stockist" && (
                           <>
                             <button
                               onClick={() => handleUpdate(SuperStockist)}
@@ -289,8 +290,9 @@ const SuperStockistDetails = () => {
                               Delete
                             </button>
                           </>
+                          )}
 
-                          {name === "stock" && (
+                          {name === "inventory" && (
                             <button
                               onClick={() => handleInventory(SuperStockist)}
                               className="bg-yellow-500 text-white p-2 rounded ml-2 cursor-pointer"
@@ -299,7 +301,7 @@ const SuperStockistDetails = () => {
                             </button>
                           )}
                         </td>
-                      )}
+
                     </tr>
                   ))}
                 </tbody>

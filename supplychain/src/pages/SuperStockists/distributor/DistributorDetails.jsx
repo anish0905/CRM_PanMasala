@@ -133,7 +133,7 @@ const DistributorDetails = () => {
   };
 
   const handleInventory = (user) => {
-    navigate(`/manage/Inventory/${user._id}/${role}/Distributor`, {
+    navigate(`/manage/Inventory/${user._id}/distributor/superstockist`, {
       state: {
         user: user,
       },
@@ -160,19 +160,15 @@ const DistributorDetails = () => {
           <SuperStockistSidebar />
         </div>
       )}
-      {role === "superStockist" && (
-        <div className="lg:p-5 xl:p-5 ml-0 p-0 h-screen">
-          {/* <SuperDistributorSideBar /> */}
-        </div>
-      )}
+      
 
       <div className="lg:ml-80 font-serif w-full md:p-5 p-4">
         <div className="bg-[#93c5fd] rounded-md shadow p-4 flex gap-4 items-center justify-between">
           <h1 className="flex-grow text-start text-xs sm:text-sm md:text-lg lg:text-xl font-bold text-gray-800">
             {name === "user"
               ? "Manage Distributor"
-              : name === "stock"
-              ? "Distributor Inventory"
+              : name === "inventory"
+              ? " Manage Distributor Inventory"
               : "Distributor Registration"}
           </h1>
 
@@ -289,7 +285,7 @@ const DistributorDetails = () => {
                         {Distributor.pinCode}
                       </td>
                       <td className="px-2 py-4 md:text-lg text-xs whitespace-nowrap overflow-hidden overflow-ellipsis border-r-2 border-white">
-                        {name !== "stock" && (
+                        {name !== "inventory" && (
                           <>
                             <button
                               onClick={() => handleUpdate(Distributor)}
@@ -305,7 +301,7 @@ const DistributorDetails = () => {
                             </button>
                           </>
                         )}
-                        {name === "stock" && (
+                        {name === "inventory" && (
                           <button
                             onClick={() => handleInventory(Distributor)}
                             className="bg-yellow-500 text-white p-2 rounded ml-2 cursor-pointer"

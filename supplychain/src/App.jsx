@@ -26,6 +26,7 @@ import MyInventory from "./pages/inventory/MyInventory";
 import StockHistory from "./pages/inventory/StockHistory";
 import DispatchInventory from "./pages/inventory/DispatchInventory";
 import DispatchHistory from "./pages/inventory/DispatchHistory";
+import AllUserInventoryDashbord from "./pages/inventory/AllUserInventoryDashbord";
 
 function App() {
   const navigate = useNavigate();
@@ -63,16 +64,13 @@ function App() {
         path="/manage/superstockist/:name/:role"
         element={<SuperStockistDetails />}
       />
-      <Route
-        path="/manage/distributor/:name/:role"
-        element={<DistributorDetails />}
-      />
+    
       <Route
         path="/manage/cnf/distributor/:name/:role"
         element={<Distributors />}
       />
       <Route
-        path="/manage/cnf/distributor/:id"
+        path="/manage/cnf/:name/:id"
         element={<DistributorsDetails />}
       />
       <Route path="/manage/userProfile/:role" element={<UserProfile />} />
@@ -99,6 +97,13 @@ function App() {
       <Route
         path="/Dispatch-History/:role"
         element={<DispatchHistory />}
+      />
+
+
+      <Route
+        path="/manage/Inventory/:id/:role/:currentUser"
+        element={<AllUserInventoryDashbord />}
+
       />
     </Routes>
   );
