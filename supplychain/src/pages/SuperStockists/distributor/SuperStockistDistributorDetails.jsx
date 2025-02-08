@@ -3,12 +3,12 @@ import Swal from "sweetalert2";
 import { TbHomeStats } from "react-icons/tb";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 
-import DistributorRegister from "../../SuperStockists/distributor/DistributorRegister";
+import DistributorRegister from "./DistributorRegister";
 import SuperStockistSidebar from "../SSsidebar/SuperStockistSidebar";
 import SuperStockistBarModal from "../SSsidebar/SuperStockistBarModal";
 import SMSDrawer from "../../../Component/SMS_Drawer";
 
-const DistributorDetails = () => {
+const SuperStockistDistributorDetails = () => {
   const [Distributors, setDistributors] = useState([]);
   const [showModal, setShowModal] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
@@ -344,4 +344,4 @@ const DistributorDetails = () => {
   );
 };
 
-export default DistributorDetails;
+export default SuperStockistDistributorDetails;

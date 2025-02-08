@@ -143,49 +143,12 @@ const DistributorSidebar = ({ onClose }) => {
                 onClick={() => handleItemClick("/Dispatch-History/distributor")}
               />
 
-              <DropdownItem
-                text="Distributor Inventory"
-                onClick={() =>
-                  handleItemClick("/manage/superStockit/Inventory")
-                }
-              />
+              
             </div>
           )}
         </div>
 
-        {/* Manage Attendance Record */}
-
-        {/* <div className="relative">
-          <span
-            className="nav-item nav-item-dropdown flex items-center gap-4 cursor-pointer p-4 transition duration-300 ease-in-out transform rounded-full mb-2"
-            onClick={toggleAttendanceDropdown}
-          >
-            <MdOutlineEventAvailable
-              style={{ color: "blue", fontSize: "2rem" }}
-            />
-            <span className="text-lg font-semibold">Manage Attendance</span>
-          </span>
-          {AttendanceDropdown && (
-            <div className="flex justify-start ml-10 flex-col font-semibold text-xl text-black">
-              <DropdownItem
-                text={<>Field Executive</>}
-                onClick={() =>
-                  handleItemClick(
-                    "/mange/Field-Executive-Approval/FieldManager/Attendance"
-                  )
-                }
-              />
-              <DropdownItem
-                text={<>Field Executive Approval</>}
-                onClick={() =>
-                  handleItemClick(
-                    "/mange/Field-Executive-Approval/Admin/Attendance"
-                  )
-                }
-              />
-            </div>
-          )}
-        </div> */}
+        
 
         {/* FEA and FE */}
         <div className="relative">

@@ -7,7 +7,7 @@ import CNFDashbord from "./pages/CNF/CNFDashbord";
 // import SubAdminDashboard from "./pages/SubAdmin/dashboard/Dashboard";
 import SuperStockistDetails from "./pages/CNF/superStockist/SuperStockistDetails";
 import SuperStockistdashboard from "./pages/SuperStockists/SuperStockistdashboard";
-import DistributorDetails from "./pages/SuperStockists/distributor/DistributorDetails";
+import SuperStockistDistributorDetails from "./pages/SuperStockists/distributor/SuperStockistDistributorDetails";
 import DistributerDashBoard from "./pages/Distributer/dashboard/DistributerDashBoard";
 import DistributorProductReport from "./Component/Showcase/ShowcaseProductReport";
 import FEA from "./pages/Distributer/FEA&FE/FEA.Details";
@@ -64,7 +64,7 @@ function App() {
         path="/manage/superstockist/:name/:role"
         element={<SuperStockistDetails />}
       />
-    
+
       <Route
         path="/manage/cnf/distributor/:name/:role"
         element={<Distributors />}
@@ -73,6 +73,12 @@ function App() {
         path="/manage/cnf/:name/:id"
         element={<DistributorsDetails />}
       />
+
+      <Route
+        path="/manage/distributor/:name/:role"
+        element={<SuperStockistDistributorDetails />}
+      />
+
       <Route path="/manage/userProfile/:role" element={<UserProfile />} />
 
 
