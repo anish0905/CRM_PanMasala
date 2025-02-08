@@ -1,79 +1,120 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { MdSms, MdNotifications, MdHistory, MdClose } from "react-icons/md";
 import { VscGitPullRequestGoToChanges } from "react-icons/vsc";
+import axios from "axios";
 
 const SMSDrawer = () => {
-    const [isOpen, setIsOpen] = useState(false);
-    const [activeTooltip, setActiveTooltip] = useState(null);
+  const URI = import.meta.env.VITE_API_URL;
+  const [isOpen, setIsOpen] = useState(false);
+  const [pendingRequests, setPendingRequests] = useState([]);
+  const [fieldManagers, setFieldManagers] = useState([]);
 
-    const toggleDrawer = () => {
-        setIsOpen(!isOpen);
-    };
+  useEffect(() => {
+    if (isOpen) {
+      fetchPendingRequests();
+    }
+  }, [isOpen]);
 
-    const toggleTooltip = (id) => {
-        if (window.innerWidth <= 768) {  // Only toggle on small screens
-            setActiveTooltip(activeTooltip === id ? null : id);
+  const fetchPendingRequests = async () => {
+    try {
+      const response = await axios.get(
+        `${URI}/api/approveDeleteRequest/approvedFieldManagers`
+      );
+      setPendingRequests(response.data.pendingRequests);
+      setFieldManagers(response.data.fieldManagers);
+    } catch (error) {
+      console.error("Error fetching pending requests:", error);
+    }
+  };
+
+  const handleAction = async (requestId, action) => {
+    try {
+      await axios.delete(
+        `${URI}/api/approveDeleteRequest/field-manager/delete-request/approve`,
+        {
+          data: { requestId, action: action }, // Correct way to send data in a DELETE request
         }
-    };
+      );
 
-    return (
-        <div className="relative">
-            {/* Floating SMS Icon Button */}
+      setPendingRequests(
+        pendingRequests.filter((req) => req._id !== requestId)
+      );
+    } catch (error) {
+      console.error(`Error performing ${action} action:`, error);
+    }
+  };
+
+  return (
+    <div className="relative">
+      {/* Floating SMS Icon Button */}
+      <button
+        onClick={() => setIsOpen(!isOpen)}
+        className="fixed bottom-6 right-6 bg-teal-900 text-white p-3 rounded-full shadow-lg hover:bg-blue-700 transition-all"
+      >
+        <MdSms className="text-4xl" />
+      </button>
+
+      {/* Drawer */}
+      <div
+        className={`fixed top-0 right-0 z-50 h-full w-full sm:w-3/4 md:w-1/2 lg:w-1/3 bg-white shadow-xl transform transition-transform duration-300 ease-in-out ${
+          isOpen ? "translate-x-0" : "translate-x-full"
+        }`}
+      >
+        <div className="flex flex-col h-full p-4 bg-gray-100 rounded-l-lg">
+          <div className="flex justify-between items-center mb-4 border-b pb-3">
+            <h2 className="text-lg font-semibold text-gray-800">Messages</h2>
             <button
-                onClick={toggleDrawer}
-                className="fixed bottom-6 right-6 bg-teal-900 text-white p-3 rounded-full shadow-lg hover:bg-blue-700 transition-all sm:bottom-4 sm:right-4"
+              onClick={() => setIsOpen(false)}
+              className="text-gray-600 hover:text-red-500 transition"
             >
-                <MdSms className="text-4xl sm:text-3xl" />
+              <MdClose className="text-2xl" />
             </button>
+          </div>
 
-            {/* Drawer */}
-            <div
-                className={`fixed top-0 right-0 z-50 h-full w-full sm:w-3/4 md:w-1/2 lg:w-1/3 bg-white shadow-xl transform transition-transform duration-300 ease-in-out ${
-                    isOpen ? "translate-x-0" : "translate-x-full"
-                }`}
-            >
-                <div className="flex flex-col h-full p-4 sm:p-6 bg-gray-100 rounded-l-lg">
-                    <div className="flex justify-between items-center mb-4 border-b pb-3">
-                        <h2 className="text-lg sm:text-xl font-semibold text-gray-800">Messages</h2>
-                        <button onClick={toggleDrawer} className="text-gray-600 hover:text-red-500 transition">
-                            <MdClose className="text-2xl sm:text-3xl" />
-                        </button>
+          {/* Notifications Section */}
+          <div>
+            <h3 className="text-md font-semibold mb-2">Pending Requests</h3>
+            {pendingRequests.length === 0 ? (
+              <p className="text-gray-500">No pending requests.</p>
+            ) : (
+              pendingRequests.map((request) => {
+                const manager = fieldManagers.find(
+                  (fm) => fm._id === request.fieldManagerId
+                );
+                return (
+                  <div
+                    key={request._id}
+                    className="bg-white p-3 rounded-lg shadow mb-2"
+                  >
+                    <p className="text-gray-800 font-medium">
+                      {manager?.name || "Unknown Manager"}
+                    </p>
+                    <p className="text-gray-600 text-sm">
+                      Reason: {request.reason}
+                    </p>
+                    <div className="flex gap-2 mt-2">
+                      <button
+                        onClick={() => handleAction(request._id, "Approve")}
+                        className="bg-green-500 text-white px-3 py-1 rounded"
+                      >
+                        Approve
+                      </button>
+                      <button
+                        onClick={() => handleAction(request._id, "Reject")}
+                        className="bg-red-500 text-white px-3 py-1 rounded"
+                      >
+                        Reject
+                      </button>
                     </div>
-                    <nav>
-                        <ul className="list-none flex space-x-6 sm:space-x-8 justify-center">
-                            {[
-                                { name: "Notifications", icon: <MdNotifications />, id: "notifications" },
-                                { name: "Approval Request", icon: <VscGitPullRequestGoToChanges />, id: "approval" },
-                                { name: "History", icon: <MdHistory />, id: "history" }
-                            ].map((item) => (
-                                <li key={item.id} className="relative">
-                                    <span
-                                        className="text-gray-600 text-4xl sm:text-3xl cursor-pointer hover:text-blue-500 transition relative"
-                                        onMouseEnter={() => window.innerWidth > 768 && setActiveTooltip(item.id)}
-                                        onMouseLeave={() => window.innerWidth > 768 && setActiveTooltip(null)}
-                                        onClick={() => toggleTooltip(item.id)}
-                                    >
-                                        {item.icon}
-                                        {(activeTooltip === item.id) && (
-                                            <span className="absolute left-1/2 transform -translate-x-1/2 mt-2 px-2 py-1 bg-gray-900 text-white text-xs rounded shadow-md whitespace-nowrap">
-                                                {item.name}
-                                            </span>
-                                        )}
-                                    </span>
-                                </li>
-                            ))}
-                        </ul>
-                    </nav>
-                    <button
-                        onClick={toggleDrawer}
-                        className="mt-auto bg-yellow-500 text-black px-4 py-2 rounded-lg hover:bg-yellow-600 transition-all shadow-md"
-                    >
-                        Close Drawer
-                    </button>
-                </div>
-            </div>
+                  </div>
+                );
+              })
+            )}
+          </div>
         </div>
-    );
+      </div>
+    </div>
+  );
 };
 
 export default SMSDrawer;

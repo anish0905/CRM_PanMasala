@@ -4,6 +4,8 @@ const FieldManager = require("../../models/FieldManagement/Login.model");
 const { validationResult } = require("express-validator"); // For input validation
 require("dotenv").config();
 const InspectionShop = require("../../models/FieldManagement/inspectionShopDetails.model");
+const DeleteRequest = require("../../models/FieldManagement/deleteRequestSchema");
+// console.log(DeleteRequest);
 
 // Utility to handle errors
 const handleError = (res, statusCode, message) => {
@@ -270,20 +272,53 @@ const getByIdFieldManager = async (req, res) => {
   }
 };
 
-const deleteByIdFieldManager = async (req, res) => {
-  const { id } = req.params;
+// const deleteByIdFieldManager = async (req, res) => {
+//   const { id } = req.params;
+//   try {
+//     if (!id) {
+//       return res.status(400).json({ message: "Field Manager ID is required" });
+//     }
+//     const fieldManager = await FieldManager.findByIdAndDelete(id);
+//     if (!fieldManager) {
+//       return res.status(404).json({ message: "Field Manager not found" });
+//     }
+//     res.json({ message: "Field Manager deleted successfully" });
+//   } catch (error) {
+//     console.error("Error deleting Field Manager:", error);
+//     res.status(500).json({ message: "Server error in deleting Field Manager" });
+//   }
+// };
+
+const requestDeleteByIdFieldManager = async (req, res) => {
   try {
-    if (!id) {
-      return res.status(400).json({ message: "Field Manager ID is required" });
+    const { fieldManagerId, reason } = req.body;
+
+    if (!fieldManagerId || !reason) {
+      return res
+        .status(400)
+        .json({ message: "FieldManager ID and reason are required." });
     }
-    const fieldManager = await FieldManager.findByIdAndDelete(id);
-    if (!fieldManager) {
-      return res.status(404).json({ message: "Field Manager not found" });
+
+    const existingRequest = await DeleteRequest.findOne({
+      fieldManagerId,
+      status: "Pending",
+    });
+    if (existingRequest) {
+      return res
+        .status(400)
+        .json({ message: "Delete request is already pending." });
     }
-    res.json({ message: "Field Manager deleted successfully" });
+
+    const deleteRequest = new DeleteRequest({ fieldManagerId, reason });
+    await deleteRequest.save();
+
+    res.json({
+      message: "Delete request submitted successfully.",
+      deleteRequest,
+    });
   } catch (error) {
-    console.error("Error deleting Field Manager:", error);
-    res.status(500).json({ message: "Server error in deleting Field Manager" });
+    console.error("Error submitting delete request:", error);
+    res.status(500).json({ message: "Server error in submitting request." });
   }
 };
 
@@ -326,7 +361,7 @@ module.exports = {
   getFieldManager,
   updateFieldManager,
   getByIdFieldManager,
-  deleteByIdFieldManager,
+  requestDeleteByIdFieldManager,
   logout,
   getFieldManagerbYfeaid,
 };

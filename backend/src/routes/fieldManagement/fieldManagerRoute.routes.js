@@ -14,8 +14,8 @@ router.get(
 router.put("/update/:id", FieldManagerController.updateFieldManager);
 router.get("/getFieldManager/:id", FieldManagerController.getByIdFieldManager);
 router.delete(
-  "/getFieldManager/delete/:id",
-  FieldManagerController.deleteByIdFieldManager
+  "/requestDeleteByIdFieldManager/delete/:id",
+  FieldManagerController.requestDeleteByIdFieldManager
 );
 
 router.post("/logout/:id", FieldManagerController.logout);

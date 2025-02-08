@@ -63,6 +63,20 @@ const FEA = () => {
 
   const handleDeleteButtonClick = async (selectedFieldManager) => {
     try {
+      // Prompt the user for a reason before proceeding
+      const { value: reason } = await Swal.fire({
+        title: "Reason for deletion",
+        input: "text",
+        inputPlaceholder: "Enter the reason",
+        showCancelButton: true,
+        confirmButtonText: "Submit",
+        cancelButtonText: "Cancel",
+      });
+
+      // If user cancels or doesn't enter a reason, stop execution
+      if (!reason) return;
+
+      // Confirm delete action
       const result = await Swal.fire({
         icon: "warning",
         title: "Are you sure?",
@@ -74,8 +88,17 @@ const FEA = () => {
 
       if (result.isConfirmed) {
         const response = await fetch(
-          `${BASE_URL}/api/fieldManager/getFieldManager/delete/${selectedFieldManager}`,
-          { method: "DELETE" }
+          `${BASE_URL}/api/fieldManager/requestDeleteByIdFieldManager/delete/${selectedFieldManager}`,
+          {
+            method: "DELETE",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              fieldManagerId: selectedFieldManager,
+              reason,
+            }),
+          }
         );
 
         if (response.ok) {
