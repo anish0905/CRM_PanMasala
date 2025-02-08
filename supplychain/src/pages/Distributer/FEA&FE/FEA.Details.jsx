@@ -334,16 +334,20 @@ const FEA = () => {
                           </span>
                         ) : (
                           <>
+                           <span className="lg:text-3xl text-blue-600 cursor-pointer">
                             <FaRegEdit
                               onClick={() =>
                                 handleEditButtonClick(filedManager)
                               }
                             />
+                            </span>
+                            <span className="lg:text-3xl text-red-600 cursor-pointer">
                             <MdAutoDelete
                               onClick={() =>
                                 handleDeleteButtonClick(filedManager._id)
                               }
                             />
+                               </span>
                           </>
                         )}
                       </td>

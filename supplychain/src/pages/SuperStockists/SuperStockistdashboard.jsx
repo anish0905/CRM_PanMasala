@@ -3,63 +3,56 @@ import axios from "axios";
 import { FaProductHunt, FaRunning } from "react-icons/fa";
 import { MdIncompleteCircle } from "react-icons/md";
 import { TbTruckDelivery } from "react-icons/tb";
-import { Avatar } from "@material-tailwind/react";
 import { Link } from "react-router-dom";
 
-// import OrderStateWise from "./OrderStateWise";
-import Img from "../../assets/avataaars.png";
 import SuperStockistSidebar from "./SSsidebar/SuperStockistSidebar";
 import SuperStockistBarModal from "./SSsidebar/SuperStockistBarModal";
 import SMSDrawer from "../../Component/SMS_Drawer";
+import OrderChart from "../CNF/OrderChart";
+import OrderStateWise from "../CNF/OrderStateWise";
 // import OrderChart from "./OrderChart";
 // import OrderDetailsCityTaluka from "./OrderDetailsCityTaluka";
 
 const SuperStockistdashboard = () => {
-  const [superStockist, setSuperStockist] = useState([]);
-  const [stockist, setStockist] = useState([]);
-  const [deliveryBoy, setDeliveryBoy] = useState([]);
+  const [Distributor, setDistributor] = useState([]);
   const [panShopDetails, setPanShopDetails] = useState([]);
   const [pendingOrder, setPendingOrder] = useState(0);
   const [confirmedOrder, setConfirmedOrder] = useState(0);
   const [deliveredOrder, setDeliveredOrder] = useState(0);
   const [orders, setOrders] = useState([]);
-  const [fieldManager, setFieldManager] = useState([]);
-  const [fieldManagerAdmin, setFieldManagerAdmin] = useState([]);
 
   const URI = import.meta.env.VITE_API_URL;
+  const currentUserId = localStorage.getItem('userId')
+
+  console.log(Distributor)
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         const [
-          superStockistRes,
-          stockistRes,
+
+
+          Distributor,
           orderRes,
-          deliveryBoyRes,
+          // deliveryBoyRes,
           panShopDetailsRes,
-          fieldManager,
         ] = await Promise.all([
-          axios.get(`${URI}/api/superstockist/getAllUser`),
-          axios.get(`${URI}/api/executives/getAlluser/`),
+
+
+          axios.get(`${URI}/api/distributor/superStockist/${currentUserId}`),
           axios.get(`${URI}/api/panshop/order/`),
-          axios.get(`${URI}/api/qrGeneraterBoy/allDetailsDeliverBoy`),
-          axios.get(`${URI}/api/panShopOwner/`),
-          axios.get(`${URI}/api/fieldManager/getFieldManager`),
+          // axios.get(`${URI }/api/qrGeneraterBoy/allDetailsDeliverBoy`),
+          axios.get(`${URI}/api/panShop/`),
         ]);
 
-        setSuperStockist(superStockistRes.data);
-        setStockist(stockistRes.data);
+
+        setDistributor(Distributor.data);
         setOrders(orderRes.data);
-        setDeliveryBoy(deliveryBoyRes.data);
+        // setDeliveryBoy(deliveryBoyRes.data);
         setPanShopDetails(panShopDetailsRes.data.data);
-        const FieldManagers = fieldManager.data.filter(
-          (manager) => manager.role === "FieldManager"
-        );
-        const FieldManagersAdmin = fieldManager.data.filter(
-          (manager) => manager.role === "Admin"
-        );
-        setFieldManagerAdmin(FieldManagersAdmin);
-        setFieldManager(FieldManagers);
+
+
+
 
         const today = new Date().toISOString().slice(0, 10);
         const todayOrders = orderRes.data.filter(
@@ -87,7 +80,7 @@ const SuperStockistdashboard = () => {
   const sortedProducts = orders.sort((a, b) => b.totalPrice - a.totalPrice);
   const top5Products = sortedProducts.slice(0, 5);
 
-  if (!superStockist.length) {
+  if (!Distributor.length) {
     return (
       <div className="flex justify-center items-center flex-col min-h-screen bg-blue-300">
         <SuperStockistSidebar />
@@ -102,8 +95,10 @@ const SuperStockistdashboard = () => {
         <SuperStockistSidebar />
       </div>
       <div className="lg:ml-80 md:ml-40 font-serif w-full lg:p-10 md:p-5">
-        <div className="flex items-center flex-wrap justify-center lg:justify-end gap-5 h-44 bg-blue-300 rounded-xl">
-          <Avatar alt="User Avatar" src={Img} />
+        <div className="flex items-center  justify-between gap-5 p-10 bg-blue-300 rounded-xl">
+          <h1 className="flex-grow text-start text-base sm:text-base md:text-lg lg:text-xl font-bold text-gray-800">
+            Super Stockist Dashboard
+          </h1>
           <p className="lg:text-2xl md:text-xl text-sm font-bold border-4 border-blue-400 p-2 rounded-lg bg-blue-100">
             {localStorage.getItem("email")}
           </p>
@@ -111,8 +106,8 @@ const SuperStockistdashboard = () => {
             <SuperStockistBarModal />
           </div>
           <div>
-        <SMSDrawer />
-      </div>
+            <SMSDrawer />
+          </div>
         </div>
 
         <div className="grid lg:grid-cols-4 md:grid-cols-2 gap-4 my-10">
@@ -144,52 +139,25 @@ const SuperStockistdashboard = () => {
           <div className="bg-blue-800 text-white p-5 rounded-lg w-full">
             <h1 className="text-2xl bg-blue-300 p-3 rounded-lg my-4">Users</h1>
             {[
-              {
-                name: "SuperStockist",
-                count: superStockist.length,
-                link: "/superstockistDetails",
-              },
-              {
-                name: "Stockist",
-                count: stockist.length,
-                link: "/stockistDetails",
-              },
-              {
-                name: "Delivery Boy",
-                count: deliveryBoy.length,
-                link: "/deliveryboyDetails",
-              },
-              {
-                name: "PanShop",
-                count: panShopDetails.length,
-                link: "/panshowDetails",
-              },
-              {
-                name: "Field Executive Approval",
-                count: fieldManagerAdmin.length,
-                link: "/mange/fieldManagerAdmin",
-              },
-              {
-                name: "Field Executive",
-                count: fieldManager.length,
-                link: "/manage/field/manager",
-              },
+
+
+              { name: "Distributor", count: Distributor.length, link: "/manage/distributor/user/superStockist" },
+              { name: "PanShop", count: panShopDetails.length, link: "#" },
+
             ].map(({ name, count, link }, idx) => (
               <Link
                 key={idx}
                 to={link}
-                className="flex justify-between items-center p-3 hover:bg-blue-300 rounded-lg"
+                className="flex justify-between items-center p-3 px-4  hover:bg-blue-300 rounded-lg"
               >
-                <span>{name}</span>
-                <span>{count}</span>
+                <span className="text-sm">{name}</span>
+                <span className="text-sm">{count}</span>
               </Link>
             ))}
           </div>
 
-          <div className="bg-blue-800 text-white p-5 rounded-lg w-full">
-            <h1 className="text-2xl bg-blue-300 p-3 rounded-lg">
-              Top Products
-            </h1>
+          <div className="bg-blue-800 text-white p-5 rounded-lg w-full my-4">
+            <h1 className="text-2xl bg-blue-300 p-3 rounded-lg">Top Products</h1>
             {top5Products.map((product, idx) => (
               <div key={idx} className="flex justify-between p-2">
                 <span>{product.products[0]?.productName}</span>
@@ -204,9 +172,7 @@ const SuperStockistdashboard = () => {
         </div>
 
         <OrderStateWise />
-        <div className="w-full my-8">
-          <OrderDetailsCityTaluka />
-        </div>
+        
       </div>
     </div>
   );

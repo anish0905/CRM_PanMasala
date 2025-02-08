@@ -3,12 +3,12 @@ import Swal from "sweetalert2";
 import { TbHomeStats } from "react-icons/tb";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 
-import DistributorRegister from "../../SuperStockists/distributor/DistributorRegister";
+import DistributorRegister from "./DistributorRegister";
 import SuperStockistSidebar from "../SSsidebar/SuperStockistSidebar";
 import SuperStockistBarModal from "../SSsidebar/SuperStockistBarModal";
 import SMSDrawer from "../../../Component/SMS_Drawer";
 
-const DistributorDetails = () => {
+const SuperStockistDistributorDetails = () => {
   const [Distributors, setDistributors] = useState([]);
   const [showModal, setShowModal] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
@@ -32,14 +32,14 @@ const DistributorDetails = () => {
     fetchDistributors();
   }, []);
 
-  
+
 
   const fetchDistributors = async () => {
     try {
       const response =
-        
-           await fetch(`${URI}/api/distributor/superStockist/${currentUserId}`)
-          
+
+        await fetch(`${URI}/api/distributor/superStockist/${currentUserId}`)
+
 
       if (!response.ok) {
         throw new Error("Failed to fetch Distributors");
@@ -160,7 +160,7 @@ const DistributorDetails = () => {
           <SuperStockistSidebar />
         </div>
       )}
-      
+
 
       <div className="lg:ml-80 font-serif w-full md:p-5 p-4">
         <div className="bg-[#93c5fd] rounded-md shadow p-4 flex gap-4 items-center justify-between">
@@ -168,8 +168,8 @@ const DistributorDetails = () => {
             {name === "user"
               ? "Manage Distributor"
               : name === "inventory"
-              ? " Manage Distributor Inventory"
-              : "Distributor Registration"}
+                ? " Manage Distributor Inventory"
+                : "Distributor Registration"}
           </h1>
 
           {name === "Registration" && (
@@ -191,9 +191,9 @@ const DistributorDetails = () => {
               <SuperStockistBarModal />
             </div>
           )}
-           <div>
-        <SMSDrawer />
-      </div>
+          <div>
+            <SMSDrawer />
+          </div>
         </div>
 
         {showModal && (
@@ -251,7 +251,12 @@ const DistributorDetails = () => {
                     <th className="px-2 py-4 md:text-lg text-xs border-r-2 border-white">
                       PinCode
                     </th>
-                    <th className="px-2 py-4 md:text-lg text-xs">Actions</th>
+                    {
+                      name != "Registration" && (
+                        <th className="px-2 py-4 md:text-lg text-xs">Actions</th>
+                      )
+                    }
+
                   </tr>
                 </thead>
                 <tbody>
@@ -285,22 +290,23 @@ const DistributorDetails = () => {
                         {Distributor.pinCode}
                       </td>
                       <td className="px-2 py-4 md:text-lg text-xs whitespace-nowrap overflow-hidden overflow-ellipsis border-r-2 border-white">
-                        {name !== "inventory" && (
-                          <>
-                            <button
-                              onClick={() => handleUpdate(Distributor)}
-                              className="bg-blue-500 text-white p-2 rounded cursor-pointer"
-                            >
-                              Update
-                            </button>
-                            <button
-                              onClick={() => handleDeleteClick(Distributor._id)}
-                              className="bg-red-500 text-white p-2 rounded ml-2 cursor-pointer"
-                            >
-                              Delete
-                            </button>
-                          </>
-                        )}
+                        {name !== "inventory" &&
+                          name != "Registration" && (
+                            <>
+                              <button
+                                onClick={() => handleUpdate(Distributor)}
+                                className="bg-blue-500 text-white p-2 rounded cursor-pointer"
+                              >
+                                Update
+                              </button>
+                              <button
+                                onClick={() => handleDeleteClick(Distributor._id)}
+                                className="bg-red-500 text-white p-2 rounded ml-2 cursor-pointer"
+                              >
+                                Delete
+                              </button>
+                            </>
+                          )}
                         {name === "inventory" && (
                           <button
                             onClick={() => handleInventory(Distributor)}
@@ -344,4 +350,4 @@ const DistributorDetails = () => {
   );
 };
 
-export default DistributorDetails;
+export default SuperStockistDistributorDetails;

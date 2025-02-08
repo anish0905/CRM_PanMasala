@@ -89,7 +89,7 @@ const CNFSidebar = ({ onClose }) => {
         <NavItem
           icon={<RxDashboard style={{ color: "#eab308", fontSize: "2rem" }} />}
           text="Dashboard"
-          onClick={() => handleItemClick("/managementDashboard")}
+          onClick={() => handleItemClick("/CNFDashBoard")}
         />
 
         <NavItem
