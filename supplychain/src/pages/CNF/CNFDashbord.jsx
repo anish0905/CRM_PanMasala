@@ -144,10 +144,10 @@ const CNFDashbord = () => {
                    <h1 className="text-2xl bg-blue-300 p-3 rounded-lg my-4">Users</h1>
                    {[
           
-                     { name: "SuperStockist", count: superStockist.length, link: "/manage/superstockist/user/Admin" },
-                     { name: "Distributor", count: Distributor.length, link: "/manage/Distributor/user/Admin" },
+                     { name: "SuperStockist", count: superStockist.length, link: "/manage/superstockist/Super-Stockist/CNF" },
+                     { name: "Distributor", count: Distributor.length, link: "/manage/cnf/inventory/67a1e7ad2285ea8697a9b92e" },
                    
-                    
+
                     
                      { name: "PanShop", count: panShopDetails.length, link: "/panshowDetails" },
                    

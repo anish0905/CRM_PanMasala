@@ -3,14 +3,13 @@ import axios from "axios";
 import { FaProductHunt, FaRunning } from "react-icons/fa";
 import { MdIncompleteCircle } from "react-icons/md";
 import { TbTruckDelivery } from "react-icons/tb";
-import { Avatar } from "@material-tailwind/react";
 import { Link } from "react-router-dom";
 
-// import OrderStateWise from "./OrderStateWise";
-import Img from "../../assets/avataaars.png";
 import SuperStockistSidebar from "./SSsidebar/SuperStockistSidebar";
 import SuperStockistBarModal from "./SSsidebar/SuperStockistBarModal";
 import SMSDrawer from "../../Component/SMS_Drawer";
+import OrderChart from "../CNF/OrderChart";
+import OrderStateWise from "../CNF/OrderStateWise";
 // import OrderChart from "./OrderChart";
 // import OrderDetailsCityTaluka from "./OrderDetailsCityTaluka";
 
@@ -25,32 +24,34 @@ const SuperStockistdashboard = () => {
   const URI = import.meta.env.VITE_API_URL;
   const currentUserId = localStorage.getItem('userId')
 
+  console.log(Distributor)
+
   useEffect(() => {
     const fetchData = async () => {
       try {
         const [
 
-         
+
           Distributor,
           orderRes,
           // deliveryBoyRes,
           panShopDetailsRes,
         ] = await Promise.all([
 
-         
-          await fetch(`${URI}/api/distributor/superStockist/${currentUserId}`),
+
+          axios.get(`${URI}/api/distributor/superStockist/${currentUserId}`),
           axios.get(`${URI}/api/panshop/order/`),
           // axios.get(`${URI }/api/qrGeneraterBoy/allDetailsDeliverBoy`),
           axios.get(`${URI}/api/panShop/`),
         ]);
 
-       
-        setDistributor(Distributor.data.data);
+
+        setDistributor(Distributor.data);
         setOrders(orderRes.data);
         // setDeliveryBoy(deliveryBoyRes.data);
         setPanShopDetails(panShopDetailsRes.data.data);
 
-      
+
 
 
         const today = new Date().toISOString().slice(0, 10);
@@ -96,13 +97,13 @@ const SuperStockistdashboard = () => {
       <div className="lg:ml-80 md:ml-40 font-serif w-full lg:p-10 md:p-5">
         <div className="flex items-center  justify-between gap-5 p-10 bg-blue-300 rounded-xl">
           <h1 className="flex-grow text-start text-base sm:text-base md:text-lg lg:text-xl font-bold text-gray-800">
-            CNF Dashboard
+            Super Stockist Dashboard
           </h1>
           <p className="lg:text-2xl md:text-xl text-sm font-bold border-4 border-blue-400 p-2 rounded-lg bg-blue-100">
             {localStorage.getItem("email")}
           </p>
           <div className="lg:hidden md:hidden block">
-            <CNFSideBarModal />
+            <SuperStockistBarModal />
           </div>
           <div>
             <SMSDrawer />
@@ -139,9 +140,9 @@ const SuperStockistdashboard = () => {
             <h1 className="text-2xl bg-blue-300 p-3 rounded-lg my-4">Users</h1>
             {[
 
-          
-              { name: "Distributor", count: Distributor.length, link: "/manage/Distributor/user/Admin" },
-              { name: "PanShop", count: panShopDetails.length, link: "/panshowDetails" },
+
+              { name: "Distributor", count: Distributor.length, link: "/manage/distributor/user/superStockist" },
+              { name: "PanShop", count: panShopDetails.length, link: "#" },
 
             ].map(({ name, count, link }, idx) => (
               <Link
@@ -171,9 +172,7 @@ const SuperStockistdashboard = () => {
         </div>
 
         <OrderStateWise />
-        <div className="w-full my-8">
-          <OrderDetailsCityTaluka />
-        </div>
+        
       </div>
     </div>
   );
