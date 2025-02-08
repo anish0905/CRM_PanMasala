@@ -37,6 +37,8 @@ const CNFSidebar = ({ onClose }) => {
   const togglemanageInventoryDropdown = () =>
     setManageInventory(!manageInventory);
 
+  const currentUserId = localStorage.getItem("userId");
+
   const handleItemClick = (route) => {
     if (route) {
       navigate(route);
@@ -147,7 +149,7 @@ const CNFSidebar = ({ onClose }) => {
               <DropdownItem
                 text="Distributor Inventory"
                 onClick={() =>
-                  handleItemClick("/manage/superstockist/Super-Stockist/CNF")
+                  handleItemClick(`/manage/cnf/inventory/${currentUserId}`)
                 }
               />
             </div>
@@ -203,6 +205,12 @@ const CNFSidebar = ({ onClose }) => {
                   handleItemClick(
                     "/manage/cnf/distributor/supertockist-distributor/CNF"
                   )
+                }
+              />
+               <DropdownItem
+                text="Distributor Inventory"
+                onClick={() =>
+                  handleItemClick(`/manage/cnf/inventory/${currentUserId}`)
                 }
               />
             </div>

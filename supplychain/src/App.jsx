@@ -64,16 +64,13 @@ function App() {
         path="/manage/superstockist/:name/:role"
         element={<SuperStockistDetails />}
       />
-      <Route
-        path="/manage/distributor/:name/:role"
-        element={<DistributorDetails />}
-      />
+    
       <Route
         path="/manage/cnf/distributor/:name/:role"
         element={<Distributors />}
       />
       <Route
-        path="/manage/cnf/distributor/:id"
+        path="/manage/cnf/:name/:id"
         element={<DistributorsDetails />}
       />
       <Route path="/manage/userProfile/:role" element={<UserProfile />} />

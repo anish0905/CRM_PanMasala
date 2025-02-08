@@ -280,6 +280,37 @@ const DistributorDetailsBySuperstockist = async (req, res) => {
   }
 };
 
+
+const DistributorDetailsByCnfId = async (req, res) => {
+  try {
+    const { cnfId } = req.params;
+
+
+    // Find distributors filtered by superstockist ID
+    const distributors = await Distributor.find({
+
+      cnf: cnfId,
+    });
+
+    if (!distributors || distributors.length === 0) {
+      return res
+        .status(404)
+        .json({ message: "No distributors found for this cnf" });
+    }
+
+    res.status(200).json({
+      message: "Distributors fetched successfully",
+      data: distributors,
+    });
+  } catch (error) {
+    res.status(500).json({
+      message: "An error occurred while fetching distributors",
+      error: error.message,
+    });
+  }
+};
+
+
 module.exports = {
   registerUser,
   loginUser,
@@ -287,6 +318,6 @@ module.exports = {
   updateUserDetails,
   getAllUsers,
   deleteUser,
-
+  DistributorDetailsByCnfId,
   DistributorDetailsBySuperstockist,
 };

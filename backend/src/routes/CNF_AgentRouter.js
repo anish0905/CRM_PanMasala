@@ -8,6 +8,7 @@ const {
   getAllUsers,
   deleteUser,
   DistributorDetailsBySuperstockist,
+  DistributorDetailsByCnfId
 } = require("../controllers/CNF_AgentController");
 const validateToken = require("../middleware/validateTokenHandler");
 
@@ -34,6 +35,11 @@ router.delete("/:id", validateToken, deleteUser);
 router.get(
   "/DistributorDetailsBySuperstockist/:superstockistId",
   DistributorDetailsBySuperstockist
+);
+
+router.get(
+  "/DistributorDetailsByCnfId/:cnfId",
+  DistributorDetailsByCnfId
 );
 
 module.exports = router;
