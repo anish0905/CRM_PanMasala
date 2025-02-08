@@ -9,7 +9,7 @@ const {
   getUserDetailsByEmail,
   getDistributorBySuperByID,
   updateUser,
-  deleteUser,
+  requestDeleteByIdDistributor,
   feaDetailsList,
 } = require("../../controllers/Distributor/Distributor.Controller");
 const executiveValidateToken = require("../../middleware/executiveValidateTokenHandler");
@@ -25,7 +25,10 @@ router.post("/email", getUserDetailsByEmail);
 
 router.put("/update/:id", updateUser);
 
-router.delete("/:id", deleteUser);
+router.delete(
+  "/requestDeleteByIdDistributor/delete",
+  requestDeleteByIdDistributor
+);
 
 //Current user information
 

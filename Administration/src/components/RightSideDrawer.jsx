@@ -9,11 +9,11 @@ const SMSDrawer = () => {
   const [pendingRequests, setPendingRequests] = useState([]);
   const [fieldManagers, setFieldManagers] = useState([]);
 
+  let messageCount = pendingRequests.length;
+
   useEffect(() => {
-    if (isOpen) {
-      fetchPendingRequests();
-    }
-  }, [isOpen]);
+    fetchPendingRequests();
+  }, []);
 
   const fetchPendingRequests = async () => {
     try {
@@ -21,6 +21,7 @@ const SMSDrawer = () => {
         `${URI}/api/approveDeleteRequest/approvedFieldManagers`
       );
       setPendingRequests(response.data.pendingRequests);
+
       setFieldManagers(response.data.fieldManagers);
     } catch (error) {
       console.error("Error fetching pending requests:", error);
@@ -52,6 +53,11 @@ const SMSDrawer = () => {
         className="fixed bottom-6 right-6 bg-teal-900 text-white p-3 rounded-full shadow-lg hover:bg-blue-700 transition-all"
       >
         <MdSms className="text-4xl" />
+        {messageCount > 0 && (
+          <span className="absolute -top-3 right-1/4 bg-red-500 text-white text-xs px-2 py-1 rounded-full">
+            {messageCount}
+          </span>
+        )}
       </button>
 
       {/* Drawer */}
@@ -86,8 +92,18 @@ const SMSDrawer = () => {
                     key={request._id}
                     className="bg-white p-3 rounded-lg shadow mb-2"
                   >
+                    <h4>Requiested By: {manager?.distributors_id.username}</h4>
                     <p className="text-gray-800 font-medium">
-                      {manager?.name || "Unknown Manager"}
+                      <span>Name: {manager?.name || "Unknown Manager"}</span>
+                    </p>
+                    <p className="text-gray-800 font-medium">
+                      <span>Email: {manager?.email || "Unknown Manager"}</span>
+                    </p>
+                    <p className="text-gray-800 font-medium">
+                      <span>
+                        {" "}
+                        Designation: {manager?.role || "Unknown Manager"}
+                      </span>
                     </p>
                     <p className="text-gray-600 text-sm">
                       Reason: {request.reason}

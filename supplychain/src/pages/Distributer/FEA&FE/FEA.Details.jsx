@@ -82,7 +82,7 @@ const FEA = () => {
         title: "Are you sure?",
         text: "This action cannot be undone.",
         showCancelButton: true,
-        confirmButtonText: "Yes, delete it!",
+        confirmButtonText: "Yes, Requiest it!",
         cancelButtonText: "Cancel",
       });
 
@@ -102,11 +102,12 @@ const FEA = () => {
         );
 
         if (response.ok) {
-          Swal.fire({ icon: "success", title: "Delete Successful!" }).then(
-            () => {
-              fetchFEA();
-            }
-          );
+          Swal.fire({
+            icon: "success",
+            title: "Requiest send Successful!",
+          }).then(() => {
+            fetchFEA();
+          });
         } else {
           Swal.fire({
             icon: "error",
@@ -334,20 +335,20 @@ const FEA = () => {
                           </span>
                         ) : (
                           <>
-                           <span className="lg:text-3xl text-blue-600 cursor-pointer">
-                            <FaRegEdit
-                              onClick={() =>
-                                handleEditButtonClick(filedManager)
-                              }
-                            />
+                            <span className="lg:text-3xl text-blue-600 cursor-pointer">
+                              <FaRegEdit
+                                onClick={() =>
+                                  handleEditButtonClick(filedManager)
+                                }
+                              />
                             </span>
                             <span className="lg:text-3xl text-red-600 cursor-pointer">
-                            <MdAutoDelete
-                              onClick={() =>
-                                handleDeleteButtonClick(filedManager._id)
-                              }
-                            />
-                               </span>
+                              <MdAutoDelete
+                                onClick={() =>
+                                  handleDeleteButtonClick(filedManager._id)
+                                }
+                              />
+                            </span>
                           </>
                         )}
                       </td>

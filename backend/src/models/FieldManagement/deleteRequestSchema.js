@@ -4,8 +4,14 @@ const deleteRequestSchema = new mongoose.Schema({
   fieldManagerId: {
     // Fixed naming inconsistency
     type: mongoose.Schema.Types.ObjectId,
-    required: true,
+
     ref: "FieldManagerLogin",
+  },
+  distributorId: {
+    type: mongoose.Schema.Types.ObjectId,
+
+    ref: "Distributor", // Reference to Distribution model
+    default: null,
   },
   reason: { type: String, required: true },
   status: {

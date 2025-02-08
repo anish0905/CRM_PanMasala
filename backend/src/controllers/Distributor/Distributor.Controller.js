@@ -4,6 +4,8 @@ const jwt = require("jsonwebtoken");
 const Distributor = require("../../models/Distributor/Distributor.Model");
 const mongoose = require("mongoose");
 const FeaDetails = require("../../models/FieldManagement/Login.model");
+const DeleteRequest = require("../../models/FieldManagement/deleteRequestSchema");
+
 console.log(FeaDetails);
 function validatePassword(password) {
   const minLength = 8; // Minimum length for the password
@@ -236,7 +238,6 @@ const getDistributorBySuperByID = asyncHandler(async (req, res) => {
 
     // Fetch Distributors based on superDistributorId
     const Distributors = await Distributor.find({
-
       superstockist: new ObjectId(superDistributorId),
     });
 
@@ -336,32 +337,32 @@ const updateUser = asyncHandler(async (req, resp) => {
 // @route DELETE /api/users/delete/:id
 // @access private
 
-const deleteUser = asyncHandler(async (req, resp) => {
-  const { id } = req.params;
+// const deleteUser = asyncHandler(async (req, resp) => {
+//   const { id } = req.params;
 
-  // Validate if the provided ID is valid
-  if (!mongoose.Types.ObjectId.isValid(id)) {
-    resp.status(400);
-    throw new Error("Invalid distributor ID");
-  }
+//   // Validate if the provided ID is valid
+//   if (!mongoose.Types.ObjectId.isValid(id)) {
+//     resp.status(400);
+//     throw new Error("Invalid distributor ID");
+//   }
 
-  // Find the distributor by ID
-  const distributor = await Distributor.findById(id);
+//   // Find the distributor by ID
+//   const distributor = await Distributor.findById(id);
 
-  // Check if the distributor exists
-  if (!distributor) {
-    resp.status(404);
-    throw new Error("Distributor not found");
-  }
+//   // Check if the distributor exists
+//   if (!distributor) {
+//     resp.status(404);
+//     throw new Error("Distributor not found");
+//   }
 
-  // Delete the distributor using deleteOne
-  await Distributor.deleteOne({ _id: id });
+//   // Delete the distributor using deleteOne
+//   await Distributor.deleteOne({ _id: id });
 
-  resp.status(200).json({
-    message: "Distributor deleted successfully",
-    distributorId: id,
-  });
-});
+//   resp.status(200).json({
+//     message: "Distributor deleted successfully",
+//     distributorId: id,
+//   });
+// });
 
 const feaDetailsList = asyncHandler(async (req, resp) => {
   const distributors_id = req.params.id; // The distributor's ID for which Field Manager details are requested
@@ -384,6 +385,40 @@ const feaDetailsList = asyncHandler(async (req, resp) => {
   }
 });
 
+const requestDeleteByIdDistributor = async (req, res) => {
+  try {
+    const { distributorId, reason } = req.body;
+    console.log("Received distributorId:", distributorId);
+
+    if (!distributorId || !reason) {
+      return res
+        .status(400)
+        .json({ message: "Distributor ID and reason are required." });
+    }
+
+    const existingRequest = await DeleteRequest.findOne({
+      distributorId,
+      status: "Pending",
+    });
+    if (existingRequest) {
+      return res
+        .status(400)
+        .json({ message: "Delete request is already pending." });
+    }
+
+    const deleteRequest = new DeleteRequest({ distributorId, reason });
+    await deleteRequest.save();
+
+    res.json({
+      message: "Delete request submitted successfully.",
+      deleteRequest,
+    });
+  } catch (error) {
+    console.error("Error submitting delete request:", error);
+    res.status(500).json({ message: "Server error in submitting request." });
+  }
+};
+
 module.exports = {
   registerUser,
   loginUser,
@@ -393,6 +428,6 @@ module.exports = {
   getUserDetailsByEmail,
   getDistributorBySuperByID,
   updateUser,
-  deleteUser,
+  requestDeleteByIdDistributor,
   feaDetailsList,
 };

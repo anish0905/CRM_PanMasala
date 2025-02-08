@@ -42,7 +42,7 @@ const getApprovedFieldManager = async (req, res) => {
 
     const fieldManagers = await FieldManager.find({
       _id: { $in: fieldManagerIds },
-    });
+    }).populate("distributors_id");
 
     return res.status(200).json({
       pendingRequests, // Includes all pending requests
