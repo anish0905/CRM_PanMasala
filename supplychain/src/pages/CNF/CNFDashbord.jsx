@@ -149,7 +149,7 @@ const CNFDashbord = () => {
                    
 
                     
-                     { name: "PanShop", count: panShopDetails.length, link: "/panshowDetails" },
+                     { name: "PanShop", count: panShopDetails.length, link: "#" },
                    
                    ].map(({ name, count, link }, idx) => (
                      <Link

@@ -10,7 +10,7 @@ const DistributorSchema = mongoose.Schema(
       type: String,
       required: [true, "Please add the user email address"],
       unique: [true, "Email address already taken"],
-      lowercase: true, // Ensures the email is stored in lowercase
+      lowercase: true,
     },
     mobileNo: {
       type: String,
@@ -56,13 +56,28 @@ const DistributorSchema = mongoose.Schema(
     },
     resetToken: String,
     resetTokenExpiration: Date,
+
+    // Add Location for Geospatial Queries
+    location: {
+      type: {
+        type: String,
+        enum: ["Point"], // GeoJSON requires "Point"
+        default: "Point",
+      },
+      coordinates: {
+        type: [Number], // [longitude, latitude]
+        required: true,
+      },
+    },
   },
   {
     timestamps: true,
   }
 );
 
-// Pre-save hook to ensure email is lowercase
+// Ensure location field has a geospatial index
+DistributorSchema.index({ location: "2dsphere" });
+
 DistributorSchema.pre("save", function (next) {
   if (this.email) {
     this.email = this.email.toLowerCase();

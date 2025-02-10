@@ -236,7 +236,7 @@ const DispatchHistory = () => {
                 </div>
 
                 {/* Filters and Actions */}
-                <div className="flex flex-wrap gap-4 mb-4 p-4 bg-blue-400 rounded-sm shadow-sm">
+                {/* <div className="flex flex-wrap gap-4 mb-4 p-4 bg-blue-400 rounded-sm shadow-sm">
                     <div className="flex items-center gap-2">
                         <label className="font-semibold">Filter by Month:</label>
                         <input
@@ -269,7 +269,7 @@ const DispatchHistory = () => {
                             Download Excel
                         </button>
                     </div>
-                </div>
+                </div> */}
 
                 {/* Dispatch History Table */}
                 {inventory ? (
