@@ -63,27 +63,51 @@ const FEA = () => {
 
   const handleDeleteButtonClick = async (selectedFieldManager) => {
     try {
+      // Prompt the user for a reason before proceeding
+      const { value: reason } = await Swal.fire({
+        title: "Reason for deletion",
+        input: "text",
+        inputPlaceholder: "Enter the reason",
+        showCancelButton: true,
+        confirmButtonText: "Submit",
+        cancelButtonText: "Cancel",
+      });
+
+      // If user cancels or doesn't enter a reason, stop execution
+      if (!reason) return;
+
+      // Confirm delete action
       const result = await Swal.fire({
         icon: "warning",
         title: "Are you sure?",
         text: "This action cannot be undone.",
         showCancelButton: true,
-        confirmButtonText: "Yes, delete it!",
+        confirmButtonText: "Yes, Requiest it!",
         cancelButtonText: "Cancel",
       });
 
       if (result.isConfirmed) {
         const response = await fetch(
-          `${BASE_URL}/api/fieldManager/getFieldManager/delete/${selectedFieldManager}`,
-          { method: "DELETE" }
+          `${BASE_URL}/api/fieldManager/requestDeleteByIdFieldManager/delete/${selectedFieldManager}`,
+          {
+            method: "DELETE",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              fieldManagerId: selectedFieldManager,
+              reason,
+            }),
+          }
         );
 
         if (response.ok) {
-          Swal.fire({ icon: "success", title: "Delete Successful!" }).then(
-            () => {
-              fetchFEA();
-            }
-          );
+          Swal.fire({
+            icon: "success",
+            title: "Requiest send Successful!",
+          }).then(() => {
+            fetchFEA();
+          });
         } else {
           Swal.fire({
             icon: "error",
@@ -311,20 +335,20 @@ const FEA = () => {
                           </span>
                         ) : (
                           <>
-                           <span className="lg:text-3xl text-blue-600 cursor-pointer">
-                            <FaRegEdit
-                              onClick={() =>
-                                handleEditButtonClick(filedManager)
-                              }
-                            />
+                            <span className="lg:text-3xl text-blue-600 cursor-pointer">
+                              <FaRegEdit
+                                onClick={() =>
+                                  handleEditButtonClick(filedManager)
+                                }
+                              />
                             </span>
                             <span className="lg:text-3xl text-red-600 cursor-pointer">
-                            <MdAutoDelete
-                              onClick={() =>
-                                handleDeleteButtonClick(filedManager._id)
-                              }
-                            />
-                               </span>
+                              <MdAutoDelete
+                                onClick={() =>
+                                  handleDeleteButtonClick(filedManager._id)
+                                }
+                              />
+                            </span>
                           </>
                         )}
                       </td>

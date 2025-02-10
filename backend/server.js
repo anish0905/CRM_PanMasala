@@ -29,7 +29,6 @@ const cnfAgentRoutes = require("./src/routes/CNF_AgentRouter");
 const superStockistSignupRoutes = require("./src/routes/superStockist/superStockist.Routes");
 const superStockistDeliveryBoyRoutes = require("./src/routes/superStockist/SuperStockistDeveliveyBoy.Routes");
 
-
 //Distributor variables
 // const DistributorOrderRoutes = require("./src/routes/Distributor/Router.Routes");
 // const DistributorInventoryRoute = require("./src/routes/Distributor/DistributorInventory.Routes");
@@ -47,6 +46,8 @@ const superstockistInventoryRoute = require("./src/routes/Inventory/superstockis
 const distributoryInventoryRoute = require("./src/routes/Inventory/distributoryInventoryRoute");
 
 const messageRoutes = require("./src/routes/messageRoutes");
+
+const approveDeleteRequestRoute = require("./src/routes/approveDeleteRequest");
 
 // Connect to Database
 connectDb();
@@ -70,7 +71,6 @@ app.use("/api/subAdmin", subAdminRoutes);
 // Super Stockist Routes
 app.use("/api/superstockist", superStockistSignupRoutes);
 app.use("/api/superstockist/deliveryBoy", superStockistDeliveryBoyRoutes);
-
 
 // Field Management Routes
 app.use("/api/fieldManager", fieldManagerLogin);
@@ -106,6 +106,8 @@ app.use("/api/superstockist/inventory", superstockistInventoryRoute);
 app.use("/api/distributor/inventory", distributoryInventoryRoute);
 
 app.use("/api/message", messageRoutes);
+
+app.use("/api/approveDeleteRequest", approveDeleteRequestRoute);
 
 // Fallback Route for Undefined Endpoints
 app.use((req, res, next) => {
