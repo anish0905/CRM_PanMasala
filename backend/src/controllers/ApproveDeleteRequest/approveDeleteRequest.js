@@ -1,5 +1,24 @@
 const DeleteRequest = require("../../models/FieldManagement/deleteRequestSchema");
 const FieldManager = require("../../models/FieldManagement/Login.model");
+const Distributors = require("../../models/Distributor/Distributor.Model");
+
+// it is used for check status of delete users
+const deleteRequestStatus = async (req, res) => {
+  try {
+    const distributorId = req.params.id;
+
+    const deleteRequest = await DeleteRequest.findOne({ distributorId });
+    if (!deleteRequest) {
+      return res.status(404).json({ message: "Delete request not found" });
+    }
+    res.status(200).json(deleteRequest);
+  } catch (error) {
+    console.error("Error fetching delete request:", error);
+    return res.status(500).json({ message: "Internal server error" });
+  }
+};
+
+//field management Delete request
 
 const approveFieldDeleteRequest = async (req, res) => {
   const { requestId, action } = req.body; // action = "Approved" or "Rejected"
@@ -13,6 +32,7 @@ const approveFieldDeleteRequest = async (req, res) => {
     if (action === "Approved") {
       // Delete the Field Manager
       await FieldManager.findByIdAndDelete(deleteRequest.fieldManagerId);
+      await Distributors.findByIdAndDelete(deleteRequest.fieldManagerId);
       deleteRequest.status = "Approved";
     } else {
       deleteRequest.status = "Rejected";
@@ -40,9 +60,14 @@ const getApprovedFieldManager = async (req, res) => {
       (request) => request.fieldManagerId
     );
 
-    const fieldManagers = await FieldManager.find({
-      _id: { $in: fieldManagerIds },
-    }).populate("distributors_id");
+    const fieldManagers = [
+      ...(await FieldManager.find({ _id: { $in: fieldManagerIds } }).populate(
+        "distributors_id"
+      )),
+      ...(await Distributors.find({ _id: { $in: fieldManagerIds } }).populate(
+        "superstockist"
+      )),
+    ];
 
     return res.status(200).json({
       pendingRequests, // Includes all pending requests
@@ -54,4 +79,10 @@ const getApprovedFieldManager = async (req, res) => {
   }
 };
 
-module.exports = { approveFieldDeleteRequest, getApprovedFieldManager };
+//Distributor Delete
+
+module.exports = {
+  approveFieldDeleteRequest,
+  getApprovedFieldManager,
+  deleteRequestStatus,
+};

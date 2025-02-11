@@ -8,6 +8,7 @@ const SMSDrawer = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [pendingRequests, setPendingRequests] = useState([]);
   const [fieldManagers, setFieldManagers] = useState([]);
+  console.log(fieldManagers, "hhhhhhhhhhhh");
 
   let messageCount = pendingRequests.length;
 
@@ -28,17 +29,19 @@ const SMSDrawer = () => {
     }
   };
 
-  const handleAction = async (requestId, action) => {
+  const handleAction = async (request, action) => {
+    console.log("Action", request);
     try {
-      await axios.delete(
-        `${URI}/api/approveDeleteRequest/field-manager/delete-request/approve`,
-        {
-          data: { requestId, action: action }, // Correct way to send data in a DELETE request
-        }
-      );
+      const url = request.fieldManagerId
+        ? `${URI}/api/approveDeleteRequest/field-manager/delete-request/approve`
+        : `${URI}/api/approveDeleteRequest/distributor/delete-request/approve`;
+
+      await axios.delete(url, {
+        data: { requestId: request._id, action: action }, // Correct way to send data in a DELETE request
+      });
 
       setPendingRequests(
-        pendingRequests.filter((req) => req._id !== requestId)
+        pendingRequests.filter((req) => req._id !== request._id)
       );
     } catch (error) {
       console.error(`Error performing ${action} action:`, error);
@@ -92,9 +95,18 @@ const SMSDrawer = () => {
                     key={request._id}
                     className="bg-white p-3 rounded-lg shadow mb-2"
                   >
-                    <h4>Requiested By: {manager?.distributors_id.username}</h4>
+                    <h4>
+                      Requiested By:{" "}
+                      {manager?.distributors_id?.username ||
+                        manager?.superstockist?.username}
+                    </h4>
                     <p className="text-gray-800 font-medium">
-                      <span>Name: {manager?.name || "Unknown Manager"}</span>
+                      <span>
+                        Name:{" "}
+                        {manager?.name ||
+                          manager?.username ||
+                          "Unknown Manager"}
+                      </span>
                     </p>
                     <p className="text-gray-800 font-medium">
                       <span>Email: {manager?.email || "Unknown Manager"}</span>
@@ -110,13 +122,13 @@ const SMSDrawer = () => {
                     </p>
                     <div className="flex gap-2 mt-2">
                       <button
-                        onClick={() => handleAction(request._id, "Approve")}
+                        onClick={() => handleAction(request, "Approved")}
                         className="bg-green-500 text-white px-3 py-1 rounded"
                       >
                         Approve
                       </button>
                       <button
-                        onClick={() => handleAction(request._id, "Reject")}
+                        onClick={() => handleAction(request._id, "Rejected")}
                         className="bg-red-500 text-white px-3 py-1 rounded"
                       >
                         Reject
