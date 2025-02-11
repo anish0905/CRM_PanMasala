@@ -66,7 +66,7 @@ const DistributorSchema = mongoose.Schema(
       },
       coordinates: {
         type: [Number], // [longitude, latitude]
-        required: true,
+        
       },
     },
   },
