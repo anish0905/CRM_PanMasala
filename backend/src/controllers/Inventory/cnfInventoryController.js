@@ -252,3 +252,19 @@ exports.getInventoryByUserId = async (req, res) => {
         res.status(500).json({ message: 'Error fetching inventory', error });
     }
 };
+
+
+exports.getAllInventoryData = async(req, res, next)=>{
+    try {
+        const inventories = await CNFInventory.find().populate("products.productId").populate({
+            path: "userId",
+            
+        })
+        res.status(200).json({ data: inventories });
+        
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: "Failed to fetch all inventory data", error: error.message });
+    
+    }
+}

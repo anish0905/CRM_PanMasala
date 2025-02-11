@@ -25,6 +25,9 @@ import StockHistory from "./pages/Admin/inventory/StockHistory";
 import DispatchInventory from "./pages/Admin/inventory/DispatchInventory";
 import DispatchHistory from "./pages/Admin/inventory/DispatchHistory";
 import AllUserInventoryDashbord from "./pages/Admin/inventory/AllUserInventoryDashbord";
+import { AllUserInventory } from "./pages/Admin/inventory/AllUserInventory/AllUserInvtory";
+
+
 function App() {
   const navigate = useNavigate();
   const email = localStorage.getItem("email");
@@ -102,13 +105,23 @@ function App() {
         path="/Dispatch-History/:role"
         element={<DispatchHistory />}
       />
-      
+
       <Route
         path="/manage/Inventory/:id/:role/:currentUser"
         element={<AllUserInventoryDashbord />}
-        
+
       />
-      
+
+      <Route
+        path="/manage/allUserInvetory/:role"
+        element={<AllUserInventory />}
+
+      />
+
+
+
+
+
 
 
     </Routes>

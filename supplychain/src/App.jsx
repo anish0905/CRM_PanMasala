@@ -28,6 +28,7 @@ import DispatchInventory from "./pages/inventory/DispatchInventory";
 import DispatchHistory from "./pages/inventory/DispatchHistory";
 import AllUserInventoryDashbord from "./pages/inventory/AllUserInventoryDashbord";
 import DistributorDispatchInventory from "./pages/inventory/DistributorDispatchInventory";
+import { RequirestInventory } from "./pages/inventory/RequirestInventory";
 
 function App() {
   const navigate = useNavigate();
@@ -118,6 +119,14 @@ function App() {
         element={<DistributorDispatchInventory />}
 
       />
+
+      <Route
+        path="/requiest/:role"
+        element={<RequirestInventory />}
+
+      />
+
+
 
 
 

@@ -87,7 +87,7 @@ const AddInventory = () => {
             <div className="lg:ml-80 font-serif w-full md:p-5 p-4">
                 <div className="bg-[#93c5fd] rounded-md shadow p-4 flex gap-4 items-center justify-between mb-6">
                     <h1 className="flex-grow text-start text-xs sm:text-sm md:text-lg lg:text-xl font-bold text-gray-800">
-                        Add Inventory
+                        Received  Inventory
                     </h1>
                     <RightSideDrawer />
                     {email && (
@@ -109,7 +109,7 @@ const AddInventory = () => {
                 </div>
 
                 <div className="bg-gray-100 rounded-lg shadow-md p-6">
-                    <h2 className="text-2xl font-bold mb-6 text-gray-800">Add Inventory Details</h2>
+                  
 
                     {message && (
                         <div className={`mb-4 p-3 rounded-lg ${isError ? 'bg-red-100 text-red-700' : 'bg-green-100 text-green-700'}`}>

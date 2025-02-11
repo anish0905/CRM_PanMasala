@@ -123,6 +123,13 @@ const AdminSidebar = ({ onClose }) => {
                   handleItemClick("/manage/Distributor/inventory/Admin")
                 }
               />
+
+              <DropdownItem
+                text="All Users Inventory"
+                onClick={() =>
+                  handleItemClick("/manage/allUserInvetory/admin")
+                }
+              />
             </div>
           )}
         </div>

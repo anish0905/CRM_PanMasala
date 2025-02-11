@@ -3,6 +3,7 @@ const Message = require("../../models/messageModel");
 const Distributor = require('../../models/Distributor/Distributor.Model');
 const SuperStockistInventory = require('../../models/Inventory/superStockistInventory');
 
+
 exports.addInventory = async (req, res) => {
     try {
         const { userId, revisedDate, orderId } = req.body;
@@ -167,8 +168,8 @@ exports.dispatchStock = async (req, res) => {
             issuedBy,
             UserDetails.username,  // Correct sender name
             issuedTo,
-            `📦 Stock Dispatched  
-            Dispatched Products: 
+            "inventory"
+            ` 
             ${dispatchedProducts.map(p => `🔹 ${p.productName}: ${p.quantityDispatched}`).join('\n')}  
             
             📅 Received Date: ${new Date(receivedDate).toLocaleString()}  
@@ -187,13 +188,14 @@ exports.dispatchStock = async (req, res) => {
 
 
 
-const sendNotification = async (senderId, senderName, recipient, content) => {
+const sendNotification = async (senderId, senderName, recipient,subject, content) => {
+    console.log(content)
     try {
         const message = new Message({
             sender: senderId,
             senderName: senderName,
             recipient: recipient,
-            subject:"inventory",
+            subject: subject,
             content: { text: content }  // Correct way to structure the content object
         });
         await message.save(); // Ensure it's saved properly
@@ -217,16 +219,16 @@ exports.getInventoryByUserId = async (req, res) => {
         const inventory = await DistributoryInventory.findOne({ userId })
             .populate("products.productId")  // Populate productId inside products array
             .populate({
-                path: 'revisedStockHistory.revisedBy',  
-              
+                path: 'revisedStockHistory.revisedBy',
+
             })
             .populate({
-                path: 'dispatchedStockHistory.issuedTo',  
-               
+                path: 'dispatchedStockHistory.issuedTo',
+
             })
             .populate({
-                path: 'dispatchedStockHistory.issuedBy',  
-               
+                path: 'dispatchedStockHistory.issuedBy',
+
             });
 
         if (!inventory) {
@@ -239,3 +241,120 @@ exports.getInventoryByUserId = async (req, res) => {
         res.status(500).json({ message: 'Error fetching inventory', error });
     }
 };
+
+
+exports.sendRequiredForInventory = async (req, res) => {
+    try {
+        const { inventoryItems, requestMessage, recipient
+            , deadline, sender } = req.body;
+
+        // Validate inventory items
+        if (!Array.isArray(inventoryItems) || inventoryItems.length === 0) {
+            return res.status(400).json({ message: 'Inventory items array is required' });
+        }
+
+        // Validate sender and recipient
+        if (!sender || !recipient) {
+            return res.status(400).json({ message: 'Sender and recipient are required' });
+        }
+
+        // Validate deadline
+        if (!deadline) {
+            return res.status(400).json({ message: 'Deadline is required' });
+        }
+
+        // Get sender's name asynchronously
+        const Sendername = await Distributor.findById(sender);
+        if (!Sendername) {
+            return res.status(404).json({ message: 'Sender not found' });
+        }
+
+        // Ensure deadline is a valid date
+        const deadlineDate = new Date(deadline);
+        if (isNaN(deadlineDate)) {
+            return res.status(400).json({ message: 'Invalid deadline date' });
+        }
+
+        // Send notification
+        sendNotification(
+            sender,
+            Sendername.username,
+            recipient,
+
+            "Inventory Required",
+            ` 
+            ${inventoryItems.map(p => `🛍️ ${p.productName}: ${p.quantity}`).join('\n')}  
+            
+            📅 Deadline Date: ${deadlineDate.toLocaleString()}  
+            📝 Request Message: ${requestMessage}`
+        );
+
+        res.status(200).json({ message: 'Notification sent successfully' });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Error sending notification', error });
+    }
+};
+
+
+exports.getSuperInventoryBySuperstockistId = async (req, res) => {
+    try {
+        const { superstockistId } = req.params;
+
+        // Validate if the SuperstockistId is provided and is valid
+        if (!superstockistId || superstockistId.trim() === '') {
+            return res.status(400).json({ message: 'SuperstockistId is required' });
+        }
+
+        // Fetch distributors based on the SuperstockistId
+        const SuperstockistDistributor = await Distributor.find({ superstockist: superstockistId });
+
+        // Check if no distributors are found for the provided superstockistId
+        if (!SuperstockistDistributor || SuperstockistDistributor.length === 0) {
+            return res.status(404).json({ message: 'No distributors found for this SuperstockistId' });
+        }
+
+        // Map over distributors to fetch their inventory
+        const superstockistData = await Promise.all(SuperstockistDistributor.map(async (superstockist) => {
+            // Fetch the inventory for each distributor
+            const superstockistInventory = await DistributoryInventory.find({
+                userId: superstockist._id
+            })
+                .populate('products.productId') // Populate product details
+                .populate({
+                    path: 'userId', // Populate user details
+                    select: 'username mobileNo state district' // Only select necessary fields for the user
+                });
+
+            // Return a structured response even if inventory is not found
+            return {
+                distributoryId: superstockist._id,
+                distributoryName: superstockist.username,
+                state: superstockist.state,
+                district: superstockist.district,
+                mobileNo: superstockist.mobileNo,
+                inventory: superstockistInventory.length ? superstockistInventory.map(inventory => ({
+                    productId: inventory.products.map(product => ({
+                        productName: product.productId.title,
+                        quantity: product.quantity,
+                    }))
+                })) : [] // If no inventory, return empty array
+            };
+        }));
+
+        // Return the superstockist data with their inventory
+        return res.status(200).json(superstockistData);
+
+    } catch (error) {
+        // Log the error and return a 500 status code
+        console.error('Error fetching superstockist inventory:', error);
+        return res.status(500).json({ message: 'Internal server error', error: error.message });
+    }
+};
+
+
+
+
+
+
+

@@ -214,12 +214,7 @@ const Login = () => {
                 </button>
               </form>
 
-              <button
-                onClick={handleBack}
-                className="w-full py-3 mt-4 mb-20 rounded-lg font-bold text-lg shadow-lg bg-gray-200 text-blue-600 hover:bg-gray-300 hover:shadow-xl cursor-pointer"
-              >
-                Select Role
-              </button>
+              
             </div>
           </div>
         </div>

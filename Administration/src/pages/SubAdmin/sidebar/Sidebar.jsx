@@ -146,6 +146,12 @@ const Sidebar = ({ onClose }) => {
                 text="Distributor Inventory"
                 onClick={() => handleItemClick("/manage/Distributor/inventory/Sub-Admin")}
               />
+               <DropdownItem
+                text="All Users Inventory"
+                onClick={() =>
+                  handleItemClick("/manage/allUserInvetory/subAdmin")
+                }
+              />
 
             </div>
           )}

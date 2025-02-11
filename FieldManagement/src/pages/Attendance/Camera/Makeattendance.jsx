@@ -68,7 +68,7 @@ const MakeAttendance = () => {
         }
       }
 
-      const roleMapping = role === "fea" ? "fea" : "fieldExecutive";
+      const roleMapping = role === "fea" ? "fea" : "fieldexecutive";
       const payload = {
         user_id: userId,
         role: roleMapping,

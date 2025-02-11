@@ -7,5 +7,6 @@ router.put("/unread/:messageId", messageController.unReadMessage);
 
 router.get("/get/:senderId/:recipientId", messageController.getMessages);
 router.delete("/delete/:messageId", messageController.deleteMessage);
+router.get("/get/:recipientId", messageController.getMessagesByrecipientId)
 
 module.exports = router;

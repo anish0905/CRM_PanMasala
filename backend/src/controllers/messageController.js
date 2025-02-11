@@ -67,6 +67,22 @@ exports.getMessages = async (req, res) => {
   }
 };
 
+exports.getMessagesByrecipientId = async (req, res) => {
+  try {
+    const {  recipientId } = req.params;
+
+    const messages = await Message.find({
+      recipient: recipientId,
+      
+      
+    }).sort({ createdAt: 1 }); // Sort by timestamp
+
+    res.status(200).json(messages);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
 // Delete a Message
 exports.deleteMessage = async (req, res) => {
   try {
@@ -110,3 +126,6 @@ exports.unReadMessage = async (req, res) => {
     });
   }
 };
+
+
+

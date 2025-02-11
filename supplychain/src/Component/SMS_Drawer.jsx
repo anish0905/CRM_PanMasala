@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { MdSms, MdNotifications, MdHistory, MdClose } from "react-icons/md";
 import { VscGitPullRequestGoToChanges } from "react-icons/vsc";
-import UnReadMessage from "./Showcase/UnReadMessage";
+import UnReadMessage from "./Showcase/unReadMessage/UnReadMessage";
 import HistoryTab from "./HistoryTab";
 
 const SMSDrawer = () => {
@@ -12,19 +12,16 @@ const SMSDrawer = () => {
   const [messages, setMessages] = useState([]);
   const [activeTab, setActiveTab] = useState("notifications"); // Default tab
 
-  const senderId =
-    localStorage.getItem("subAdmin") ||
-    localStorage.getItem("cnfId") ||
-    localStorage.getItem("superstockist");
+
   const recipientId = localStorage.getItem("userId");
 
   // Fetch messages
   const fetchMessages = async () => {
-    if (!senderId || !recipientId) return;
+    if ( !recipientId) return;
 
     try {
       const response = await axios.get(
-        `${BASE_URL}/api/message/get/${senderId}/${recipientId}`
+        `${BASE_URL}/api/message/get/${recipientId}`
       );
 
       setMessages(response.data);

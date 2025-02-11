@@ -1,53 +1,49 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
-import DatePicker from 'react-datepicker';
-import 'react-datepicker/dist/react-datepicker.css';
-import RightSideDrawer from "../../Component/SMS_Drawer";
-import Swal from 'sweetalert2';
 import { useParams } from 'react-router-dom';
-
-import MyInventoryTable from './MyInventoryTable';
-import CNFSideBarModal from '../CNF/CNFSideBarModal';
-import SuperStockistBarModal from '../SuperStockists/SSsidebar/SuperStockistBarModal';
+import axios from 'axios';
+import Swal from 'sweetalert2';
+import DatePicker from 'react-datepicker'; // Assuming you're using this for the date picker
+import 'react-datepicker/dist/react-datepicker.css';
 import DistributorBarModal from '../Distributer/sidebar/DistributorBarModal';
-import CNFSidebar from '../CNF/CNFSidebar';
-import SuperStockistSidebar from '../SuperStockists/SSsidebar/SuperStockistSidebar';
+import SuperStockistBarModal from '../SuperStockists/SSsidebar/SuperStockistBarModal';
+import CNFSideBarModal from '../CNF/CNFSideBarModal';
 import DistributorSidebar from '../Distributer/sidebar/DistributorSidebar';
-const DispatchInventory = () => {
+import SuperStockistSidebar from '../SuperStockists/SSsidebar/SuperStockistSidebar';
+import CNFSidebar from '../CNF/CNFSidebar';
+import RightSideDrawer from '../../Component/SMS_Drawer';
+
+export const RequirestInventory = () => {
     const email = localStorage.getItem("email");
-    const currentUserId = localStorage.getItem("userId");
-    const [inventory, setInventory] = useState(null);
+    const BASE_URL = import.meta.env.VITE_API_URL;
     const [products, setProducts] = useState([]);
     const [selectedProduct, setSelectedProduct] = useState("");
     const [quantity, setQuantity] = useState("");
-    const [revisedDate, setRevisedDate] = useState(new Date());
-    const [inventoryItems, setInventoryItems] = useState([]);
-    const [editingIndex, setEditingIndex] = useState(null);
+    const [deadline, setdeadline] = useState(new Date());
     const [message, setMessage] = useState('');
     const [isError, setIsError] = useState(false);
-    const [Users, setUsers] = useState([]);
-    const [selectedUserId, setSelectUserId] = useState();
+    const [requiest, setRequiest] = useState();
+    const [requestMessage, setRequestMessage] = useState('');  // Added state for request message
+    const [inventoryItems, setInventoryItems] = useState([]);
+    const [editingIndex, setEditingIndex] = useState(null);
 
-    const BASE_URL = import.meta.env.VITE_API_URL;
+    let sender = localStorage.getItem("userId");
+    const { role } = useParams();
 
-    const { role } = useParams()
+    let recipient;
+
+    if (role === "cnf") {
+        recipient = localStorage.getItem("subAdmin");
+    }
+    if (role === "superstockist") {
+        recipient = localStorage.getItem("cnfId");
+    }
+    if (role === "distributor") {
+        recipient = localStorage.getItem("superstockist");
+    }
 
     useEffect(() => {
         fetchProducts();
-        fetchUsers();
-        fetchInventory();
     }, []);
-
-    const generateOrderId = () => {
-        const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-        let orderId = "";
-        for (let i = 0; i < 12; i++) {
-            orderId += chars.charAt(Math.floor(Math.random() * chars.length));
-        }
-        return orderId;
-    };
-
-
 
     const fetchProducts = async () => {
         try {
@@ -58,55 +54,12 @@ const DispatchInventory = () => {
         }
     };
 
-    const fetchUsers = async () => {
-        try {
-            const url =
-                role === "cnf" ? `${BASE_URL}/api/superstockist/getAllUserByCnfId/${currentUserId}` :
-                    role === "superstockist" ? `${BASE_URL}/api/distributor/superStockist/${currentUserId}` :
-                        role === "distributor" ? `${BASE_URL}/api/distributor/getAllUser/${currentUserId}` :
-                            null; // Handle cases where role is invalid
-
-            if (!url) {
-                throw new Error("Invalid role provided");
-            }
-
-            const response = await fetch(url);
-
-            if (!response.ok) {
-                throw new Error("Failed to fetch users");
-            }
-
-            const data = await response.json();
-            setUsers(data);
-
-        } catch (error) {
-            console.error("Error fetching Users:", error);
-        }
-    };
-
-
-    const fetchInventory = async () => {
-        try {
-            const response = await axios.get(`${BASE_URL}/api/${role}/inventory/inventory/${currentUserId}`)
-
-            setInventory(response.data.data);
-        } catch (error) {
-            console.error("Error fetching inventory:", error);
-        }
-    };
-
-
     const handleProductSelection = (productId) => {
         setSelectedProduct(productId);
     };
 
-    const handleUserSelection = (cnfId) => {
-        setSelectUserId(cnfId);
-    };
-
-
     const handleDateChange = (date) => {
-        setRevisedDate(date);
+        setdeadline(date);
     };
 
     const handleAddProduct = () => {
@@ -123,17 +76,14 @@ const DispatchInventory = () => {
             return;
         }
 
-
-
         if (editingIndex !== null) {
             // Edit existing item
             const updatedItems = [...inventoryItems];
             updatedItems[editingIndex] = {
                 productId: selectedProduct,
-                productName: productDetails.title
-                ,
+                productName: productDetails.title,
                 quantity,
-                revisedDate
+                deadline
             };
             setInventoryItems(updatedItems);
             setEditingIndex(null);
@@ -143,7 +93,7 @@ const DispatchInventory = () => {
                 productId: selectedProduct,
                 productName: productDetails.title,
                 quantity,
-                revisedDate
+                deadline
             }]);
         }
 
@@ -167,77 +117,32 @@ const DispatchInventory = () => {
         setIsError(false);
         setMessage('');
 
-        if (!selectedUserId) {
-            Swal.fire("Error", "Please select a CNF!", "error");
-            return;
-        }
-
-
         if (inventoryItems.length === 0) {
             Swal.fire("Error", "Please add at least one product!", "error");
             return;
         }
 
-        if (!revisedDate) {
-            Swal.fire("Error", "Please select a dispatch date!", "error");
-            return;
-        }
+        
 
-
-
-        for (const item of inventoryItems) {
-            const productInStock = inventory.products.find(product => product.
-                productId._id
-                === item.productId);
-
-
-
-            if (!productInStock || productInStock.quantity < item.quantity) {
-                Swal.fire("Error", `Insufficient quantity of ${item.productName} in stock!`, "error");
-                return; // Stop execution if stock is insufficient
-            }
-        }
-
-
-
-
-        const orderId = generateOrderId(); // Generate Order ID
-        const otp = Math.floor(100000 + Math.random() * 900000).toString(); // Generate OTP
-
-        const confirm = await Swal.fire({
-            title: "Are you sure?",
-            text: "Do you want to Dispatch the inventory?",
-            icon: "warning",
-            showCancelButton: true,
-            confirmButtonText: "Yes, Dispatch it!",
-            cancelButtonText: "Cancel",
-        });
-
-        if (!confirm.isConfirmed) return;
+        // Assuming you're sending data somewhere, e.g., to an API
+        const data = {
+            inventoryItems,
+            sender,
+            requestMessage,
+            recipient,
+            deadline
+        };
 
         try {
-            await axios.post(`${BASE_URL}/api/${role}/inventory/dispatch-inventory`, {
-                userId: currentUserId,
-                issuedTo: selectedUserId,
-                issuedBy: currentUserId,
-                otp,
-                orderId,
-                receivedDate: revisedDate.toISOString().split('T')[0],
-                products: inventoryItems.map(item => ({
-                    productId: item.productId,
-                    quantity: item.quantity,
-                    productName: item.productName,
-
-
-                }))
-            });
-            fetchInventory();
-            setMessage('Inventory updated successfully!');
-            setInventoryItems([]);
+            const response = await axios.post(`${BASE_URL}/api/${role}/inventory/send-required-for-inventory`, data);
+            if (response.status === 200) {
+                Swal.fire("Success", "Your request has been submitted!", "success");
+                // Reset form fields after successful submission
+                setInventoryItems([]);
+                setRequestMessage('');
+            }
         } catch (error) {
-            setIsError(true);
-            setMessage('Error updating inventory. Please try again.');
-            console.error('Error:', error);
+            Swal.fire("Error", "Failed to submit request. Please try again later.", "error");
         }
     };
 
@@ -253,13 +158,12 @@ const DispatchInventory = () => {
                         <DistributorSidebar />
                     )
                 }
-
             </div>
 
             <div className="lg:ml-80 font-serif w-full md:p-5 p-4">
                 <div className="bg-[#93c5fd] rounded-md shadow p-4 flex gap-4 items-center justify-between mb-6">
                     <h1 className="flex-grow text-start text-xs sm:text-sm md:text-lg lg:text-xl font-bold text-gray-800">
-                        Dispatch Inventory
+                    Request for Inventory
                     </h1>
                     <RightSideDrawer />
                     {email && (
@@ -271,7 +175,7 @@ const DispatchInventory = () => {
                         {
                             role === "cnf" ? (
                                 <CNFSideBarModal />
-                            ) ? role === "superstockist" : (
+                            ) : role === "superstockist" ? (
                                 <SuperStockistBarModal />
                             ) : (
                                 <DistributorBarModal />
@@ -279,8 +183,6 @@ const DispatchInventory = () => {
                         }
                     </div>
                 </div>
-
-                <MyInventoryTable inventory={inventory} />
 
                 <div className="bg-gray-100 rounded-lg shadow-lg p-8 ">
                     {/* Message Alert */}
@@ -290,32 +192,7 @@ const DispatchInventory = () => {
                         </div>
                     )}
 
-                    {/* Select CNF */}
-                    <div className="space-y-4">
-                        <h2 className="text-xl font-bold text-gray-800">
-                            {role === "cnf"
-                                ? " Select Super stockist"
-                                : role === "superstockist"
-                                    ? " Select Distributor"
-                                    : role === "Distributor"
-                                        ? "Some Value"
-                                        : "OrderID"}
-                        </h2>
-
-                        <select
-                            value={selectedUserId}
-                            onChange={(e) => handleUserSelection(e.target.value)}
-                            className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
-                        >
-                            <option value="">Select User </option>
-                            {Users.map(user => (
-                                <option key={user._id} value={user._id}>
-                                    {user.username}( {user.state}) ({user.city}-{user.pinCode})
-                                </option>
-                            ))}
-                        </select>
-
-                    </div>
+                    
 
                     {/* Add Inventory Details */}
                     <h2 className="text-xl font-bold text-gray-800 mt-6">Add Inventory Details</h2>
@@ -353,9 +230,9 @@ const DispatchInventory = () => {
 
                     {/* Revised Date */}
                     <div className="mt-4">
-                        <label className="block text-sm font-medium text-gray-700 mb-1">Revised Date</label>
+                        <label className="block text-sm font-medium text-gray-700 mb-1">Deadline</label>
                         <DatePicker
-                            selected={revisedDate}
+                            selected={deadline}
                             onChange={handleDateChange}
                             dateFormat="yyyy-MM-dd"
                             className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
@@ -390,19 +267,27 @@ const DispatchInventory = () => {
                         <p className="text-gray-500 mt-2">No products added yet.</p>
                     )}
 
+                    {/* Request Message Text Area */}
+                    <div className="mt-4">
+                        <label className="block  text-gray-700 mb-1 text-lg font-semibold mt-6"> Message</label>
+                        <textarea
+                            value={requestMessage}
+                            onChange={(e) => setRequestMessage(e.target.value)}
+                            rows="4"
+                            className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
+                            placeholder="Write your request or registration details here..."
+                        />
+                    </div>
+
                     {/* Submit Button */}
                     <button
                         onClick={handleSubmit}
                         className="w-full bg-green-500 text-white py-3 px-4 mt-6 rounded-md shadow-md hover:bg-green-600 transition"
                     >
-                        Submit Inventory
+                        Submit
                     </button>
                 </div>
-
             </div>
         </div>
     );
-
-}
-
-export default DispatchInventory
+};

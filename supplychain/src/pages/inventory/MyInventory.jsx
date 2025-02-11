@@ -111,7 +111,7 @@ const MyInventory = () => {
                                         <th className="  px-6 py-4 text-left">Product Name</th>
                                         <th className="  px-6 py-4 text-center">Quantity</th>
                                         <th className="  px-6 py-4 text-center">Price</th>
-                                        <th className="  px-6 py-4 text-center">Action</th>
+                                        {/* <th className="  px-6 py-4 text-center">Action</th> */}
                                     </tr>
                                 </thead>
 
@@ -132,14 +132,14 @@ const MyInventory = () => {
                                             <td className=" px-6 py-4 text-center">
                                                 {product.productId?.price ? `₹ ${product.productId.price.toFixed(2)}` : "N/A"}
                                             </td>
-                                            <td className=" px-4 py-2 flex justify-center gap-4">
+                                            {/* <td className=" px-4 py-2 flex justify-center gap-4">
                                                 <button
                                                     className="bg-[#1e40af] hover:bg-blue-800 text-white font-bold py-2 px-4 rounded-md transition duration-300 cursor-pointer"
                                                 >
                                                     <FaHistory />
                                                 </button>
 
-                                            </td>
+                                            </td> */}
                                         </tr>
                                     ))}
                                 </tbody>
@@ -150,7 +150,7 @@ const MyInventory = () => {
                                         <td className=" px-6 py-4 text-left">Total Stock</td>
                                         <td className=" px-6 py-4 text-center">{inventory.remainingStock || 0}</td>
                                         <td className=" px-6 py-4 text-right">Total Dispatched: {inventory.dispatchedStock || 0}</td>
-                                        <td className=" px-6 py-4 text-center"></td>
+                                        {/* <td className=" px-6 py-4 text-center"></td> */}
                                     </tr>
                                 </tfoot>
                             </table>

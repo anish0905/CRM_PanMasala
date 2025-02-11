@@ -243,3 +243,70 @@ exports.getInventoryByUserId = async (req, res) => {
         res.status(500).json({ message: 'Error fetching inventory', error });
     }
 };
+
+
+exports.getSuperInventoryByCnfId = async (req, res) => {
+    try {
+        const { cnfId } = req.params;
+
+        // Fetch superstockists based on the CNF ID
+        const cnfSuperstockist = await Superstockist.find({ cnf: cnfId });
+
+        // Check if any superstockist is found
+        if (!cnfSuperstockist || cnfSuperstockist.length === 0) {
+            return res.status(404).json({ message: 'No superstockist found with this CNF ID' });
+        }
+
+        // Map over superstockists to fetch their inventory
+        const superstockistData = await Promise.all(cnfSuperstockist.map(async (superstockist) => {
+            // Fetch the inventory for each superstockist
+            const superstockistInventory = await SuperstockistInventory.find({ userId: superstockist._id })
+                .populate({
+                    path: 'products.productId',
+                    select: 'title description price' // You can add more product details here
+                })
+                .populate({
+                    path: 'userId',
+                    select: 'username mobileNo state district' // Ensure you populate the necessary fields
+                });
+
+            // If no inventory is found for this superstockist
+            if (!superstockistInventory || superstockistInventory.length === 0) {
+                return {
+                    superstockistId: superstockist._id,
+                    superstockistName: superstockist.username,
+                    state: superstockist.state,
+                    district: superstockist.district,
+                    mobileNo: superstockist.mobileNo,
+                     
+                    inventory: [] // No inventory data found
+                };
+            }
+
+            // Return structured data for the superstockist including their inventory
+            return {
+                superstockistId: superstockist._id,
+                superstockistName: superstockist.username,
+                state: superstockist.state,
+                district: superstockist.district,
+                mobileNo: superstockist.mobileNo,
+                inventory: superstockistInventory.map((inventory) => ({
+                    productId: inventory.products.map((product) => ({
+                        productName: product.productId.title,
+                        quantity: product.quantity,
+                    })),
+                })),
+            };
+        }));
+
+        // Return the superstockist data with inventory
+        return res.status(200).json(superstockistData);
+
+    } catch (error) {
+        // Log the error and return a 500 status code
+        console.error('Error fetching superstockist inventory:', error);
+        return res.status(500).json({ message: 'Internal server error' });
+    }
+};
+
+

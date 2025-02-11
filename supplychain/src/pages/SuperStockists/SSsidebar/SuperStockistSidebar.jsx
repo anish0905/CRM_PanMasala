@@ -118,7 +118,7 @@ const SuperStockistSidebar = ({ onClose }) => {
           {manageInventory && (
             <div className="flex justify-start ml-10 flex-col font-semibold text-xl text-black">
               <DropdownItem
-                text="Add Inventory"
+                text="Received Inventory"
                 onClick={() => handleItemClick("/add-inventory/superstockist")}
               />
               <DropdownItem
@@ -148,6 +148,10 @@ const SuperStockistSidebar = ({ onClose }) => {
                 onClick={() =>
                   handleItemClick("/manage/distributor/inventory/superStockist")
                 }
+              />
+              <DropdownItem
+                text="Requirest inventory"
+                onClick={() => handleItemClick("/requiest/superstockist")}
               />
             </div>
           )}

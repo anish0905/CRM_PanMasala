@@ -118,8 +118,8 @@ const DistributorSidebar = ({ onClose }) => {
           </span>
           {manageInventory && (
             <div className="flex justify-start ml-10 flex-col font-semibold text-xl text-black">
-             <DropdownItem
-                text="Add Inventory"
+              <DropdownItem
+                text="Received Inventory"
                 onClick={() => handleItemClick("/add-inventory/distributor")}
               />
               <DropdownItem
@@ -143,12 +143,17 @@ const DistributorSidebar = ({ onClose }) => {
                 onClick={() => handleItemClick("/Dispatch-History/distributor")}
               />
 
-              
+              <DropdownItem
+                text="Requirest inventory"
+                onClick={() => handleItemClick("/requiest/distributor")}
+              />
+
+
             </div>
           )}
         </div>
 
-        
+
 
         {/* FEA and FE */}
         <div className="relative">
@@ -172,7 +177,7 @@ const DistributorSidebar = ({ onClose }) => {
             </div>
           )}
         </div>
-       <NavItem
+        <NavItem
           icon={<CgProfile style={{ color: "#047857", fontSize: "2rem" }} />}
           text="My Profile"
           onClick={() => handleItemClick("/manage/userProfile/distributor")}

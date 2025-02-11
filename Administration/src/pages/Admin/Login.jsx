@@ -151,12 +151,7 @@ const Login = () => {
               >
                 Sign In
               </button>
-              <button
-                onClick={() => window.location.reload()}
-                className="w-full hover:bg-blue-600 hover:text-white py-3 rounded-lg font-bold text-lg bg-white text-blue-600 border border-blue-600 shadow-xl transition-all duration-300 mt-4 cursor-pointer"
-              >
-                Select Role
-              </button>
+              
 
             </div>
           </div>

@@ -57,12 +57,12 @@ function NewCamera({ cameraType, onCapture, onClose }) {
   }, [cameraType]);
 
   const capturePhoto = async () => {
-    if (!currentLocation.latitude || !currentLocation.longitude) {
-      setError("Location not available. Please enable location services.");
-      return;
-    }
+    // if (!currentLocation.latitude || !currentLocation.longitude) {
+    //   setError("Location not available. Please enable location services.");
+    //   return;
+    // }
 
-    setLoading(true);
+    // setLoading(true);
     try {
       const canvas = document.createElement("canvas");
       const video = videoRef.current;

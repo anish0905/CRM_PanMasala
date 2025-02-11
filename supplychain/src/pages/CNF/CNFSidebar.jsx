@@ -115,7 +115,7 @@ const CNFSidebar = ({ onClose }) => {
           {manageInventory && (
             <div className="flex justify-start ml-10 flex-col font-semibold text-xl text-black">
               <DropdownItem
-                text="Add Inventory"
+                text="Received Inventory"
                 onClick={() => handleItemClick("/add-inventory/cnf")}
               />
               <DropdownItem
@@ -151,6 +151,10 @@ const CNFSidebar = ({ onClose }) => {
                 onClick={() =>
                   handleItemClick(`/manage/cnf/inventory/${currentUserId}`)
                 }
+              />
+              <DropdownItem
+                text="Requirest inventory"
+                onClick={() => handleItemClick("/requiest/cnf")}
               />
             </div>
           )}
