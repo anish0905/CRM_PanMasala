@@ -135,7 +135,7 @@ const DistributorSidebar = ({ onClose }) => {
 
               <DropdownItem
                 text="Dispatch Inventory"
-                onClick={() => handleItemClick("/Dispatch-Inventory/distributor")}
+                onClick={() => handleItemClick("/Dispatch-Inventory")}
               />
 
               <DropdownItem

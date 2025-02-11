@@ -225,7 +225,7 @@ const SuperStockistDetails = () => {
                       State
                     </th>
                     <th className="px-2 py-4 md:text-lg text-xs  border-r-2 border-white">
-                      district
+                      District
                     </th>
                     <th className="px-2 py-4 md:text-lg text-xs  border-r-2 border-white">
                       State
