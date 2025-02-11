@@ -387,17 +387,17 @@ const feaDetailsList = asyncHandler(async (req, resp) => {
 
 const requestDeleteByIdDistributor = async (req, res) => {
   try {
-    const { distributorId, reason } = req.body;
-    console.log("Received distributorId:", distributorId);
+    const { fieldManagerId, reason } = req.body;
+    console.log("Received distributorId:", fieldManagerId);
 
-    if (!distributorId || !reason) {
+    if (!fieldManagerId || !reason) {
       return res
         .status(400)
         .json({ message: "Distributor ID and reason are required." });
     }
 
     const existingRequest = await DeleteRequest.findOne({
-      distributorId,
+      fieldManagerId,
       status: "Pending",
     });
     if (existingRequest) {
@@ -406,7 +406,7 @@ const requestDeleteByIdDistributor = async (req, res) => {
         .json({ message: "Delete request is already pending." });
     }
 
-    const deleteRequest = new DeleteRequest({ distributorId, reason });
+    const deleteRequest = new DeleteRequest({ fieldManagerId, reason });
     await deleteRequest.save();
 
     res.json({

@@ -17,6 +17,7 @@ const SuperStockistDistributorDetails = () => {
   const [selectedDistributor, setSelectedDistributor] = useState();
   const email = localStorage.getItem("email");
   const currentUserId = localStorage.getItem("userId");
+  const [status, setStatus] = useState([]);
   const { name, role } = useParams();
   const navigate = useNavigate();
   const location = useLocation();
@@ -32,14 +33,11 @@ const SuperStockistDistributorDetails = () => {
     fetchDistributors();
   }, []);
 
-
-
   const fetchDistributors = async () => {
     try {
-      const response =
-
-        await fetch(`${URI}/api/distributor/superStockist/${currentUserId}`)
-
+      const response = await fetch(
+        `${URI}/api/distributor/superStockist/${currentUserId}`
+      );
 
       if (!response.ok) {
         throw new Error("Failed to fetch Distributors");
@@ -91,41 +89,90 @@ const SuperStockistDistributorDetails = () => {
     filteredAndSortedDistributors().length / itemsPerPage
   );
 
-  const handleDeleteClick = async (id) => {
-    const confirmResult = await Swal.fire({
-      title: "Are you sure?",
-      text: "This action cannot be undone!",
-      icon: "warning",
-      showCancelButton: true,
-      confirmButtonText: "Yes, delete it!",
-      cancelButtonText: "No, cancel!",
-      buttonsStyling: false, // Disable SweetAlert2 default button styling
-      customClass: {
-        confirmButton: "bg-red-500 text-white px-4 py-2 rounded-md mx-2", // Add margin to the button
-        cancelButton: "bg-gray-500 text-white px-4 py-2 rounded-md mx-2", // Add margin to the button
-      },
-    });
+  const handleDeleteButtonClick = async (id) => {
+    console.log("Delete", id);
+    try {
+      // Prompt the user for a reason before proceeding
+      const { value: reason } = await Swal.fire({
+        title: "Reason for deletion",
+        input: "text",
+        inputPlaceholder: "Enter the reason",
+        showCancelButton: true,
+        confirmButtonText: "Submit",
+        cancelButtonText: "Cancel",
+      });
+      console.log(reason);
 
-    if (confirmResult.isConfirmed) {
-      try {
+      // If user cancels or doesn't enter a reason, stop execution
+      if (!reason) return;
+
+      // Confirm delete action
+      const result = await Swal.fire({
+        icon: "warning",
+        title: "Are you sure?",
+        text: "This action cannot be undone.",
+        showCancelButton: true,
+        confirmButtonText: "Yes, Requiest it!",
+        cancelButtonText: "Cancel",
+      });
+
+      if (result.isConfirmed) {
         const response = await fetch(
-          `${URI}/api/admin/Distributor/delete/${id}`,
+          `${URI}/api/distributor/requestDeleteByIdDistributor/delete`,
           {
             method: "DELETE",
             headers: {
-              Authorization: `Bearer ${token}`,
+              "Content-Type": "application/json",
             },
+            body: JSON.stringify({
+              fieldManagerId: id,
+              reason,
+            }),
           }
         );
 
-        Swal.fire("sucess", "sub-Admin delete sucessfully", "error");
-        fetchDistributors();
-      } catch (error) {
-        console.error("Error Distributor:", error);
-        Swal.fire("Error", "Could not delete Distributor", "error");
+        if (response.ok) {
+          Swal.fire({
+            icon: "success",
+            title: "Requiest send Successful!",
+          }).then(() => {
+            fetchStatus();
+          });
+        } else {
+          Swal.fire({
+            icon: "error",
+            title: "Delete Failed",
+            text: "Something went wrong.",
+          });
+        }
       }
+    } catch (error) {
+      Swal.fire({
+        icon: "error",
+        title: "An error occurred",
+        text: "Please try again later.",
+      });
     }
   };
+
+  const fetchStatus = async () => {
+    try {
+      const response = await fetch(
+        `${URI}/api/approveDeleteRequest/${currentUserId}`
+      );
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+      const data = await response.json();
+      setStatus(data.pendingRequests || []); // Ensure it's an array
+    } catch (error) {
+      console.error("Error fetching status:", error);
+    }
+  };
+
+  useEffect(() => {
+    fetchStatus();
+  }, [currentUserId]);
 
   const handleUpdate = (user) => {
     setSelectedDistributor(user);
@@ -161,15 +208,14 @@ const SuperStockistDistributorDetails = () => {
         </div>
       )}
 
-
       <div className="lg:ml-80 font-serif w-full md:p-5 p-4">
         <div className="bg-[#93c5fd] rounded-md shadow p-4 flex gap-4 items-center justify-between">
           <h1 className="flex-grow text-start text-xs sm:text-sm md:text-lg lg:text-xl font-bold text-gray-800">
             {name === "user"
               ? "Manage Distributor"
               : name === "inventory"
-                ? " Manage Distributor Inventory"
-                : "Distributor Registration"}
+              ? " Manage Distributor Inventory"
+              : "Distributor Registration"}
           </h1>
 
           {name === "Registration" && (
@@ -251,12 +297,9 @@ const SuperStockistDistributorDetails = () => {
                     <th className="px-2 py-4 md:text-lg text-xs border-r-2 border-white">
                       PinCode
                     </th>
-                    {
-                      name != "Registration" && (
-                        <th className="px-2 py-4 md:text-lg text-xs">Actions</th>
-                      )
-                    }
-
+                    {name != "Registration" && (
+                      <th className="px-2 py-4 md:text-lg text-xs">Actions</th>
+                    )}
                   </tr>
                 </thead>
                 <tbody>
@@ -290,23 +333,43 @@ const SuperStockistDistributorDetails = () => {
                         {Distributor.pinCode}
                       </td>
                       <td className="px-2 py-4 md:text-lg text-xs whitespace-nowrap overflow-hidden overflow-ellipsis border-r-2 border-white">
-                        {name !== "inventory" &&
-                          name != "Registration" && (
-                            <>
-                              <button
-                                onClick={() => handleUpdate(Distributor)}
-                                className="bg-blue-500 text-white p-2 rounded cursor-pointer"
-                              >
-                                Update
-                              </button>
-                              <button
-                                onClick={() => handleDeleteClick(Distributor._id)}
-                                className="bg-red-500 text-white p-2 rounded ml-2 cursor-pointer"
-                              >
-                                Delete
-                              </button>
-                            </>
-                          )}
+                        {name !== "inventory" && name != "Registration" && (
+                          <>
+                            <button
+                              onClick={() => handleUpdate(Distributor)}
+                              className="bg-blue-500 text-white p-2 rounded cursor-pointer"
+                            >
+                              Update
+                            </button>
+                            <button
+                              onClick={() =>
+                                handleDeleteButtonClick(Distributor._id)
+                              }
+                              className={`text-white p-2 rounded ml-2 ${
+                                status.some(
+                                  (item) =>
+                                    item.fieldManagerId === Distributor._id &&
+                                    item.status === "Pending"
+                                )
+                                  ? "bg-gray-500 cursor-not-allowed"
+                                  : "bg-red-500 cursor-pointer"
+                              }`}
+                              disabled={status.some(
+                                (item) =>
+                                  item.fieldManagerId === Distributor._id &&
+                                  item.status === "Pending"
+                              )}
+                            >
+                              {status.some(
+                                (item) =>
+                                  item.fieldManagerId === Distributor._id &&
+                                  item.status === "Pending"
+                              )
+                                ? "Pending"
+                                : "Delete"}
+                            </button>
+                          </>
+                        )}
                         {name === "inventory" && (
                           <button
                             onClick={() => handleInventory(Distributor)}

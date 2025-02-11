@@ -148,28 +148,6 @@ const AdminSidebar = ({ onClose }) => {
                   handleItemClick("/manage/CNF/Registration/Admin")
                 }
               />
-              {/* <DropdownItem
-                text="Super Stockist"
-                onClick={() => handleItemClick("/manage/superstockist/Registration/Admin")}
-              />
-              <DropdownItem
-                text="Distributor"
-                onClick={() => handleItemClick("/manage/Distributor/Registration/Admin")}
-              />
-              <DropdownItem
-                text="Field Executive Approval"
-                onClick={() => handleItemClick("/Field-Executive-Approval/Admin/Registration")}
-              />
-              
-              <DropdownItem
-                text="Field Executive "
-                onClick={() => handleItemClick("/Field-Executive-Approval/FieldManager/Registration")}
-              />
-
-              <DropdownItem
-                text="Delivery Boy"
-                onClick={() => handleItemClick("/deliveryboyDetails")}
-              /> */}
             </div>
           )}
         </div>
@@ -363,12 +341,6 @@ const AdminSidebar = ({ onClose }) => {
           icon={<FaUserPlus style={{ color: "green", fontSize: "2rem" }} />}
           text="Create Product"
           onClick={() => handleItemClick("/Add-product")}
-        />
-
-        <NavItem
-          icon={<FaUserPlus style={{ color: "red", fontSize: "2rem" }} />}
-          text="Delete Request"
-          onClick={() => handleItemClick("/delete-request")}
         />
 
         <LogoutItem
